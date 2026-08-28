@@ -14,7 +14,7 @@ import logging
 from dataclasses import dataclass
 from typing import Any
 
-from engine import alpaca_cli, state
+from engine import alpaca_cli, billing_guard, state
 from engine.config import SETTINGS
 
 log = logging.getLogger(__name__)
@@ -119,6 +119,24 @@ def run(require_competition_balance: bool = False) -> list[Check]:
         checks.append(Check("journal", True, str(SETTINGS.db_path)))
     except Exception as exc:  # noqa: BLE001
         checks.append(Check("journal", False, str(exc), fatal=True))
+
+    if SETTINGS.vertex_project:
+        checks.append(
+            Check(
+                "reasoning",
+                True,
+                f"Vertex project {SETTINGS.vertex_project} ({SETTINGS.vertex_location}), "
+                f"application-default credentials, no API key stored",
+            )
+        )
+        status = billing_guard.check()
+        checks.append(
+            Check("billing account", status.ok, status.detail, fatal=not status.ok)
+        )
+    else:
+        checks.append(
+            Check("reasoning", True, "no model configured; running fully deterministic")
+        )
 
     checks.append(
         Check(

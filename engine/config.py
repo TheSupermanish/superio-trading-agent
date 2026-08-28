@@ -142,6 +142,7 @@ class Settings:
     featherless_api_key: str
     vertex_project: str
     vertex_location: str
+    expected_billing_account: str
     force_dry_run: bool
     live_from: datetime | None
     db_path: Path
@@ -215,6 +216,7 @@ def load_settings(profile: str | None = None, variant: str | None = None) -> Set
         featherless_api_key=os.getenv("FEATHERLESS_API_KEY", ""),
         vertex_project=os.getenv("GOOGLE_CLOUD_PROJECT", ""),
         vertex_location=os.getenv("GOOGLE_CLOUD_LOCATION", "global"),
+        expected_billing_account=os.getenv("EXPECTED_BILLING_ACCOUNT", ""),
         force_dry_run=_env_bool("DRY_RUN", True),
         live_from=_parse_live_from(os.getenv("LIVE_FROM")),
         db_path=ROOT / "data" / f"superio-{profile}.db",
