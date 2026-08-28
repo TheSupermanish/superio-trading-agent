@@ -187,8 +187,7 @@ def _converse(
     system: str, opening: str, ctx: tools.ToolContext
 ) -> tuple[dict[str, Any], int, list[dict[str, Any]]] | None:
     """Drive the tool-calling loop until the model returns a decision."""
-    client = llm._vertex_client()  # noqa: SLF001 - single deliberate seam
-    if client is None:
+    if not llm.vertex_available():
         return None
 
     from google.genai import types
@@ -211,16 +210,23 @@ def _converse(
     calls: list[dict[str, Any]] = []
 
     for step in range(MAX_STEPS):
+        # Gemini 2.5 runs on shared quota, so a 429 is pool contention rather
+        # than an account limit. Try another regional pool before giving up.
         response = None
-        for model in llm.GEMINI_REASONING_MODELS:
+        for model, region in llm._routes():  # noqa: SLF001 - one deliberate seam
+            client = llm._client_for(region)  # noqa: SLF001
+            if client is None:
+                continue
             try:
                 response = client.models.generate_content(
                     model=model, contents=history, config=config
                 )
                 break
             except Exception as exc:  # noqa: BLE001
-                log.warning("%s step %d failed: %s", model, step, str(exc)[:140])
+                if not llm._retryable(exc):  # noqa: SLF001
+                    log.warning("%s/%s step %d failed: %s", model, region, step, str(exc)[:140])
         if response is None or not response.candidates:
+            log.warning("no Gemini route answered at step %d", step)
             return None
 
         candidate = response.candidates[0]

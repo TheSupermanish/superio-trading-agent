@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 import re
 import time
 from functools import lru_cache
@@ -34,11 +35,25 @@ log = logging.getLogger(__name__)
 
 CLAUDE_MODEL = "claude-sonnet-5"
 
-#: Tried in order. Pro reasons better but its quota is thin and it is the first
-#: thing to return 429 under load, so Flash backs it up rather than the call
-#: failing outright.
+#: Tried in order. Pro reasons better, so it is tried first everywhere before
+#: falling back to Flash.
 GEMINI_REASONING_MODELS = ("gemini-2.5-pro", "gemini-2.5-flash")
 GEMINI_FAST_MODEL = "gemini-2.5-flash"
+
+#: Gemini 2.5 on Vertex is served from Dynamic Shared Quota: there is no
+#: per-project limit to raise, and a 429 means the pool shared across all
+#: customers of that model was momentarily saturated. Google's guidance for
+#: pay-as-you-go is to retry, because availability changes second to second.
+#:
+#: Regional pools are independent, so failing over to another region clears a
+#: 429 far more often than waiting does. These are the regions serving 2.5 that
+#: we verified answer both plain and grounded requests.
+GEMINI_REGIONS = ("us-central1", "us-east5", "global")
+
+#: A route is one (model, region) pair. Pro in every region before Flash, so we
+#: only trade reasoning quality away once every regional pool has refused.
+def _routes() -> list[tuple[str, str]]:
+    return [(m, r) for m in GEMINI_REASONING_MODELS for r in GEMINI_REGIONS]
 
 #: Gemini 2.5 counts thinking tokens against max_output_tokens, so a budget
 #: sized for the visible answer alone gets truncated mid-JSON. Reserve room for
@@ -70,7 +85,7 @@ def featherless_available() -> bool:
 GROUNDING_LOCATION = "us-central1"
 
 
-@lru_cache(maxsize=2)
+@lru_cache(maxsize=8)
 def _client_for(location: str) -> Any | None:
     if not SETTINGS.vertex_project:
         return None
@@ -122,9 +137,9 @@ def _extract_json(text: str) -> dict[str, Any] | None:
 
 
 def _gemini_once(
-    system: str, user: str, max_tokens: int, model: str
+    system: str, user: str, max_tokens: int, model: str, region: str | None = None
 ) -> dict[str, Any] | None:
-    client = _vertex_client()
+    client = _client_for(region) if region else _vertex_client()
     if client is None:
         return None
     from google.genai import types
@@ -156,24 +171,42 @@ def _ask_gemini(
     system: str,
     user: str,
     max_tokens: int,
-    models: tuple[str, ...] | str,
+    models: tuple[str, ...] | str | None = None,
     attempts: int = 2,
 ) -> dict[str, Any] | None:
-    """Walk the model ladder, retrying transient quota errors with a backoff."""
-    ladder = (models,) if isinstance(models, str) else models
-    for model in ladder:
+    """Walk the model and region routes, retrying shared-quota errors.
+
+    A 429 here is contention in a shared pool rather than an account limit, so
+    the first response is to try another regional pool immediately, and only
+    then to back off and wait.
+    """
+    if models is None:
+        routes = _routes()
+    elif isinstance(models, str):
+        routes = [(models, region) for region in GEMINI_REGIONS]
+    else:
+        routes = [(m, r) for m in models for r in GEMINI_REGIONS]
+
+    last_error: str | None = None
+    for model, region in routes:
         for attempt in range(attempts):
             try:
-                parsed = _gemini_once(system, user, max_tokens, model)
+                parsed = _gemini_once(system, user, max_tokens, model, region)
                 if parsed is not None:
                     return parsed
-                break  # parsed but unusable: a retry will not help
+                break  # answered but unusable: another attempt will not help
             except Exception as exc:  # noqa: BLE001 - an outage must not stop trading
-                if _retryable(exc) and attempt < attempts - 1:
-                    time.sleep(2 ** attempt)
-                    continue
-                log.warning("%s call failed: %s", model, str(exc)[:160])
+                last_error = str(exc)[:160]
+                if _retryable(exc):
+                    if attempt < attempts - 1:
+                        # Jitter so three supervisors do not retry in lockstep.
+                        time.sleep((2 ** attempt) * (0.6 + random.random() * 0.8))
+                        continue
+                    break  # move to the next region rather than waiting longer
+                log.warning("%s/%s call failed: %s", model, region, last_error)
                 break
+    if last_error:
+        log.warning("every Gemini route refused; last error: %s", last_error)
     return None
 
 
@@ -206,7 +239,7 @@ def reason(system: str, user: str, max_tokens: int = 1200) -> dict[str, Any] | N
     if provider == "claude":
         return _ask_claude(system, user, max_tokens, CLAUDE_MODEL)
     if provider == "gemini":
-        return _ask_gemini(system, user, max_tokens, GEMINI_REASONING_MODELS)
+        return _ask_gemini(system, user, max_tokens)
     return None
 
 

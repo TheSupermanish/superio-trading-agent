@@ -70,11 +70,17 @@ sentiment labels so the reasoning model only reads the few that matter. Cheap
 model for volume, strong model for judgement, neither trusted with an order.
 
 Vertex authenticates through application-default credentials, so there is no API
-key stored anywhere in this project. Two deployment details cost us time and are
-worth recording: Vertex refuses to combine Google Search grounding with function
-calling in a single request, which is why research and decision-making are
-separate phases; and the `global` endpoint accepts a grounded request then
-returns an empty candidate, so grounding is pinned to `us-central1`.
+key stored anywhere in this project. Three deployment details cost us time and
+are worth recording:
+
+Vertex refuses to combine Google Search grounding with function calling in a
+single request, which is why research and decision-making are separate phases.
+The `global` endpoint accepts a grounded request and then returns an empty
+candidate, so grounding is pinned to a region that serves it. And Gemini 2.5
+runs on dynamic shared quota, meaning a 429 is contention in a pool shared
+across all customers of that model rather than an account limit that can be
+raised. Regional pools are independent, so every model call walks a list of
+model and region routes and only backs off once a whole region has refused.
 
 ## The risk gates
 
