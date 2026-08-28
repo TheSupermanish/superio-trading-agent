@@ -5,6 +5,9 @@ import EquityCurve from "./EquityCurve";
 import type { Snapshot } from "./types";
 
 const POLL_MS = 60_000;
+// GitHub Pages serves a project site under a path prefix; a bare "/snapshot.json"
+// would resolve to the domain root and 404.
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const money = (n: number) =>
   `${n < 0 ? "-" : ""}$${Math.abs(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
@@ -33,7 +36,7 @@ export default function Page() {
       try {
         // Cache-bust so a refreshed snapshot is picked up rather than served
         // from the CDN edge cache.
-        const res = await fetch(`/snapshot.json?t=${Date.now()}`, { cache: "no-store" });
+        const res = await fetch(`${BASE}/snapshot.json?t=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) throw new Error(String(res.status));
         const data = (await res.json()) as Snapshot;
         if (alive) setSnap(data);
