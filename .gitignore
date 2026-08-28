@@ -8,3 +8,5 @@ dashboard/node_modules/
 dashboard/.next/
 .DS_Store
 .gstack/
+dashboard/out/
+logs/
