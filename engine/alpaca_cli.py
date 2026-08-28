@@ -121,7 +121,14 @@ def cancel_order(order_id: str) -> Any:
 
 
 def close_position(symbol: str, qty: str | None = None) -> Any:
-    args = ["position", "close", symbol]
+    """Liquidate one leg at market.
+
+    The CLI takes the symbol as a flag rather than a positional argument, and
+    passing it positionally fails with an error rather than doing nothing
+    visible, which is exactly the kind of silent no-op that matters most in the
+    one code path whose job is to get us out of a position.
+    """
+    args = ["position", "close", "--symbol-or-asset-id", symbol]
     if qty:
         args += ["--qty", qty]
     return run(args)

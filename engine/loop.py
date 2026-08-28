@@ -18,6 +18,7 @@ from typing import Any
 from engine import (
     alpaca_cli,
     executor,
+    fills,
     manager,
     mcp_research,
     preflight,
@@ -232,6 +233,11 @@ def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
         marks = manager.manage(force_flatten=True)
         _publish()
         return {"traded": False, "reason": reason, "marks": [m.__dict__ for m in marks]}
+
+    # Chase our own resting orders toward the touch before opening anything new.
+    walked = fills.walk()
+    for action in walked:
+        log.info("fill walker: %s", action)
 
     marks = manager.manage()
     opened = scan_and_trade(snap)

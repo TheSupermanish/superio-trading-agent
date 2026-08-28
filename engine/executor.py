@@ -125,6 +125,7 @@ def open_position(proposal: Proposal, qty: int, thesis_extra: str = "") -> Execu
         legs=[leg.as_dict() for leg in proposal.legs],
         qty=qty,
         net_price=proposal.net_price,
+        net_price_mid=proposal.net_price_mid,
         max_loss=proposal.max_loss_per_unit * qty,
         max_gain=proposal.max_gain_per_unit * qty,
         client_order_id=client_order_id,
@@ -184,7 +185,8 @@ def open_position(proposal: Proposal, qty: int, thesis_extra: str = "") -> Execu
         client_order_id=client_order_id,
         broker_order_id=broker_order_id,
     )
-    state.set_structure_status(structure_id, "open")
+    # Accepted is not filled. The fill walker promotes it once it actually fills.
+    state.set_structure_status(structure_id, "pending")
     return ExecutionResult(
         submitted=True,
         structure_id=structure_id,

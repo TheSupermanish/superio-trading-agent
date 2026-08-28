@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS structures (
     legs TEXT NOT NULL,
     qty INTEGER NOT NULL,
     net_price REAL NOT NULL,
+    net_price_mid REAL,
     max_loss REAL NOT NULL,
     max_gain REAL NOT NULL,
     status TEXT NOT NULL,
@@ -186,6 +187,7 @@ def open_structure(
     legs: list[dict[str, Any]],
     qty: int,
     net_price: float,
+    net_price_mid: float,
     max_loss: float,
     max_gain: float,
     client_order_id: str,
@@ -194,8 +196,8 @@ def open_structure(
     with db() as conn:
         cur = conn.execute(
             "INSERT INTO structures (opened_at, sleeve, underlying, kind, legs, qty, net_price,"
-            " max_loss, max_gain, status, client_order_id, thesis)"
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)",
+            " net_price_mid, max_loss, max_gain, status, client_order_id, thesis)"
+            " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)",
             (
                 utcnow(),
                 sleeve,
@@ -204,6 +206,7 @@ def open_structure(
                 json.dumps(legs, default=str),
                 qty,
                 net_price,
+                net_price_mid,
                 max_loss,
                 max_gain,
                 client_order_id,

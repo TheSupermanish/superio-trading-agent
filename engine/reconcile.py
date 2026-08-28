@@ -54,13 +54,19 @@ def run(auto_close_orphans: bool = False) -> Reconciliation:
     result.broker_symbols = set(option_positions)
 
     for structure in state.live_structures():
-        if structure["status"] not in {"open", "pending"}:
+        # Only structures confirmed filled can be reconciled flat. A `pending`
+        # structure has a working entry order and no position yet, which looks
+        # identical to a vanished one from the position book alone. Closing it
+        # here would abandon a live order and leave the journal claiming a
+        # trade that is still trying to happen.
+        if structure["status"] != "open":
             continue
         symbols = {leg["symbol"] for leg in structure["legs"]}
         result.journal_symbols |= symbols
 
         present = symbols & result.broker_symbols
         if not present:
+            # Confirmed filled earlier, no legs now: it really is gone.
             # The journal thinks this is open and the broker has none of it.
             log.info(
                 "structure #%s has no legs at the broker; marking closed",
