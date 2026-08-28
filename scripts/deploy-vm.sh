@@ -16,8 +16,16 @@ sudo apt-get install -y -qq git curl jq >/dev/null
 
 echo "== alpaca CLI =="
 if ! command -v alpaca >/dev/null 2>&1; then
-  ARCH=$(dpkg --print-architecture)
-  curl -fsSL "https://github.com/alpacahq/cli/releases/latest/download/alpaca_Linux_x86_64.tar.gz" \
+  # Release assets are named cli_<version>_linux_<arch>.tar.gz, so resolve the
+  # current tag rather than guessing a "latest download" filename.
+  CLI_TAG=$(curl -fsSL https://api.github.com/repos/alpacahq/cli/releases/latest | jq -r .tag_name)
+  CLI_VER="${CLI_TAG#v}"
+  case "$(dpkg --print-architecture)" in
+    amd64) CLI_ARCH=amd64 ;;
+    arm64) CLI_ARCH=arm64 ;;
+    *) echo "unsupported architecture" >&2; exit 1 ;;
+  esac
+  curl -fsSL "https://github.com/alpacahq/cli/releases/download/${CLI_TAG}/cli_${CLI_VER}_linux_${CLI_ARCH}.tar.gz" \
     -o /tmp/alpaca.tgz
   sudo tar -xzf /tmp/alpaca.tgz -C /usr/local/bin alpaca
   sudo chmod +x /usr/local/bin/alpaca
