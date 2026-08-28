@@ -1,0 +1,230 @@
+"""The risk officer.
+
+The LLM agents propose structures. Nothing reaches the broker unless this
+module approves it. Every rule is deterministic, unit-testable, and expressed
+as a number in `engine/config.py` -- there is no model call in this file.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Any
+
+from engine import state
+from engine.config import SETTINGS
+from engine.types import CONTRACT_MULTIPLIER, Proposal, Verdict
+
+
+@dataclass
+class PortfolioSnapshot:
+    equity: float
+    last_equity: float
+    cash: float
+    buying_power: float
+    open_risk: float
+    peak_equity: float
+    open_structures: int
+    trades_today: int
+
+    @property
+    def day_pnl(self) -> float:
+        return self.equity - self.last_equity
+
+    @property
+    def day_pnl_pct(self) -> float:
+        return self.day_pnl / self.last_equity if self.last_equity else 0.0
+
+    @property
+    def drawdown_pct(self) -> float:
+        if not self.peak_equity:
+            return 0.0
+        return (self.peak_equity - self.equity) / self.peak_equity
+
+
+def snapshot_from_account(account: dict[str, Any]) -> PortfolioSnapshot:
+    equity = float(account.get("equity", 0) or 0)
+    last_equity = float(account.get("last_equity", 0) or 0) or equity
+    peak = state.peak_equity() or equity
+    return PortfolioSnapshot(
+        equity=equity,
+        last_equity=last_equity,
+        cash=float(account.get("cash", 0) or 0),
+        buying_power=float(account.get("buying_power", 0) or 0),
+        open_risk=state.open_risk_total(),
+        peak_equity=max(peak, equity),
+        open_structures=len(state.live_structures()),
+        trades_today=state.trades_opened_today(),
+    )
+
+
+# --- Structural checks -----------------------------------------------------
+
+def _is_defined_risk(proposal: Proposal) -> tuple[bool, str]:
+    """Every short leg must be covered by a long leg of the same type and expiry.
+
+    This is the gate that makes a blown-up account structurally impossible: no
+    naked short options, ever, regardless of what the model asked for.
+    """
+    shorts = [leg for leg in proposal.legs if leg.side == "sell"]
+    longs = [leg for leg in proposal.legs if leg.side == "buy"]
+
+    if not shorts:
+        return True, "long-only structure, risk is the debit paid"
+
+    short_units = sum(leg.ratio_qty for leg in shorts)
+    long_units = sum(leg.ratio_qty for leg in longs)
+    if long_units < short_units:
+        return False, f"{short_units} short units covered by only {long_units} long units"
+
+    for short in shorts:
+        cover = [
+            leg
+            for leg in longs
+            if leg.is_call == short.is_call and leg.expiry == short.expiry
+        ]
+        if not cover:
+            return False, f"short leg {short.symbol} has no same-expiry, same-type cover"
+
+    # A same-type, same-expiry long leg bounds the loss on a short leg from
+    # either side. A long call above a short call caps a credit spread at its
+    # width; a long call below a short call is a debit spread whose loss is the
+    # premium paid. Both are defined risk, so strike direction is not a gate --
+    # the absence of cover is.
+    return True, "all short legs covered by same-expiry long legs"
+
+
+def _liquidity_ok(proposal: Proposal) -> tuple[bool, str]:
+    p = SETTINGS.strategy
+    for leg in proposal.legs:
+        if leg.mid < p.min_leg_price:
+            return False, f"{leg.symbol} mid {leg.mid:.2f} below floor {p.min_leg_price:.2f}"
+        if leg.spread_pct > p.max_bid_ask_pct:
+            return False, (
+                f"{leg.symbol} bid/ask spread {leg.spread_pct:.1%} wider than "
+                f"{p.max_bid_ask_pct:.1%}"
+            )
+    return True, "all legs liquid"
+
+
+def _pricing_ok(proposal: Proposal) -> tuple[bool, str]:
+    r = SETTINGS.risk
+    if proposal.width <= 0:
+        return False, "structure has no width"
+    ratio = abs(proposal.net_price) / proposal.width
+    if proposal.is_credit:
+        if ratio < r.min_credit_to_width:
+            return False, (
+                f"credit {ratio:.1%} of width is below the {r.min_credit_to_width:.0%} floor"
+            )
+        return True, f"credit is {ratio:.1%} of width"
+    if ratio > r.max_debit_to_width:
+        return False, f"debit {ratio:.1%} of width exceeds the {r.max_debit_to_width:.0%} cap"
+    return True, f"debit is {ratio:.1%} of width"
+
+
+# --- Sizing ----------------------------------------------------------------
+
+def size_position(proposal: Proposal, snap: PortfolioSnapshot) -> tuple[int, list[str]]:
+    """Largest quantity that respects every capital limit at once."""
+    r = SETTINGS.risk
+    notes: list[str] = []
+    unit_risk = proposal.max_loss_per_unit
+    if unit_risk <= 0:
+        return 0, ["structure reports zero max loss, refusing to size it"]
+
+    per_trade_cap = snap.equity * r.max_risk_per_trade_pct
+    qty = int(per_trade_cap // unit_risk)
+    notes.append(f"per-trade cap {per_trade_cap:,.0f} / unit risk {unit_risk:,.0f} -> {qty}")
+
+    portfolio_room = snap.equity * r.max_open_risk_pct - snap.open_risk
+    qty = min(qty, int(max(portfolio_room, 0) // unit_risk))
+    notes.append(f"portfolio room {portfolio_room:,.0f} -> {qty}")
+
+    if proposal.sleeve == "convex":
+        sleeve_room = snap.equity * r.max_convex_open_risk_pct - state.open_risk_by(
+            "sleeve", "convex"
+        )
+        qty = min(qty, int(max(sleeve_room, 0) // unit_risk))
+        notes.append(f"convex sleeve room {sleeve_room:,.0f} -> {qty}")
+
+    underlying_room = snap.equity * r.max_risk_per_underlying_pct - state.open_risk_by(
+        "underlying", proposal.underlying
+    )
+    qty = min(qty, int(max(underlying_room, 0) // unit_risk))
+    notes.append(f"{proposal.underlying} room {underlying_room:,.0f} -> {qty}")
+
+    buying_power_room = snap.buying_power * 0.5
+    qty = min(qty, int(max(buying_power_room, 0) // unit_risk)) if unit_risk else qty
+    notes.append(f"buying power room {buying_power_room:,.0f} -> {qty}")
+
+    return max(qty, 0), notes
+
+
+# --- Kill switches ---------------------------------------------------------
+
+def kill_switch(snap: PortfolioSnapshot) -> tuple[bool, str | None]:
+    """Returns (halted, reason)."""
+    r = SETTINGS.risk
+    if snap.day_pnl_pct <= -r.daily_loss_kill_pct:
+        return True, (
+            f"daily loss {snap.day_pnl_pct:.2%} hit the {-r.daily_loss_kill_pct:.0%} kill switch"
+        )
+    if snap.drawdown_pct >= r.total_drawdown_kill_pct:
+        return True, (
+            f"drawdown {snap.drawdown_pct:.2%} hit the {r.total_drawdown_kill_pct:.0%} kill switch"
+        )
+    return False, None
+
+
+# --- Entry point -----------------------------------------------------------
+
+def evaluate(proposal: Proposal, snap: PortfolioSnapshot) -> Verdict:
+    r = SETTINGS.risk
+    reasons: list[str] = []
+
+    halted, halt_reason = kill_switch(snap)
+    if halted:
+        return Verdict.reject(f"trading halted: {halt_reason}")
+
+    if snap.trades_today >= r.max_new_trades_per_day:
+        return Verdict.reject(f"already opened {snap.trades_today} structures today")
+
+    if snap.open_structures >= r.max_open_structures:
+        return Verdict.reject(f"{snap.open_structures} structures already open")
+
+    ok, why = _is_defined_risk(proposal)
+    if not ok:
+        return Verdict.reject(f"not defined risk: {why}")
+    if r.allow_naked_short is False and not ok:
+        return Verdict.reject("naked short exposure is disabled")
+    reasons.append(why)
+
+    ok, why = _liquidity_ok(proposal)
+    if not ok:
+        return Verdict.reject(f"liquidity: {why}")
+    reasons.append(why)
+
+    ok, why = _pricing_ok(proposal)
+    if not ok:
+        return Verdict.reject(f"pricing: {why}")
+    reasons.append(why)
+
+    qty, notes = size_position(proposal, snap)
+    reasons.extend(notes)
+    if qty < 1:
+        return Verdict(approved=False, reasons=reasons + ["sized to zero contracts"], qty=0)
+
+    return Verdict(approved=True, reasons=reasons, qty=qty)
+
+
+def vertical_max_loss(width: float, net_price: float) -> float:
+    """Max loss per spread in dollars for a defined-risk vertical."""
+    if net_price > 0:  # credit spread
+        return (width - net_price) * CONTRACT_MULTIPLIER
+    return abs(net_price) * CONTRACT_MULTIPLIER
+
+
+def vertical_max_gain(width: float, net_price: float) -> float:
+    if net_price > 0:
+        return net_price * CONTRACT_MULTIPLIER
+    return (width - abs(net_price)) * CONTRACT_MULTIPLIER
