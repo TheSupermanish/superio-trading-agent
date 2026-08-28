@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28T15:14:00.873781+00:00",
+  "generated_at": "2026-08-28T15:24:05.707095+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": true,
@@ -31,9 +31,9 @@
     "by_underlying": {}
   },
   "gates": {
-    "considered": 100,
+    "considered": 106,
     "approved": 8,
-    "rejected": 92,
+    "rejected": 98,
     "rejections_by_gate": [
       {
         "gate": "G1",
@@ -43,7 +43,7 @@
       {
         "gate": "G2",
         "name": "daily and concurrent trade budget",
-        "count": 76
+        "count": 82
       },
       {
         "gate": "G3",
@@ -218,9 +218,95 @@
       "buying_power": 399999.6,
       "open_risk": 0.0,
       "day_pnl": -0.10000000000582077
+    },
+    {
+      "ts": "2026-08-28T15:17:37.413772+00:00",
+      "equity": 99999.9,
+      "cash": 99999.9,
+      "buying_power": 399999.6,
+      "open_risk": 0.0,
+      "day_pnl": -0.10000000000582077
+    },
+    {
+      "ts": "2026-08-28T15:23:26.332249+00:00",
+      "equity": 99999.9,
+      "cash": 99999.9,
+      "buying_power": 399999.6,
+      "open_risk": 0.0,
+      "day_pnl": -0.10000000000582077
     }
   ],
   "recent_decisions": [
+    {
+      "id": 157,
+      "ts": "2026-08-28T15:23:35.563580+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"IWM\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"IWM260901C00299000\", \"side\": \"buy\", \"strike\": 299.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 1.045, \"bid\": 1.0, \"ask\": 1.09, \"delta\": 0.423, \"ratio_qty\": 1}, {\"symbol\": \"IWM260901C00302000\", \"side\": \"sell\", \"strike\": 302.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 0.245, \"bid\": 0.24, \"ask\": 0.25, \"delta\": 0.1419, \"ratio_qty\": 1}], \"net_price\": -0.85, \"net_price_mid\": -0.8, \"width\": 3.0, \"max_loss_per_unit\": 85.0, \"max_gain_per_unit\": 215.0, \"qty\": 0, \"thesis\": \"Pay 0.85 for the 299/302 call spread expiring 2026-09-01: 2.5x payoff if the move continues.\", \"tags\": [\"dte:4\", \"payoff:2.5x\", \"iv:0.11\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 156,
+      "ts": "2026-08-28T15:23:33.085226+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260828C00724000\", \"side\": \"buy\", \"strike\": 724.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.735, \"bid\": 0.73, \"ask\": 0.74, \"delta\": 0.3747, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260828C00727000\", \"side\": \"sell\", \"strike\": 727.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.145, \"bid\": 0.14, \"ask\": 0.15, \"delta\": 0.1005, \"ratio_qty\": 1}], \"net_price\": -0.6, \"net_price_mid\": -0.59, \"width\": 3.0, \"max_loss_per_unit\": 60.0, \"max_gain_per_unit\": 240.0, \"qty\": 0, \"thesis\": \"Pay 0.60 for the 724/727 call spread expiring 2026-08-28: 4.0x payoff if the move continues.\", \"tags\": [\"dte:0\", \"payoff:4.0x\", \"iv:0.15\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 155,
+      "ts": "2026-08-28T15:23:30.409261+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"SPY\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"SPY260901C00777000\", \"side\": \"buy\", \"strike\": 777.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 1.53, \"bid\": 1.52, \"ask\": 1.54, \"delta\": 0.3767, \"ratio_qty\": 1}, {\"symbol\": \"SPY260901C00785000\", \"side\": \"sell\", \"strike\": 785.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 0.115, \"bid\": 0.11, \"ask\": 0.12, \"delta\": 0.0475, \"ratio_qty\": 1}], \"net_price\": -1.43, \"net_price_mid\": -1.415, \"width\": 8.0, \"max_loss_per_unit\": 143.0, \"max_gain_per_unit\": 657.0, \"qty\": 0, \"thesis\": \"Pay 1.43 for the 777/785 call spread expiring 2026-09-01: 4.6x payoff if the move continues.\", \"tags\": [\"dte:4\", \"payoff:4.6x\", \"iv:0.07\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 154,
+      "ts": "2026-08-28T15:18:23.535702+00:00",
+      "agent": "strategist",
+      "sleeve": null,
+      "underlying": null,
+      "proposal": "{\"action\": \"stand_aside\", \"confidence\": 1.0, \"tool_calls\": [{\"step\": 0, \"tool\": \"get_account_state\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_open_positions\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_calendar\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SPY\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"QQQ\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"IWM\"}}], \"chosen\": [], \"market_brief\": {\"session_tone\": \"mixed\", \"summary\": \"US equity markets are trading mixed as investors await the first major speech by new Federal Reserve Chair Kevin Warsh at the Jackson Hole symposium. [1, 4] His remarks are highly anticipated for clues on the future path of interest rates, especially with inflation remaining above the Fed's target. [2, 9] The market is digesting yesterday's tech-led rally, which was fueled by strong earnings from Nvidia, while also reacting to new earnings reports from companies like Gap and Marvell Technology. [1, 3]\", \"catalysts_today\": [\"Federal Reserve Chair Kevin Warsh's speech at the Jackson Hole Economic Symposium (10:00 a.m. ET). [2, 8]\", \"Earnings reports from Gap (GPS) and Marvell Technology (MRVL). [1]\"], \"vol_context\": \"The CBOE Volatility Index (VIX) was down yesterday, and futures are indicating a mixed and cautious open, suggesting uncertainty is present but not spiking ahead of the Fed speech. [3, 1]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity markets today August 28 2026\", \"market tone today August 28 2026\", \"SPY QQQ IWM trading today August 28 2026\", \"economic data release today August 28 2026\", \"Federal Reserve speakers today August 28 2026\", \"VIX today August 28 2026\"], \"cached\": true}}",
+      "verdict": "stand_aside",
+      "reasons": "[\"The account has reached its daily trading limit, with zero trades remaining. Although the volatility regime suggests options are cheap and buying convexity would be the indicated action, no new positions can be opened today.\", \"source: gemini\", \"6 tool calls over 2 steps\"]"
+    },
+    {
+      "id": 153,
+      "ts": "2026-08-28T15:17:44.989398+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"IWM\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"IWM260901C00299000\", \"side\": \"buy\", \"strike\": 299.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 1.08, \"bid\": 1.06, \"ask\": 1.1, \"delta\": 0.4259, \"ratio_qty\": 1}, {\"symbol\": \"IWM260901C00304000\", \"side\": \"sell\", \"strike\": 304.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 0.095, \"bid\": 0.09, \"ask\": 0.1, \"delta\": 0.0611, \"ratio_qty\": 1}], \"net_price\": -1.01, \"net_price_mid\": -0.985, \"width\": 5.0, \"max_loss_per_unit\": 101.0, \"max_gain_per_unit\": 399.0, \"qty\": 0, \"thesis\": \"Pay 1.01 for the 299/304 call spread expiring 2026-09-01: 4.0x payoff if the move continues.\", \"tags\": [\"dte:4\", \"payoff:4.0x\", \"iv:0.11\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 152,
+      "ts": "2026-08-28T15:17:42.602052+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260828C00724000\", \"side\": \"buy\", \"strike\": 724.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.74, \"bid\": 0.73, \"ask\": 0.75, \"delta\": 0.3458, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260828C00727000\", \"side\": \"sell\", \"strike\": 727.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.155, \"bid\": 0.15, \"ask\": 0.16, \"delta\": 0.0992, \"ratio_qty\": 1}], \"net_price\": -0.6, \"net_price_mid\": -0.585, \"width\": 3.0, \"max_loss_per_unit\": 60.0, \"max_gain_per_unit\": 240.0, \"qty\": 0, \"thesis\": \"Pay 0.60 for the 724/727 call spread expiring 2026-08-28: 4.0x payoff if the move continues.\", \"tags\": [\"dte:0\", \"payoff:4.0x\", \"iv:0.17\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 151,
+      "ts": "2026-08-28T15:17:40.217522+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"SPY\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"SPY260828C00775000\", \"side\": \"buy\", \"strike\": 775.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.715, \"bid\": 0.71, \"ask\": 0.72, \"delta\": 0.4098, \"ratio_qty\": 1}, {\"symbol\": \"SPY260828C00778000\", \"side\": \"sell\", \"strike\": 778.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.095, \"bid\": 0.09, \"ask\": 0.1, \"delta\": 0.082, \"ratio_qty\": 1}], \"net_price\": -0.63, \"net_price_mid\": -0.62, \"width\": 3.0, \"max_loss_per_unit\": 63.0, \"max_gain_per_unit\": 237.0, \"qty\": 0, \"thesis\": \"Pay 0.63 for the 775/778 call spread expiring 2026-08-28: 3.8x payoff if the move continues.\", \"tags\": [\"dte:0\", \"payoff:3.8x\", \"iv:0.12\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
     {
       "id": 150,
       "ts": "2026-08-28T15:12:39.123461+00:00",
@@ -1350,76 +1436,6 @@
       "proposal": "{\"sleeve\": \"core\", \"underlying\": \"IWM\", \"kind\": \"call_credit_spread\", \"legs\": [{\"symbol\": \"IWM260904C00305000\", \"side\": \"sell\", \"strike\": 305.0, \"expiry\": \"2026-09-04\", \"is_call\": true, \"mid\": 0.355, \"bid\": 0.34, \"ask\": 0.37, \"delta\": 0.1267, \"ratio_qty\": 1}, {\"symbol\": \"IWM260904C00306000\", \"side\": \"buy\", \"strike\": 306.0, \"expiry\": \"2026-09-04\", \"is_call\": true, \"mid\": 0.21, \"bid\": 0.2, \"ask\": 0.22, \"delta\": 0.0849, \"ratio_qty\": 1}], \"net_price\": 0.12, \"net_price_mid\": 0.145, \"width\": 1.0, \"max_loss_per_unit\": 88.0, \"max_gain_per_unit\": 12.0, \"qty\": 0, \"thesis\": \"Sell the 305 call at 0.13 delta expiring 2026-09-04, buy the 306 wing. Collect 0.12 on 1 wide (12% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:7\", \"delta:0.13\", \"iv:0.14\", \"width:1\"]}",
       "verdict": "rejected",
       "reasons": "[\"G5 pricing: credit 12.0% of width is below the 18% floor\"]"
-    },
-    {
-      "id": 37,
-      "ts": "2026-08-28T14:17:39.660193+00:00",
-      "agent": "scout",
-      "sleeve": null,
-      "underlying": "IWM",
-      "proposal": "{\"underlying\": \"IWM\", \"spot\": 298.175, \"sma20\": 300.36575, \"sma50\": 297.308, \"trend\": \"chop\", \"ret_5d\": -0.0062179102487164295, \"realized_vol\": 0.13793857356834044, \"atm_iv\": 0.118, \"vol_premium\": -0.019938573568340445, \"bias\": \"neutral\", \"notes\": [\"spot 298.18 vs sma20 300.37 vs sma50 297.31\", \"atm iv 11.8% vs realized 13.8% -> discount -2.0%\", \"options are cheap relative to realized movement; favour buying convexity\"]}",
-      "verdict": "observed",
-      "reasons": "[\"spot 298.18 vs sma20 300.37 vs sma50 297.31\", \"atm iv 11.8% vs realized 13.8% -> discount -2.0%\", \"options are cheap relative to realized movement; favour buying convexity\"]"
-    },
-    {
-      "id": 36,
-      "ts": "2026-08-28T14:17:38.418167+00:00",
-      "agent": "strategist",
-      "sleeve": null,
-      "underlying": "QQQ",
-      "proposal": "{\"candidates\": [{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260828C00720000\", \"side\": \"buy\", \"strike\": 720.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 1.225, \"bid\": 1.22, \"ask\": 1.23, \"delta\": 0.3856, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260828C00725000\", \"side\": \"sell\", \"strike\": 725.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.165, \"bid\": 0.16, \"ask\": 0.17, \"delta\": 0.0809, \"ratio_qty\": 1}], \"net_price\": -1.07, \"net_price_mid\": -1.06, \"width\": 5.0, \"max_loss_per_unit\": 107.0, \"max_gain_per_unit\": 393.0, \"qty\": 5, \"thesis\": \"Pay 1.07 for the 720/725 call spread expiring 2026-08-28: 3.7x payoff if the move continues.\", \"tags\": [\"dte:0\", \"payoff:3.7x\", \"iv:0.24\"]}], \"choice\": 0, \"confidence\": 0.5}",
-      "verdict": "selected",
-      "reasons": "[\"no model configured; taking the top-ranked structure\", \"source: unavailable\"]"
-    },
-    {
-      "id": 35,
-      "ts": "2026-08-28T14:17:38.417139+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "QQQ",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"QQQ\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"QQQ260904P00696000\", \"side\": \"sell\", \"strike\": 696.0, \"expiry\": \"2026-09-04\", \"is_call\": false, \"mid\": 1.235, \"bid\": 1.22, \"ask\": 1.25, \"delta\": -0.1217, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260904P00695000\", \"side\": \"buy\", \"strike\": 695.0, \"expiry\": \"2026-09-04\", \"is_call\": false, \"mid\": 1.12, \"bid\": 1.11, \"ask\": 1.13, \"delta\": -0.1122, \"ratio_qty\": 1}], \"net_price\": 0.09, \"net_price_mid\": 0.115, \"width\": 1.0, \"max_loss_per_unit\": 91.0, \"max_gain_per_unit\": 9.0, \"qty\": 0, \"thesis\": \"Sell the 696 put at 0.12 delta expiring 2026-09-04, buy the 695 wing. Collect 0.09 on 1 wide (9% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:7\", \"delta:0.12\", \"iv:0.20\", \"width:1\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G5 pricing: credit 9.0% of width is below the 18% floor\"]"
-    },
-    {
-      "id": 34,
-      "ts": "2026-08-28T14:17:38.415811+00:00",
-      "agent": "risk_officer",
-      "sleeve": "convex",
-      "underlying": "QQQ",
-      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260828C00720000\", \"side\": \"buy\", \"strike\": 720.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 1.225, \"bid\": 1.22, \"ask\": 1.23, \"delta\": 0.3856, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260828C00725000\", \"side\": \"sell\", \"strike\": 725.0, \"expiry\": \"2026-08-28\", \"is_call\": true, \"mid\": 0.165, \"bid\": 0.16, \"ask\": 0.17, \"delta\": 0.0809, \"ratio_qty\": 1}], \"net_price\": -1.07, \"net_price_mid\": -1.06, \"width\": 5.0, \"max_loss_per_unit\": 107.0, \"max_gain_per_unit\": 393.0, \"qty\": 0, \"thesis\": \"Pay 1.07 for the 720/725 call spread expiring 2026-08-28: 3.7x payoff if the move continues.\", \"tags\": [\"dte:0\", \"payoff:3.7x\", \"iv:0.24\"]}",
-      "verdict": "approved",
-      "reasons": "[\"G1 kill switches clear\", \"G2 6/8 trades today, 1/10 open\", \"G3 all short legs covered by same-expiry long legs\", \"G4 all legs liquid\", \"G5 debit is 21.4% of width\", \"G6 no scheduled catalyst before expiry\", \"G7 per-trade cap 600 / unit risk 107 -> 5\", \"G7 portfolio room 5,457 -> 5\", \"G7 convex sleeve room 2,500 -> 5\", \"G7 QQQ room 2,500 -> 5\", \"G7 buying power room 200,000 -> 5\"]"
-    },
-    {
-      "id": 33,
-      "ts": "2026-08-28T14:17:36.491181+00:00",
-      "agent": "scout",
-      "sleeve": null,
-      "underlying": "QQQ",
-      "proposal": "{\"underlying\": \"QQQ\", \"spot\": 718.665, \"sma20\": 718.0095, \"sma50\": 712.0360000000001, \"trend\": \"up\", \"ret_5d\": 0.006784317573344856, \"realized_vol\": 0.18031358474069065, \"atm_iv\": 0.1256, \"vol_premium\": -0.05471358474069066, \"bias\": \"bullish\", \"notes\": [\"spot 718.66 vs sma20 718.01 vs sma50 712.04\", \"atm iv 12.6% vs realized 18.0% -> discount -5.5%\", \"options are cheap relative to realized movement; favour buying convexity\"]}",
-      "verdict": "observed",
-      "reasons": "[\"spot 718.66 vs sma20 718.01 vs sma50 712.04\", \"atm iv 12.6% vs realized 18.0% -> discount -5.5%\", \"options are cheap relative to realized movement; favour buying convexity\"]"
-    },
-    {
-      "id": 32,
-      "ts": "2026-08-28T14:17:34.950314+00:00",
-      "agent": "strategist",
-      "sleeve": null,
-      "underlying": "SPY",
-      "proposal": "{\"candidates\": [{\"sleeve\": \"convex\", \"underlying\": \"SPY\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"SPY260901C00773000\", \"side\": \"buy\", \"strike\": 773.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 1.935, \"bid\": 1.9, \"ask\": 1.97, \"delta\": 0.402, \"ratio_qty\": 1}, {\"symbol\": \"SPY260901C00781000\", \"side\": \"sell\", \"strike\": 781.0, \"expiry\": \"2026-09-01\", \"is_call\": true, \"mid\": 0.17, \"bid\": 0.16, \"ask\": 0.18, \"delta\": 0.0626, \"ratio_qty\": 1}], \"net_price\": -1.81, \"net_price_mid\": -1.765, \"width\": 8.0, \"max_loss_per_unit\": 181.0, \"max_gain_per_unit\": 619.0, \"qty\": 3, \"thesis\": \"Pay 1.81 for the 773/781 call spread expiring 2026-09-01: 3.4x payoff if the move continues.\", \"tags\": [\"dte:4\", \"payoff:3.4x\", \"iv:0.08\"]}], \"choice\": 0, \"confidence\": 0.5}",
-      "verdict": "selected",
-      "reasons": "[\"no model configured; taking the top-ranked structure\", \"source: unavailable\"]"
-    },
-    {
-      "id": 31,
-      "ts": "2026-08-28T14:17:34.949623+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"SPY\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"SPY260831P00763000\", \"side\": \"sell\", \"strike\": 763.0, \"expiry\": \"2026-08-31\", \"is_call\": false, \"mid\": 0.495, \"bid\": 0.49, \"ask\": 0.5, \"delta\": -0.1319, \"ratio_qty\": 1}, {\"symbol\": \"SPY260831P00762000\", \"side\": \"buy\", \"strike\": 762.0, \"expiry\": \"2026-08-31\", \"is_call\": false, \"mid\": 0.365, \"bid\": 0.36, \"ask\": 0.37, \"delta\": -0.1033, \"ratio_qty\": 1}], \"net_price\": 0.12, \"net_price_mid\": 0.13, \"width\": 1.0, \"max_loss_per_unit\": 88.0, \"max_gain_per_unit\": 12.0, \"qty\": 0, \"thesis\": \"Sell the 763 put at 0.13 delta expiring 2026-08-31, buy the 762 wing. Collect 0.12 on 1 wide (12% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:3\", \"delta:0.13\", \"iv:0.11\", \"width:1\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G5 pricing: credit 12.0% of width is below the 18% floor\"]"
     }
   ],
   "recent_orders": [
@@ -1521,6 +1537,22 @@
     }
   ],
   "recent_events": [
+    {
+      "id": 11,
+      "ts": "2026-08-28T15:17:32.841849+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 10,
+      "ts": "2026-08-28T15:17:28.704676+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=test2 variant=convex_tilt mode=DRY RUN until Mon 31 Aug 19:20 +0545",
+      "data": null
+    },
     {
       "id": 9,
       "ts": "2026-08-28T15:11:31.809536+00:00",
