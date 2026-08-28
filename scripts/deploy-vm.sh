@@ -104,8 +104,8 @@ After=network-online.target
 [Service]
 Type=simple
 User=$USER
-WorkingDirectory=$ROOT/dashboard/out
-ExecStart=/usr/bin/python3 -m http.server $DASH_PORT --bind 0.0.0.0
+WorkingDirectory=$ROOT
+ExecStart=/usr/bin/python3 $ROOT/scripts/serve.py $ROOT/dashboard/out $DASH_PORT
 Restart=always
 RestartSec=10
 
