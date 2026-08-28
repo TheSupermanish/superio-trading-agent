@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+# Provision Superio on a Debian VM alongside whatever else is running there.
+#
+# Deliberately self-contained under /opt/superio with its own systemd units and
+# its own port, so it cannot collide with an existing web stack. Nothing here
+# touches ports 80 or 443.
+set -euo pipefail
+
+REPO="https://github.com/TheSupermanish/superio-trading-agent.git"
+ROOT=/opt/superio
+DASH_PORT=8088
+
+echo "== packages =="
+sudo apt-get update -qq
+sudo apt-get install -y -qq git curl jq >/dev/null
+
+echo "== alpaca CLI =="
+if ! command -v alpaca >/dev/null 2>&1; then
+  ARCH=$(dpkg --print-architecture)
+  curl -fsSL "https://github.com/alpacahq/cli/releases/latest/download/alpaca_Linux_x86_64.tar.gz" \
+    -o /tmp/alpaca.tgz
+  sudo tar -xzf /tmp/alpaca.tgz -C /usr/local/bin alpaca
+  sudo chmod +x /usr/local/bin/alpaca
+fi
+alpaca version || true
+
+echo "== uv =="
+if ! command -v uv >/dev/null 2>&1; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh >/dev/null
+  sudo ln -sf "$HOME/.local/bin/uv" /usr/local/bin/uv
+  sudo ln -sf "$HOME/.local/bin/uvx" /usr/local/bin/uvx
+fi
+
+echo "== code =="
+sudo mkdir -p "$ROOT"
+sudo chown -R "$USER":"$USER" "$ROOT"
+if [ -d "$ROOT/.git" ]; then
+  git -C "$ROOT" fetch --quiet origin && git -C "$ROOT" reset --hard --quiet origin/main
+else
+  git clone --quiet "$REPO" "$ROOT"
+fi
+
+echo "== python env =="
+cd "$ROOT"
+uv venv --python 3.11 --quiet 2>/dev/null || uv venv --quiet
+VIRTUAL_ENV="$ROOT/.venv" uv pip install --quiet -e .
+VIRTUAL_ENV="$ROOT/.venv" uv pip install --quiet google-genai mcp
+mkdir -p "$ROOT/logs" "$ROOT/data"
+
+echo "== dashboard =="
+if ! command -v node >/dev/null 2>&1; then
+  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - >/dev/null 2>&1
+  sudo apt-get install -y -qq nodejs >/dev/null
+fi
+cd "$ROOT/dashboard"
+npm ci --silent --no-audit --no-fund
+NEXT_PUBLIC_BASE_PATH="" npm run build --silent
+cd "$ROOT"
+
+echo "== systemd =="
+for spec in main:barbell test2:convex_tilt test3:income_only; do
+  prof="${spec%%:*}"; var="${spec##*:}"
+  sudo tee /etc/systemd/system/superio-$prof.service >/dev/null <<UNIT
+[Unit]
+Description=Superio trading agent ($prof / $var)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=$ROOT
+Environment=ALPACA_PROFILE=$prof
+Environment=STRATEGY_VARIANT=$var
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=$ROOT/.venv/bin/python -m engine.loop --interval 300
+Restart=always
+RestartSec=30
+StandardOutput=append:$ROOT/logs/$prof.log
+StandardError=append:$ROOT/logs/$prof.log
+MemoryMax=600M
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+done
+
+sudo tee /etc/systemd/system/superio-dashboard.service >/dev/null <<UNIT
+[Unit]
+Description=Superio dashboard (static)
+After=network-online.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=$ROOT/dashboard/out
+ExecStart=/usr/bin/python3 -m http.server $DASH_PORT --bind 0.0.0.0
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+# Refresh the snapshot the dashboard reads, straight into the served directory.
+sudo tee /etc/systemd/system/superio-snapshot.service >/dev/null <<UNIT
+[Unit]
+Description=Superio dashboard snapshot refresh
+
+[Service]
+Type=oneshot
+User=$USER
+WorkingDirectory=$ROOT
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/bin/bash $ROOT/scripts/vm-snapshot.sh
+UNIT
+
+sudo tee /etc/systemd/system/superio-snapshot.timer >/dev/null <<UNIT
+[Unit]
+Description=Refresh the Superio snapshot every minute
+
+[Timer]
+OnBootSec=90
+OnUnitActiveSec=60
+
+[Install]
+WantedBy=timers.target
+UNIT
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now superio-main superio-test2 superio-test3 \
+  superio-dashboard superio-snapshot.timer >/dev/null 2>&1
+echo "== done =="
+systemctl --no-pager --plain list-units 'superio-*' | head -12
