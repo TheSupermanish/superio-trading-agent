@@ -46,9 +46,28 @@ GEMINI_FAST_MODEL = "gemini-2.5-flash"
 #: pay-as-you-go is to retry, because availability changes second to second.
 #:
 #: Regional pools are independent, so failing over to another region clears a
-#: 429 far more often than waiting does. These are the regions serving 2.5 that
-#: we verified answer both plain and grounded requests.
-GEMINI_REGIONS = ("us-central1", "us-east5", "global")
+#: 429 far more often than waiting does. Every region below was probed and
+#: confirmed to serve gemini-2.5-pro; the ones that returned 404 (europe-west2,
+#: asia-south1, asia-southeast1, australia-southeast1) are deliberately absent.
+#:
+#: Ordered nearest-first for latency, but spread across continents early so the
+#: fallbacks are genuinely independent pools rather than neighbours likely to be
+#: congested at the same moment.
+GEMINI_REGIONS = (
+    "us-central1",
+    "us-east5",
+    "us-west1",
+    "us-east4",
+    "europe-west4",
+    "asia-northeast1",
+    "us-south1",
+    "global",
+)
+
+#: Google Search grounding is served from fewer places than plain generation,
+#: and the `global` endpoint answers a grounded request with an empty candidate
+#: instead of an error, so it is excluded here rather than merely deprioritised.
+GROUNDING_REGIONS = ("us-central1", "us-east5", "us-east4", "us-west1")
 
 #: A route is one (model, region) pair. Pro in every region before Flash, so we
 #: only trade reasoning quality away once every regional pool has refused.
@@ -78,14 +97,7 @@ def featherless_available() -> bool:
     return bool(SETTINGS.featherless_api_key)
 
 
-#: Google Search grounding is not served from every Vertex region. The `global`
-#: endpoint accepts a grounded request and returns an empty candidate, and some
-#: regional endpoints reject it outright, so grounding gets its own client
-#: pinned to a region that actually serves it.
-GROUNDING_LOCATION = "us-central1"
-
-
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=16)
 def _client_for(location: str) -> Any | None:
     if not SETTINGS.vertex_project:
         return None
@@ -309,12 +321,13 @@ def search_grounded(
     Grounded responses cannot use a JSON response_mime_type either, so the JSON
     is parsed out of the prose.
     """
-    client = _client_for(GROUNDING_LOCATION)
-    if client is None:
-        return None
     from google.genai import types
 
     for model in GEMINI_REASONING_MODELS:
+      for region in GROUNDING_REGIONS:
+        client = _client_for(region)
+        if client is None:
+            continue
         try:
             response = client.models.generate_content(
                 model=model,
@@ -342,7 +355,9 @@ def search_grounded(
                 sources = list(getattr(metadata, "web_search_queries", None) or [])
             return parsed, sources
         except Exception as exc:  # noqa: BLE001
-            log.warning("%s grounded search failed: %s", model, str(exc)[:160])
+            if not _retryable(exc):
+                log.warning("%s/%s grounded search failed: %s", model, region, str(exc)[:160])
+    log.warning("no Gemini route served a grounded search this pass")
     return None
 
 
