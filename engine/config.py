@@ -18,6 +18,8 @@ import os
 from dataclasses import dataclass, replace
 from pathlib import Path
 
+from datetime import datetime, timezone
+
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -135,7 +137,8 @@ class Settings:
     stock_feed: str
     anthropic_api_key: str
     featherless_api_key: str
-    dry_run: bool
+    force_dry_run: bool
+    live_from: datetime | None
     db_path: Path
     risk: RiskLimits
     strategy: StrategyParams
@@ -144,9 +147,42 @@ class Settings:
     def configured(self) -> bool:
         return bool(self.api_key and self.secret_key)
 
+    @property
+    def dry_run(self) -> bool:
+        """Orders are simulated unless we are past the arming time.
+
+        `DRY_RUN=true` pins the agent to simulation permanently. Otherwise the
+        agent arms itself at `LIVE_FROM`, which lets a supervisor be started
+        days early and begin trading on its own at the intended moment instead
+        of depending on someone being at a keyboard.
+        """
+        if self.force_dry_run:
+            return True
+        if self.live_from is None:
+            return False
+        return datetime.now(timezone.utc) < self.live_from
+
     def describe(self) -> str:
-        mode = "DRY RUN" if self.dry_run else "LIVE PAPER"
+        if self.dry_run:
+            mode = "DRY RUN"
+            if not self.force_dry_run and self.live_from:
+                mode += f" until {self.live_from.astimezone().strftime('%a %d %b %H:%M %Z')}"
+        else:
+            mode = "LIVE PAPER"
         return f"profile={self.profile} variant={self.variant} mode={mode}"
+
+
+def _parse_live_from(raw: str | None) -> datetime | None:
+    """Parse the arming time. An unparseable value keeps the agent simulated."""
+    if not raw:
+        return None
+    try:
+        parsed = datetime.fromisoformat(raw.strip())
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
 
 
 def _profile_value(profile: str, suffix: str, fallback: str = "") -> str:
@@ -172,7 +208,8 @@ def load_settings(profile: str | None = None, variant: str | None = None) -> Set
         stock_feed=os.getenv("ALPACA_STOCK_FEED", "iex"),
         anthropic_api_key=os.getenv("ANTHROPIC_API_KEY", ""),
         featherless_api_key=os.getenv("FEATHERLESS_API_KEY", ""),
-        dry_run=_env_bool("DRY_RUN", True),
+        force_dry_run=_env_bool("DRY_RUN", True),
+        live_from=_parse_live_from(os.getenv("LIVE_FROM")),
         db_path=ROOT / "data" / f"superio-{profile}.db",
         risk=risk,
         strategy=strategy,

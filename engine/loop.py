@@ -15,7 +15,18 @@ import time
 from dataclasses import asdict
 from typing import Any
 
-from engine import alpaca_cli, executor, manager, preflight, reconcile, risk, state
+from engine import (
+    alpaca_cli,
+    executor,
+    manager,
+    mcp_research,
+    preflight,
+    reconcile,
+    report,
+    risk,
+    state,
+)
+from engine.agents import strategist
 from engine.config import SETTINGS
 from engine.regime import Regime, read as read_regime
 from engine.strategies import build_credit_spread, build_debit_spread, build_iron_condor
@@ -105,6 +116,13 @@ def scan_and_trade(snap: risk.PortfolioSnapshot) -> list[dict[str, Any]]:
     """One entry pass across the universe. At most one new structure per name."""
     results: list[dict[str, Any]] = []
 
+    # One MCP session for the whole pass rather than one per symbol.
+    news: dict[str, list[dict[str, str]]] = {}
+    try:
+        news = mcp_research.research_sync(list(SETTINGS.strategy.universe)).get("news", {})
+    except Exception as exc:  # noqa: BLE001
+        log.debug("news unavailable: %s", exc)
+
     for underlying in SETTINGS.strategy.universe:
         try:
             regime = read_regime(underlying)
@@ -120,7 +138,10 @@ def scan_and_trade(snap: risk.PortfolioSnapshot) -> list[dict[str, Any]]:
             underlying=underlying,
         )
 
-        opened = False
+        # Gate every candidate first. The strategist only ever sees structures
+        # that are already approved and already sized, so its choice cannot
+        # widen risk -- at worst it picks a slightly worse safe trade.
+        approved: list[Proposal] = []
         for proposal in candidates_for(regime):
             verdict = risk.evaluate(proposal, snap)
             state.log_decision(
@@ -132,50 +153,78 @@ def scan_and_trade(snap: risk.PortfolioSnapshot) -> list[dict[str, Any]]:
                 underlying=underlying,
             )
             if not verdict.approved:
-                log.info(
-                    "%s %s rejected: %s", underlying, proposal.kind, verdict.reasons[-1]
-                )
+                log.info("%s %s rejected: %s", underlying, proposal.kind, verdict.reasons[-1])
                 continue
-
             proposal.qty = verdict.qty
-            result = executor.open_position(
-                proposal, verdict.qty, thesis_extra=f"Regime: {regime.trend}/{regime.bias}."
-            )
-            log.info(
-                "%s %s x%s @ %s -> %s",
-                underlying,
-                proposal.kind,
-                verdict.qty,
-                result.limit_price,
-                "submitted" if result.submitted else (result.error or "dry run"),
-            )
-            results.append(
-                {
-                    "underlying": underlying,
-                    "kind": proposal.kind,
-                    "qty": verdict.qty,
-                    "limit_price": result.limit_price,
-                    "command": result.command,
-                    "submitted": result.submitted,
-                    "error": result.error,
-                }
-            )
-            snap.open_risk += proposal.max_loss_per_unit * verdict.qty
-            snap.trades_today += 1
-            snap.open_structures += 1
-            opened = True
-            break  # one new structure per underlying per pass
+            approved.append(proposal)
 
-        if not opened:
+        if not approved:
             log.info("%s: no structure cleared the gates this pass", underlying)
+            continue
+
+        headlines = news.get(underlying, []) if news else []
+        call = strategist.choose(regime, approved, headlines)
+        state.log_decision(
+            agent="strategist",
+            proposal={
+                "candidates": [p.as_dict() for p in approved],
+                "choice": call.choice,
+                "confidence": call.confidence,
+            },
+            verdict="declined" if call.declined else "selected",
+            reasons=[call.reasoning, f"source: {call.source}"],
+            underlying=underlying,
+        )
+        if call.declined:
+            log.info("%s: strategist declined -- %s", underlying, call.reasoning)
+            continue
+
+        proposal = approved[call.choice]
+        result = executor.open_position(
+            proposal,
+            proposal.qty,
+            thesis_extra=f"Regime: {regime.trend}/{regime.bias}. {call.reasoning}".strip(),
+        )
+        log.info(
+            "%s %s x%s @ %s -> %s",
+            underlying,
+            proposal.kind,
+            proposal.qty,
+            result.limit_price,
+            "submitted" if result.submitted else (result.error or "dry run"),
+        )
+        results.append(
+            {
+                "underlying": underlying,
+                "kind": proposal.kind,
+                "qty": proposal.qty,
+                "limit_price": result.limit_price,
+                "command": result.command,
+                "submitted": result.submitted,
+                "error": result.error,
+                "strategist": call.source,
+            }
+        )
+        snap.open_risk += proposal.max_loss_per_unit * proposal.qty
+        snap.trades_today += 1
+        snap.open_structures += 1
 
     return results
+
+
+def _publish() -> None:
+    """Refresh the snapshot the dashboard reads. Never fatal."""
+    try:
+        report.write()
+    except Exception as exc:  # noqa: BLE001
+        log.warning("could not write snapshot: %s", exc)
 
 
 def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
     is_open, clock = market_open()
     if not is_open and not ignore_market_hours:
         log.info("market closed, next open %s", clock.get("next_open"))
+        _publish()
         return {"traded": False, "reason": "market closed", "clock": clock}
 
     # What the broker holds is the truth; correct the journal before sizing
@@ -199,10 +248,12 @@ def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
         log.warning("KILL SWITCH: %s -- flattening", reason)
         state.log_event("kill_switch", reason or "", level="warning", data=asdict(snap))
         marks = manager.manage(force_flatten=True)
+        _publish()
         return {"traded": False, "reason": reason, "marks": [m.__dict__ for m in marks]}
 
     marks = manager.manage()
     opened = scan_and_trade(snap)
+    _publish()
 
     return {
         "traded": bool(opened),
