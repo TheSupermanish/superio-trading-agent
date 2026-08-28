@@ -15,5 +15,14 @@ dependencies = [
     "rich>=13.0",
 ]
 
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# The dashboard sits next to the engine in this repo, so tell setuptools which
+# directories are actually Python packages rather than letting it guess.
+[tool.setuptools]
+packages = ["engine", "engine.agents", "engine.strategies"]
+
 [tool.ruff]
 line-length = 100
