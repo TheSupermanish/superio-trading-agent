@@ -26,7 +26,7 @@ from engine import (
     risk,
     state,
 )
-from engine.agents import strategist
+from engine.agents import agent
 from engine.config import SETTINGS
 from engine.regime import Regime, read as read_regime
 from engine.strategies import build_credit_spread, build_debit_spread, build_iron_condor
@@ -113,99 +113,81 @@ def candidates_for(regime: Regime) -> list[Proposal]:
 
 
 def scan_and_trade(snap: risk.PortfolioSnapshot) -> list[dict[str, Any]]:
-    """One entry pass across the universe. At most one new structure per name."""
+    """One agent pass across the universe.
+
+    The agent investigates with tools and returns references to structures the
+    risk officer has already approved and sized. This function's only job is to
+    execute what it chose; it cannot be handed anything ungated, because
+    `propose_structure` is the only way a structure comes into existence and it
+    runs the gates before returning.
+    """
     results: list[dict[str, Any]] = []
 
-    # One MCP session for the whole pass rather than one per symbol.
-    news: dict[str, list[dict[str, str]]] = {}
-    try:
-        news = mcp_research.research_sync(list(SETTINGS.strategy.universe)).get("news", {})
-    except Exception as exc:  # noqa: BLE001
-        log.debug("news unavailable: %s", exc)
+    outcome = agent.run(snap)
+    state.log_decision(
+        agent="strategist",
+        proposal={
+            "action": outcome.action,
+            "confidence": outcome.confidence,
+            "tool_calls": outcome.tool_calls,
+            "chosen": [p.as_dict() for p in outcome.chosen],
+            "market_brief": outcome.brief,
+        },
+        verdict="trade" if outcome.trading else "stand_aside",
+        reasons=[
+            outcome.reasoning,
+            f"source: {outcome.source}",
+            f"{len(outcome.tool_calls)} tool calls over {outcome.steps} steps",
+        ],
+    )
 
-    for underlying in SETTINGS.strategy.universe:
-        try:
-            regime = read_regime(underlying)
-        except Exception as exc:  # noqa: BLE001 - one bad symbol must not stop the loop
-            log.warning("regime read failed for %s: %s", underlying, exc)
-            continue
+    if not outcome.trading:
+        log.info("agent stood aside: %s", outcome.reasoning or "no reason given")
+        return results
 
-        state.log_decision(
-            agent="scout",
-            proposal=regime.as_dict(),
-            verdict="observed",
-            reasons=regime.notes,
-            underlying=underlying,
-        )
+    log.info(
+        "agent chose %s (confidence %.2f): %s",
+        ", ".join(f"{p.underlying} {p.kind}" for p in outcome.chosen),
+        outcome.confidence,
+        outcome.reasoning,
+    )
 
-        # Gate every candidate first. The strategist only ever sees structures
-        # that are already approved and already sized, so its choice cannot
-        # widen risk -- at worst it picks a slightly worse safe trade.
-        approved: list[Proposal] = []
-        for proposal in candidates_for(regime):
-            verdict = risk.evaluate(proposal, snap)
-            state.log_decision(
-                agent="risk_officer",
-                proposal=proposal.as_dict(),
-                verdict="approved" if verdict.approved else "rejected",
-                reasons=verdict.reasons,
-                sleeve=proposal.sleeve,
-                underlying=underlying,
+    for proposal in outcome.chosen:
+        # Re-check against the budget as it stands now: the agent may have
+        # picked two structures that individually fit and together do not.
+        verdict = risk.evaluate(proposal, snap)
+        if not verdict.approved:
+            log.info(
+                "%s %s no longer fits the budget: %s",
+                proposal.underlying,
+                proposal.kind,
+                verdict.reasons[-1] if verdict.reasons else "unknown",
             )
-            if not verdict.approved:
-                log.info("%s %s rejected: %s", underlying, proposal.kind, verdict.reasons[-1])
-                continue
-            proposal.qty = verdict.qty
-            approved.append(proposal)
-
-        if not approved:
-            log.info("%s: no structure cleared the gates this pass", underlying)
             continue
+        qty = min(proposal.qty or verdict.qty, verdict.qty)
 
-        headlines = news.get(underlying, []) if news else []
-        call = strategist.choose(regime, approved, headlines)
-        state.log_decision(
-            agent="strategist",
-            proposal={
-                "candidates": [p.as_dict() for p in approved],
-                "choice": call.choice,
-                "confidence": call.confidence,
-            },
-            verdict="declined" if call.declined else "selected",
-            reasons=[call.reasoning, f"source: {call.source}"],
-            underlying=underlying,
-        )
-        if call.declined:
-            log.info("%s: strategist declined -- %s", underlying, call.reasoning)
-            continue
-
-        proposal = approved[call.choice]
-        result = executor.open_position(
-            proposal,
-            proposal.qty,
-            thesis_extra=f"Regime: {regime.trend}/{regime.bias}. {call.reasoning}".strip(),
-        )
+        result = executor.open_position(proposal, qty, thesis_extra=outcome.reasoning)
         log.info(
             "%s %s x%s @ %s -> %s",
-            underlying,
+            proposal.underlying,
             proposal.kind,
-            proposal.qty,
+            qty,
             result.limit_price,
             "submitted" if result.submitted else (result.error or "dry run"),
         )
         results.append(
             {
-                "underlying": underlying,
+                "underlying": proposal.underlying,
                 "kind": proposal.kind,
-                "qty": proposal.qty,
+                "qty": qty,
                 "limit_price": result.limit_price,
                 "command": result.command,
                 "submitted": result.submitted,
                 "error": result.error,
-                "strategist": call.source,
+                "agent_source": outcome.source,
             }
         )
-        snap.open_risk += proposal.max_loss_per_unit * proposal.qty
+        snap.open_risk += proposal.max_loss_per_unit * qty
         snap.trades_today += 1
         snap.open_structures += 1
 

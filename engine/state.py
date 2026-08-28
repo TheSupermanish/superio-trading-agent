@@ -261,11 +261,21 @@ def open_risk_by(field: str, value: str) -> float:
     return float(row["total"])
 
 
-def trades_opened_today() -> int:
+def trades_opened_today(include_simulated: bool | None = None) -> int:
+    """Structures opened today.
+
+    Simulated structures count while the agent is simulating, so a dry run
+    respects the same daily budget a live session would. They stop counting the
+    moment the agent arms, because rehearsing a trade never consumed anything.
+    """
+    if include_simulated is None:
+        include_simulated = SETTINGS.dry_run
     today = datetime.now(timezone.utc).date().isoformat()
+    clause = "" if include_simulated else " AND status != 'dry_run'"
     with db() as conn:
         row = conn.execute(
-            "SELECT COUNT(*) AS n FROM structures WHERE substr(opened_at, 1, 10) = ?", (today,)
+            f"SELECT COUNT(*) AS n FROM structures WHERE substr(opened_at, 1, 10) = ?{clause}",
+            (today,),
         ).fetchone()
     return int(row["n"])
 

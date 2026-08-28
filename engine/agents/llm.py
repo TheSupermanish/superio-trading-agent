@@ -1,15 +1,20 @@
 """Model access.
 
-Two tiers, deliberately split by cost and by consequence.
+Three tiers, split by cost and by consequence.
 
-* **Claude** handles judgement: which of several vetted structures best fits the
-  regime, and why. Decisions that touch money go here.
-* **Featherless** hosts small open-source models that handle volume: reducing a
-  stream of headlines to a sentiment label so Claude only ever reads the few
-  that matter. Cheap, disposable, and never trusted with a decision.
+* **Reasoning** decides which vetted structure to take. Consequential, so it
+  gets the strongest model available: Gemini 2.5 Pro on Vertex, or Claude if an
+  Anthropic key is configured.
+* **Classification** reduces a stream of headlines to sentiment labels so the
+  reasoning model only reads the few that matter. High volume, low stakes, so it
+  runs on a cheap model: Gemini 2.5 Flash, or Featherless if a key is set.
+* **Nothing** is the third tier, and it is a supported configuration. With no
+  provider reachable the engine runs fully deterministic, which is also how its
+  regression tests run.
 
-Both are optional. With no keys configured the engine runs fully deterministic,
-which is also how it runs its regression tests.
+Vertex authenticates through application-default credentials rather than an API
+key, so there is no secret to store: whatever `gcloud auth application-default
+login` already granted is what the agent uses.
 """
 
 from __future__ import annotations
@@ -17,6 +22,8 @@ from __future__ import annotations
 import json
 import logging
 import re
+import time
+from functools import lru_cache
 from typing import Any
 
 import httpx
@@ -26,6 +33,24 @@ from engine.config import SETTINGS
 log = logging.getLogger(__name__)
 
 CLAUDE_MODEL = "claude-sonnet-5"
+
+#: Tried in order. Pro reasons better but its quota is thin and it is the first
+#: thing to return 429 under load, so Flash backs it up rather than the call
+#: failing outright.
+GEMINI_REASONING_MODELS = ("gemini-2.5-pro", "gemini-2.5-flash")
+GEMINI_FAST_MODEL = "gemini-2.5-flash"
+
+#: Gemini 2.5 counts thinking tokens against max_output_tokens, so a budget
+#: sized for the visible answer alone gets truncated mid-JSON. Reserve room for
+#: both, and keep the thinking budget small since the hard reasoning already
+#: happened deterministically before the model was called.
+THINKING_BUDGET = 256
+OUTPUT_HEADROOM = 4
+
+
+def _retryable(exc: Exception) -> bool:
+    text = str(exc)
+    return "429" in text or "RESOURCE_EXHAUSTED" in text or "503" in text
 FEATHERLESS_MODEL = "Qwen/Qwen2.5-7B-Instruct"
 FEATHERLESS_BASE = "https://api.featherless.ai/v1"
 
@@ -38,9 +63,49 @@ def featherless_available() -> bool:
     return bool(SETTINGS.featherless_api_key)
 
 
+#: Google Search grounding is not served from every Vertex region. The `global`
+#: endpoint accepts a grounded request and returns an empty candidate, and some
+#: regional endpoints reject it outright, so grounding gets its own client
+#: pinned to a region that actually serves it.
+GROUNDING_LOCATION = "us-central1"
+
+
+@lru_cache(maxsize=2)
+def _client_for(location: str) -> Any | None:
+    if not SETTINGS.vertex_project:
+        return None
+    try:
+        from google import genai
+
+        return genai.Client(
+            vertexai=True, project=SETTINGS.vertex_project, location=location
+        )
+    except Exception as exc:  # noqa: BLE001
+        log.warning("Vertex client unavailable in %s: %s", location, exc)
+        return None
+
+
+@lru_cache(maxsize=1)
+def _vertex_client() -> Any | None:
+    """Build a Vertex client once, or return None if credentials are absent."""
+    return _client_for(SETTINGS.vertex_location or "global")
+
+
+def vertex_available() -> bool:
+    return _vertex_client() is not None
+
+
+def reasoning_provider() -> str:
+    if claude_available():
+        return "claude"
+    if vertex_available():
+        return "gemini"
+    return "none"
+
+
 def _extract_json(text: str) -> dict[str, Any] | None:
     """Pull the first JSON object out of a model response."""
-    text = text.strip()
+    text = (text or "").strip()
     if text.startswith("```"):
         text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.MULTILINE).strip()
     try:
@@ -56,12 +121,65 @@ def _extract_json(text: str) -> dict[str, Any] | None:
         return None
 
 
-def ask_claude(
-    system: str, user: str, max_tokens: int = 1200, model: str = CLAUDE_MODEL
+def _gemini_once(
+    system: str, user: str, max_tokens: int, model: str
 ) -> dict[str, Any] | None:
-    """One structured call to Claude. Returns parsed JSON, or None on any failure."""
-    if not claude_available():
+    client = _vertex_client()
+    if client is None:
         return None
+    from google.genai import types
+
+    response = client.models.generate_content(
+        model=model,
+        contents=user,
+        config=types.GenerateContentConfig(
+            system_instruction=system,
+            temperature=0.2,
+            max_output_tokens=max_tokens * OUTPUT_HEADROOM + THINKING_BUDGET,
+            response_mime_type="application/json",
+            thinking_config=types.ThinkingConfig(thinking_budget=THINKING_BUDGET),
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
+        ),
+    )
+    parsed = _extract_json(response.text)
+    if parsed is None:
+        log.warning(
+            "%s returned unparseable output (finish=%s): %s",
+            model,
+            getattr(response.candidates[0], "finish_reason", "?") if response.candidates else "?",
+            (response.text or "")[:160],
+        )
+    return parsed
+
+
+def _ask_gemini(
+    system: str,
+    user: str,
+    max_tokens: int,
+    models: tuple[str, ...] | str,
+    attempts: int = 2,
+) -> dict[str, Any] | None:
+    """Walk the model ladder, retrying transient quota errors with a backoff."""
+    ladder = (models,) if isinstance(models, str) else models
+    for model in ladder:
+        for attempt in range(attempts):
+            try:
+                parsed = _gemini_once(system, user, max_tokens, model)
+                if parsed is not None:
+                    return parsed
+                break  # parsed but unusable: a retry will not help
+            except Exception as exc:  # noqa: BLE001 - an outage must not stop trading
+                if _retryable(exc) and attempt < attempts - 1:
+                    time.sleep(2 ** attempt)
+                    continue
+                log.warning("%s call failed: %s", model, str(exc)[:160])
+                break
+    return None
+
+
+def _ask_claude(
+    system: str, user: str, max_tokens: int, model: str
+) -> dict[str, Any] | None:
     try:
         from anthropic import Anthropic
 
@@ -77,18 +195,32 @@ def ask_claude(
         if parsed is None:
             log.warning("Claude returned unparseable output: %s", text[:200])
         return parsed
-    except Exception as exc:  # noqa: BLE001 - the loop must survive a model outage
+    except Exception as exc:  # noqa: BLE001
         log.warning("Claude call failed: %s", exc)
         return None
 
 
-def classify_headlines(headlines: list[str]) -> list[dict[str, Any]]:
-    """Score headlines with a small open-source model on Featherless.
+def reason(system: str, user: str, max_tokens: int = 1200) -> dict[str, Any] | None:
+    """One structured call to the best available model. JSON in, JSON out."""
+    provider = reasoning_provider()
+    if provider == "claude":
+        return _ask_claude(system, user, max_tokens, CLAUDE_MODEL)
+    if provider == "gemini":
+        return _ask_gemini(system, user, max_tokens, GEMINI_REASONING_MODELS)
+    return None
 
-    Runs on every headline, which is why it uses the cheap tier. The output is
-    a filter, not a decision: it decides what Claude bothers reading.
+
+#: Kept so existing call sites read naturally; `reason` is the real entry point.
+ask_claude = reason
+
+
+def classify_headlines(headlines: list[str]) -> list[dict[str, Any]]:
+    """Score headlines with the cheapest model available.
+
+    Runs over every headline, so it uses the cheap tier. The output is a filter,
+    not a decision: it only decides what the reasoning model bothers reading.
     """
-    if not headlines or not featherless_available():
+    if not headlines:
         return []
 
     numbered = "\n".join(f"{i}. {h}" for i, h in enumerate(headlines))
@@ -98,6 +230,19 @@ def classify_headlines(headlines: list[str]) -> list[dict[str, Any]]:
         '"relevance":0.0-1.0,"topic":"macro|earnings|policy|other"}]}.\n\n'
         f"{numbered}"
     )
+    system = "You output strict JSON and nothing else."
+
+    parsed: dict[str, Any] | None = None
+    if vertex_available():
+        parsed = _ask_gemini(system, prompt, 900, GEMINI_FAST_MODEL)
+    if parsed is None and featherless_available():
+        parsed = _classify_featherless(prompt, system)
+
+    items = (parsed or {}).get("items", [])
+    return items if isinstance(items, list) else []
+
+
+def _classify_featherless(prompt: str, system: str) -> dict[str, Any] | None:
     try:
         response = httpx.post(
             f"{FEATHERLESS_BASE}/chat/completions",
@@ -105,7 +250,7 @@ def classify_headlines(headlines: list[str]) -> list[dict[str, Any]]:
             json={
                 "model": FEATHERLESS_MODEL,
                 "messages": [
-                    {"role": "system", "content": "You output strict JSON and nothing else."},
+                    {"role": "system", "content": system},
                     {"role": "user", "content": prompt},
                 ],
                 "response_format": {"type": "json_object"},
@@ -115,13 +260,57 @@ def classify_headlines(headlines: list[str]) -> list[dict[str, Any]]:
             timeout=30,
         )
         response.raise_for_status()
-        content = response.json()["choices"][0]["message"]["content"]
-        parsed = _extract_json(content) or {}
-        items = parsed.get("items", [])
-        return items if isinstance(items, list) else []
+        return _extract_json(response.json()["choices"][0]["message"]["content"])
     except Exception as exc:  # noqa: BLE001
         log.warning("Featherless classification failed: %s", exc)
-        return []
+        return None
+
+
+def search_grounded(
+    system: str, question: str, max_tokens: int = 900
+) -> tuple[dict[str, Any], list[str]] | None:
+    """A Google-Search-grounded call. Returns (parsed JSON, source titles).
+
+    Vertex refuses to mix search grounding with function declarations in one
+    request, so this is deliberately tool-free: it researches and returns text.
+    Grounded responses cannot use a JSON response_mime_type either, so the JSON
+    is parsed out of the prose.
+    """
+    client = _client_for(GROUNDING_LOCATION)
+    if client is None:
+        return None
+    from google.genai import types
+
+    for model in GEMINI_REASONING_MODELS:
+        try:
+            response = client.models.generate_content(
+                model=model,
+                contents=f"{system}\n\n{question}",
+                config=types.GenerateContentConfig(
+                    temperature=0.3,
+                    max_output_tokens=max_tokens * OUTPUT_HEADROOM + THINKING_BUDGET,
+                    tools=[types.Tool(google_search=types.GoogleSearch())],
+                    thinking_config=types.ThinkingConfig(thinking_budget=THINKING_BUDGET),
+                ),
+            )
+            parsed = _extract_json(response.text)
+            if parsed is None:
+                continue
+            sources: list[str] = []
+            candidate = response.candidates[0] if response.candidates else None
+            metadata = getattr(candidate, "grounding_metadata", None)
+            for chunk in getattr(metadata, "grounding_chunks", None) or []:
+                web = getattr(chunk, "web", None)
+                if web and getattr(web, "title", None):
+                    sources.append(web.title)
+            # Some grounded responses cite inline and expose only the queries
+            # that were run; those still count as grounded.
+            if not sources:
+                sources = list(getattr(metadata, "web_search_queries", None) or [])
+            return parsed, sources
+        except Exception as exc:  # noqa: BLE001
+            log.warning("%s grounded search failed: %s", model, str(exc)[:160])
+    return None
 
 
 def summarise_tone(items: list[dict[str, Any]]) -> dict[str, Any]:

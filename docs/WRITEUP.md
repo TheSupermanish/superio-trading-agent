@@ -32,21 +32,49 @@ instead. At kick-off the reading was SPY implied 9.1% against realized 10.3%,
 and QQQ implied 13.4% against realized 17.9%: cheap options on both, so the
 convex sleeve leads this week.
 
-**Strategist** (Claude) sees the regime, up to five headlines, and a numbered
-list of structures that have already passed every gate and already been sized.
-It picks an index or returns -1. Two samples are drawn and must agree; on
-disagreement the deterministic ranking wins. Headlines are treated as untrusted
-data, never as instructions.
+**Analyst** (Gemini 2.5 Pro with Google Search grounding) establishes what is
+actually happening today: session tone, scheduled speakers, anything that moved
+the tape in the last few hours. A volatility model cannot know that a central
+banker speaks at 10am. On the first run it surfaced a Jackson Hole speech that
+our hand-maintained calendar had missed. It has no tools and touches nothing.
+
+**Strategist** (Gemini 2.5 Pro, function calling) is a real tool-using loop, not
+a single classification call. It can read the account state and remaining risk
+budget, pull the live strike ladder at several delta buckets, read the regime,
+check the catalyst calendar, see what is already open, and call
+`propose_structure` as many times as it wants to compare shapes. Each proposal
+is built from the live chain by our code and run through every gate before the
+model is told anything, so a rejection comes back naming the gate that refused
+it and why. The model reads that and adapts.
+
+The safety property is structural rather than a matter of prompting. The model
+never sees or emits legs, strikes, limits, or quantities. `propose_structure`
+takes a ticker and a shape name; our code builds the legs and the risk officer
+sizes them. Its final answer is a reference to a proposal that was already
+approved. A model that is confused, wrong, or prompt-injected can at worst pick
+a worse safe trade or refuse to trade.
+
+On its first live run against the income-only preset it read three regimes,
+checked the calendar, proposed two debit spreads, watched both get sized to zero
+because that preset carries no convex budget, and stood aside on the grounds
+that selling premium would fight the tape. That is the behaviour we wanted:
+it argued itself out of a trade.
 
 **Risk officer** (deterministic, no model call anywhere in the file) is below.
 
 **Journalist** (Claude) writes the daily record after the fact. It touches
 nothing and carries no risk.
 
-A small open-source model on Featherless does the high-volume work: reducing a
-stream of headlines to sentiment labels so that Claude only reads the few that
-matter. Cheap model for volume, expensive model for judgement, neither trusted
-with an order.
+Gemini 2.5 Flash does the high-volume work, reducing a stream of headlines to
+sentiment labels so the reasoning model only reads the few that matter. Cheap
+model for volume, strong model for judgement, neither trusted with an order.
+
+Vertex authenticates through application-default credentials, so there is no API
+key stored anywhere in this project. Two deployment details cost us time and are
+worth recording: Vertex refuses to combine Google Search grounding with function
+calling in a single request, which is why research and decision-making are
+separate phases; and the `global` endpoint accepts a grounded request then
+returns an empty candidate, so grounding is pinned to `us-central1`.
 
 ## The risk gates
 

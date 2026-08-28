@@ -58,7 +58,7 @@ class StrategistCall:
     choice: int
     confidence: float
     reasoning: str
-    source: str  # claude | deterministic | disagreement | unavailable
+    source: str  # gemini | claude | deterministic | disagreement | unavailable
 
     @property
     def declined(self) -> bool:
@@ -117,7 +117,8 @@ def choose(
     if not candidates:
         return StrategistCall(-1, 0.0, "no candidate cleared the risk gates", "deterministic")
 
-    if not llm.claude_available():
+    provider = llm.reasoning_provider()
+    if provider == "none":
         return StrategistCall(
             0, 0.5, "no model configured; taking the top-ranked structure", "unavailable"
         )
@@ -132,7 +133,7 @@ def choose(
 
     results: list[StrategistCall] = []
     for _ in range(max(1, samples)):
-        parsed = llm.ask_claude(SYSTEM, user, max_tokens=600)
+        parsed = llm.reason(SYSTEM, user, max_tokens=600)
         if not parsed:
             continue
         choice = parsed.get("choice")
@@ -144,7 +145,7 @@ def choose(
                 choice=choice,
                 confidence=float(parsed.get("confidence", 0.5) or 0.5),
                 reasoning=str(parsed.get("reasoning", ""))[:400],
-                source="claude",
+                source=provider,
             )
         )
 

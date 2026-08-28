@@ -24,6 +24,9 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
+# The Gemini CLI keeps its Vertex project here. Reading it means the agent uses
+# the same credentials the user already has working, with nothing to copy.
+load_dotenv(Path.home() / ".gemini" / ".env")
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -137,6 +140,8 @@ class Settings:
     stock_feed: str
     anthropic_api_key: str
     featherless_api_key: str
+    vertex_project: str
+    vertex_location: str
     force_dry_run: bool
     live_from: datetime | None
     db_path: Path
@@ -208,6 +213,8 @@ def load_settings(profile: str | None = None, variant: str | None = None) -> Set
         stock_feed=os.getenv("ALPACA_STOCK_FEED", "iex"),
         anthropic_api_key=os.getenv("ANTHROPIC_API_KEY", ""),
         featherless_api_key=os.getenv("FEATHERLESS_API_KEY", ""),
+        vertex_project=os.getenv("GOOGLE_CLOUD_PROJECT", ""),
+        vertex_location=os.getenv("GOOGLE_CLOUD_LOCATION", "global"),
         force_dry_run=_env_bool("DRY_RUN", True),
         live_from=_parse_live_from(os.getenv("LIVE_FROM")),
         db_path=ROOT / "data" / f"superio-{profile}.db",

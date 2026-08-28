@@ -82,8 +82,8 @@ def write_daily_entry() -> dict[str, Any]:
     }
 
     entry = fallback
-    if llm.claude_available():
-        parsed = llm.ask_claude(
+    if llm.reasoning_provider() != "none":
+        parsed = llm.reason(
             SYSTEM,
             "Today's activity for the trading agent:\n"
             + json.dumps(activity, indent=2, default=str),

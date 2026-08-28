@@ -21,9 +21,13 @@ worst it can do is get told no and have the refusal logged.
 ## Architecture
 
 ```
-  Scout          reads the regime: trend, realized vol, implied vol, the spread between them
+  Scout          measures the tape: trend, realized vol, implied vol, the spread between them
     |
-  Strategist     builds candidate structures from the live option chain
+  Analyst        Gemini + Google Search. What is actually happening today.
+    |
+  Strategist     Gemini + tools. Investigates, proposes structures, compares, decides.
+    |              tools: get_regime, get_chain_summary, get_news, get_calendar,
+    |                     get_account_state, get_open_positions, propose_structure
     |
   Risk officer   deterministic gate. Sizes the trade or refuses it. No model call in this file.
     |
@@ -31,6 +35,13 @@ worst it can do is get told no and have the refusal logged.
     |
   Manager        marks the book, takes profit, stops losses, flattens before assignment
 ```
+
+The strategist is a genuine tool-using loop. It reads its remaining risk budget,
+pulls the live strike ladder, and calls `propose_structure` repeatedly to compare
+shapes. Every proposal is built from the chain by our code and passed through the
+gates before the model sees it, so a refusal comes back naming the gate and the
+reason, and the model adapts. It never emits a leg, a strike, a limit, or a
+quantity.
 
 The volatility premium decides which sleeve leads. When implied vol sits above
 realized vol, selling defined-risk premium is being paid well and the core
