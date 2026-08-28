@@ -31,7 +31,10 @@ def _build(
     if (is_call and short.strike <= long.strike) or (not is_call and short.strike >= long.strike):
         return None
 
-    debit = long.mid - short.mid
+    debit_mid = long.mid - short.mid
+    # Crossing the spread: we buy the long leg at its ask and sell the short
+    # leg at its bid, so the real cost is higher than the mid suggests.
+    debit = long.ask - short.bid
     if debit <= 0:
         return None
 
@@ -46,6 +49,7 @@ def _build(
         kind=kind,
         legs=[to_leg(long, "buy"), to_leg(short, "sell")],
         net_price=-debit,
+        net_price_mid=-debit_mid,
         width=actual_width,
         max_loss_per_unit=max_loss,
         max_gain_per_unit=max_gain,

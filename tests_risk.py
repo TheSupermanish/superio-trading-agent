@@ -19,8 +19,9 @@ def snap(equity=100_000.0, open_risk=0.0, structures=0, trades=0, last_equity=No
                              open_structures=structures, trades_today=trades)
 
 
-def prop(kind, legs, net, width, max_loss, max_gain, sleeve="core"):
+def prop(kind, legs, net, width, max_loss, max_gain, sleeve="core", net_mid=None):
     return Proposal(sleeve=sleeve, underlying="SPY", kind=kind, legs=legs, net_price=net,
+                    net_price_mid=net if net_mid is None else net_mid,
                     width=width, max_loss_per_unit=max_loss, max_gain_per_unit=max_gain)
 
 
@@ -68,7 +69,7 @@ def test_daily_kill_switch_blocks_entry():
              [leg("A", "sell", 500, False, 2.0), leg("B", "buy", 495, False, 1.0)],
              1.0, 5, 400, 100)
     v = evaluate(p, snap(equity=96_000, last_equity=100_000))
-    assert not v.approved and "halted" in v.reasons[0]
+    assert not v.approved and "kill switch" in v.reasons[0], v.reasons
 
 
 def test_thin_credit_is_rejected():
@@ -77,14 +78,46 @@ def test_thin_credit_is_rejected():
     b = leg("B", "buy", 495, False, 1.60)
     v = evaluate(prop("put_credit_spread", [a, b], 0.40, 5, 460, 40), snap())
     assert not v.approved, "thin credit should be rejected"
-    assert "credit" in v.reasons[0], v.reasons
+    assert "G5" in v.reasons[0] and "credit" in v.reasons[0], v.reasons
 
 
 def test_illiquid_leg_is_rejected():
     a = leg("A", "sell", 500, False, 2.00)
     b = leg("B", "buy", 495, False, 0.20)  # 0.04 spread on a 0.20 mid = 20%
     v = evaluate(prop("put_credit_spread", [a, b], 1.80, 5, 320, 180), snap())
-    assert not v.approved and "liquidity" in v.reasons[0], v.reasons
+    assert not v.approved and "G4" in v.reasons[0], v.reasons
+
+
+def test_risk_is_sized_off_the_touch_not_the_mid():
+    """The conservative price must be the one that drives max loss."""
+    p = prop("put_credit_spread",
+             [leg("A", "sell", 500, False, 2.0), leg("B", "buy", 495, False, 1.0)],
+             net=0.90, width=5, max_loss=410, max_gain=90, net_mid=1.00)
+    assert p.net_price < p.net_price_mid, "touch price should be worse than mid"
+    assert abs(p.slippage_budget - 0.10) < 1e-9, p.slippage_budget
+    qty, notes = size_position(p, snap())
+    assert qty == 1, (qty, notes)
+
+
+def test_credit_across_a_high_impact_event_is_blocked():
+    """No writing premium across the payrolls print."""
+    from datetime import date as _date
+    from engine.calendar_gate import check
+    ok, why = check("core", "SPY", _date(2026, 9, 4), is_credit=True,
+                    now=__import__("datetime").datetime(
+                        2026, 9, 3, 14, 0,
+                        tzinfo=__import__("zoneinfo").ZoneInfo("America/New_York")))
+    assert not ok and "employment" in why, why
+
+
+def test_convex_into_an_event_is_allowed():
+    from datetime import date as _date
+    from engine.calendar_gate import check
+    ok, why = check("convex", "SPY", _date(2026, 9, 4), is_credit=False,
+                    now=__import__("datetime").datetime(
+                        2026, 9, 3, 14, 0,
+                        tzinfo=__import__("zoneinfo").ZoneInfo("America/New_York")))
+    assert ok, why
 
 
 if __name__ == "__main__":

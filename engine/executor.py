@@ -48,16 +48,19 @@ def round_to_tick(price: float) -> float:
 def net_limit_price(proposal: Proposal, slippage: float = 0.0) -> float:
     """Net limit price for the package, signed the way Alpaca expects.
 
-    `slippage` shades the price against us: for a credit we accept less, for a
-    debit we pay more. It is how the repricing ladder walks toward a fill.
+    The order goes out at the MID. Risk was sized against the touch, so any
+    fill between the two is better than the one we underwrote.
+
+    `slippage` walks the price from the mid toward the touch: for a credit we
+    accept less, for a debit we pay more. At slippage 1.0 the limit is the
+    touch price itself, which is the worst price the risk officer approved.
     """
-    magnitude = abs(proposal.net_price)
+    mid, touch = abs(proposal.net_price_mid), abs(proposal.net_price)
+    magnitude = mid + (touch - mid) * min(max(slippage, 0.0), 1.0)
+    price = round_to_tick(max(magnitude, TICK))
     if proposal.is_credit:
-        magnitude = max(magnitude * (1 - slippage), TICK)
-        price = round_to_tick(magnitude)
         return -price if CREDIT_IS_NEGATIVE else price
-    magnitude = magnitude * (1 + slippage)
-    return round_to_tick(magnitude)
+    return price
 
 
 def build_payload(proposal: Proposal, qty: int, slippage: float = 0.0) -> dict[str, Any]:

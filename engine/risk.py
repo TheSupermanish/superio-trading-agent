@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from engine import state
+from engine import calendar_gate, state
 from engine.config import SETTINGS
 from engine.types import CONTRACT_MULTIPLIER, Proposal, Verdict
 
@@ -178,41 +178,78 @@ def kill_switch(snap: PortfolioSnapshot) -> tuple[bool, str | None]:
 
 # --- Entry point -----------------------------------------------------------
 
-def evaluate(proposal: Proposal, snap: PortfolioSnapshot) -> Verdict:
+def _calendar_ok(proposal: Proposal) -> tuple[bool, str]:
+    return calendar_gate.check(
+        sleeve=proposal.sleeve,
+        underlying=proposal.underlying,
+        expiry=proposal.expiry,
+        is_credit=proposal.is_credit,
+    )
+
+
+def _budget_ok(snap: PortfolioSnapshot) -> tuple[bool, str]:
     r = SETTINGS.risk
+    if snap.trades_today >= r.max_new_trades_per_day:
+        return False, f"already opened {snap.trades_today} structures today"
+    if snap.open_structures >= r.max_open_structures:
+        return False, f"{snap.open_structures} structures already open"
+    return True, (
+        f"{snap.trades_today}/{r.max_new_trades_per_day} trades today, "
+        f"{snap.open_structures}/{r.max_open_structures} open"
+    )
+
+
+#: The gates, in the order they run. Each is independently testable and each
+#: failure is journalled by name, so any refusal can be traced to one rule.
+GATES: list[tuple[str, str]] = [
+    ("G1", "kill switches"),
+    ("G2", "daily and concurrent trade budget"),
+    ("G3", "defined risk, no naked shorts"),
+    ("G4", "leg liquidity"),
+    ("G5", "credit floor and debit cap"),
+    ("G6", "scheduled event blackout"),
+    ("G7", "position sizing"),
+]
+
+
+def evaluate(proposal: Proposal, snap: PortfolioSnapshot) -> Verdict:
+    """Run every gate in order. The first refusal ends it."""
     reasons: list[str] = []
 
     halted, halt_reason = kill_switch(snap)
     if halted:
-        return Verdict.reject(f"trading halted: {halt_reason}")
+        return Verdict.reject(f"G1 kill switch: {halt_reason}")
+    reasons.append("G1 kill switches clear")
 
-    if snap.trades_today >= r.max_new_trades_per_day:
-        return Verdict.reject(f"already opened {snap.trades_today} structures today")
-
-    if snap.open_structures >= r.max_open_structures:
-        return Verdict.reject(f"{snap.open_structures} structures already open")
+    ok, why = _budget_ok(snap)
+    if not ok:
+        return Verdict.reject(f"G2 budget: {why}")
+    reasons.append(f"G2 {why}")
 
     ok, why = _is_defined_risk(proposal)
     if not ok:
-        return Verdict.reject(f"not defined risk: {why}")
-    if r.allow_naked_short is False and not ok:
-        return Verdict.reject("naked short exposure is disabled")
-    reasons.append(why)
+        return Verdict.reject(f"G3 not defined risk: {why}")
+    reasons.append(f"G3 {why}")
 
     ok, why = _liquidity_ok(proposal)
     if not ok:
-        return Verdict.reject(f"liquidity: {why}")
-    reasons.append(why)
+        return Verdict.reject(f"G4 liquidity: {why}")
+    reasons.append(f"G4 {why}")
 
     ok, why = _pricing_ok(proposal)
     if not ok:
-        return Verdict.reject(f"pricing: {why}")
-    reasons.append(why)
+        return Verdict.reject(f"G5 pricing: {why}")
+    reasons.append(f"G5 {why}")
+
+    ok, why = _calendar_ok(proposal)
+    if not ok:
+        return Verdict.reject(f"G6 event blackout: {why}")
+    reasons.append(f"G6 {why}")
 
     qty, notes = size_position(proposal, snap)
-    reasons.extend(notes)
+    reasons.extend(f"G7 {n}" for n in notes)
     if qty < 1:
-        return Verdict(approved=False, reasons=reasons + ["sized to zero contracts"], qty=0)
+        return Verdict(approved=False, reasons=reasons + ["G7 sized to zero contracts"], qty=0)
 
     return Verdict(approved=True, reasons=reasons, qty=qty)
 

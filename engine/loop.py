@@ -15,7 +15,7 @@ import time
 from dataclasses import asdict
 from typing import Any
 
-from engine import alpaca_cli, executor, manager, risk, state
+from engine import alpaca_cli, executor, manager, preflight, reconcile, risk, state
 from engine.config import SETTINGS
 from engine.regime import Regime, read as read_regime
 from engine.strategies import build_credit_spread, build_debit_spread, build_iron_condor
@@ -178,6 +178,12 @@ def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
         log.info("market closed, next open %s", clock.get("next_open"))
         return {"traded": False, "reason": "market closed", "clock": clock}
 
+    # What the broker holds is the truth; correct the journal before sizing
+    # anything against it.
+    recon = reconcile.run()
+    if not recon.clean:
+        state.log_event("reconciliation", recon.summary(), level="warning")
+
     snap = account_snapshot()
     halted, reason = risk.kill_switch(snap)
     log.info(
@@ -219,6 +225,11 @@ def main() -> None:
         action="store_true",
         help="run the pass even when the market is closed (for dry-run rehearsal)",
     )
+    parser.add_argument(
+        "--require-competition-balance",
+        action="store_true",
+        help="fail preflight unless the account equity is exactly $100,000",
+    )
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -230,6 +241,13 @@ def main() -> None:
 
     log.info("starting superio | %s", SETTINGS.describe())
     state.log_event("loop_start", SETTINGS.describe())
+
+    checks = preflight.run(require_competition_balance=args.require_competition_balance)
+    print(preflight.report(checks))
+    if not preflight.passed(checks):
+        log.error("preflight failed, refusing to trade")
+        state.log_event("preflight_failed", preflight.report(checks), level="error")
+        raise SystemExit(1)
 
     if args.once:
         result = run_once(ignore_market_hours=args.ignore_market_hours)

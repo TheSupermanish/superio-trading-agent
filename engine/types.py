@@ -35,6 +35,11 @@ class Leg:
             return 1.0
         return (self.ask - self.bid) / self.mid
 
+    @property
+    def touch(self) -> float:
+        """Price paid or received when crossing the spread on this leg."""
+        return self.ask if self.side == "buy" else self.bid
+
     def as_dict(self) -> dict[str, Any]:
         return {
             "symbol": self.symbol,
@@ -54,8 +59,16 @@ class Leg:
 class Proposal:
     """One defined-risk structure the agent wants to open.
 
-    `net_price` is per spread and signed from our point of view: positive means
-    we collect a credit, negative means we pay a debit.
+    Two prices, both per spread and signed from our point of view: positive
+    means we collect a credit, negative means we pay a debit.
+
+    * `net_price` is the CONSERVATIVE price, computed by crossing the spread on
+      every leg. Every risk calculation uses this one. Alpaca's paper engine
+      fills at the touch rather than the mid, so sizing off mid prices would
+      quietly understate the real maximum loss.
+    * `net_price_mid` is where the package theoretically trades. It is the
+      opening limit price, because there is no reason to pay the touch before
+      trying for the mid.
     """
 
     sleeve: Sleeve
@@ -63,6 +76,7 @@ class Proposal:
     kind: str
     legs: list[Leg]
     net_price: float
+    net_price_mid: float
     width: float
     max_loss_per_unit: float
     max_gain_per_unit: float
@@ -73,6 +87,11 @@ class Proposal:
     @property
     def is_credit(self) -> bool:
         return self.net_price > 0
+
+    @property
+    def slippage_budget(self) -> float:
+        """Distance between the hopeful price and the price we sized against."""
+        return abs(self.net_price_mid - self.net_price)
 
     @property
     def max_loss_total(self) -> float:
@@ -89,6 +108,7 @@ class Proposal:
             "kind": self.kind,
             "legs": [leg.as_dict() for leg in self.legs],
             "net_price": round(self.net_price, 4),
+            "net_price_mid": round(self.net_price_mid, 4),
             "width": self.width,
             "max_loss_per_unit": round(self.max_loss_per_unit, 2),
             "max_gain_per_unit": round(self.max_gain_per_unit, 2),

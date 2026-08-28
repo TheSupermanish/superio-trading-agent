@@ -36,7 +36,10 @@ def _build_vertical(
     if (is_call and long.strike <= short.strike) or (not is_call and long.strike >= short.strike):
         return None
 
-    credit = short.mid - long.mid
+    credit_mid = short.mid - long.mid
+    # Crossing the spread: we sell the short leg at its bid and buy the wing at
+    # its ask. This is what a paper fill at the touch actually pays.
+    credit = short.bid - long.ask
     if credit <= 0:
         return None
 
@@ -48,13 +51,15 @@ def _build_vertical(
         kind=kind,
         legs=[to_leg(short, "sell"), to_leg(long, "buy")],
         net_price=credit,
+        net_price_mid=credit_mid,
         width=actual_width,
         max_loss_per_unit=vertical_max_loss(actual_width, credit),
         max_gain_per_unit=vertical_max_gain(actual_width, credit),
         thesis=(
             f"Sell the {short.strike:g} {'call' if is_call else 'put'} at "
             f"{abs(short.delta):.2f} delta expiring {short.expiry}, buy the {long.strike:g} wing. "
-            f"Collect {credit:.2f} on {actual_width:g} wide ({ratio:.0%} of width)."
+            f"Collect {credit:.2f} on {actual_width:g} wide ({ratio:.0%} of width), "
+            f"priced at the touch rather than the mid."
         ),
         tags=[
             f"dte:{short.dte}",
@@ -117,6 +122,7 @@ def build_iron_condor(underlying: str) -> Proposal | None:
         return None
 
     credit = put_side.net_price + call_side.net_price
+    credit_mid = put_side.net_price_mid + call_side.net_price_mid
     width = max(put_side.width, call_side.width)
 
     return Proposal(
@@ -125,6 +131,7 @@ def build_iron_condor(underlying: str) -> Proposal | None:
         kind="iron_condor",
         legs=put_side.legs + call_side.legs,
         net_price=credit,
+        net_price_mid=credit_mid,
         width=width,
         max_loss_per_unit=vertical_max_loss(width, credit),
         max_gain_per_unit=vertical_max_gain(width, credit),
