@@ -50,7 +50,10 @@ fi
 
 echo "== python env =="
 cd "$ROOT"
-uv venv --python 3.11 --quiet 2>/dev/null || uv venv --quiet
+# Debian 12 ships Python 3.11 and this project needs 3.12; uv fetches a
+# managed interpreter rather than us touching the system Python.
+uv python install 3.12 >/dev/null 2>&1 || true
+uv venv --python 3.12 --quiet
 VIRTUAL_ENV="$ROOT/.venv" uv pip install --quiet -e .
 VIRTUAL_ENV="$ROOT/.venv" uv pip install --quiet google-genai mcp
 mkdir -p "$ROOT/logs" "$ROOT/data"
