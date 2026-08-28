@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28T15:54:19.163856+00:00",
+  "generated_at": "2026-08-28T16:04:23.618496+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": true,
@@ -31,9 +31,9 @@
     "by_underlying": {}
   },
   "gates": {
-    "considered": 134,
+    "considered": 137,
     "approved": 8,
-    "rejected": 126,
+    "rejected": 129,
     "rejections_by_gate": [
       {
         "gate": "G1",
@@ -43,7 +43,7 @@
       {
         "gate": "G2",
         "name": "daily and concurrent trade budget",
-        "count": 112
+        "count": 115
       },
       {
         "gate": "G3",
@@ -314,9 +314,57 @@
       "buying_power": 400000.0,
       "open_risk": 0.0,
       "day_pnl": 0.0
+    },
+    {
+      "ts": "2026-08-28T15:57:02.398320+00:00",
+      "equity": 100000.0,
+      "cash": 100000.0,
+      "buying_power": 400000.0,
+      "open_risk": 0.0,
+      "day_pnl": 0.0
     }
   ],
   "recent_decisions": [
+    {
+      "id": 203,
+      "ts": "2026-08-28T15:59:51.049814+00:00",
+      "agent": "strategist",
+      "sleeve": null,
+      "underlying": null,
+      "proposal": "{\"action\": \"stand_aside\", \"confidence\": 1.0, \"tool_calls\": [{\"step\": 0, \"tool\": \"get_account_state\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_open_positions\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_calendar\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SPY\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"QQQ\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"IWM\"}}], \"chosen\": [], \"market_brief\": {\"session_tone\": \"mixed\", \"summary\": \"U.S. equity markets are trading in a mixed and cautious fashion as investors digest a key speech from Federal Reserve Chairman Kevin Warsh at the Jackson Hole symposium. [6, 7] Warsh stated that inflation remains too high and that the Fed may need to raise interest rates, leaving the door open for a potential hike sooner than December. [11, 13] Following the speech, major indices are holding steady near the flat line, with the S&P 500 and Nasdaq showing little change while the Dow Jones Industrial Average is up slightly. [2, 10]\", \"catalysts_today\": [\"Federal Reserve Chairman Kevin Warsh's speech at the Jackson Hole Economic Symposium at 10:00 AM Eastern time. [15]\", \"Bureau of Labor Statistics (BLS) releases preliminary benchmark for Current Employment Statistics at 10:00 AM Eastern time. [17]\"], \"vol_context\": \"The Cboe Volatility Index (VIX) is down, falling to a two-week low of 14.23, suggesting lower expectations for near-term market volatility. [16, 21]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity markets today August 28 2026\", \"market tone today August 28 2026\", \"SPY QQQ IWM trading today August 28 2026\", \"economic data calendar August 28 2026\", \"Fed speakers today August 28 2026\", \"VIX index today August 28 2026\"], \"cached\": false}}",
+      "verdict": "stand_aside",
+      "reasons": "[\"The account has no trades remaining today, so no action can be taken. The volatility regime across all tracked underlyings suggests that options are cheap, favoring buying convexity, but this is moot given the trading restriction.\", \"source: gemini\", \"6 tool calls over 2 steps\"]"
+    },
+    {
+      "id": 202,
+      "ts": "2026-08-28T15:57:11.191489+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"IWM\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"IWM260831C00298000\", \"side\": \"buy\", \"strike\": 298.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 0.595, \"bid\": 0.57, \"ask\": 0.62, \"delta\": 0.323, \"ratio_qty\": 1}, {\"symbol\": \"IWM260831C00301000\", \"side\": \"sell\", \"strike\": 301.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 0.105, \"bid\": 0.1, \"ask\": 0.11, \"delta\": 0.0777, \"ratio_qty\": 1}], \"net_price\": -0.52, \"net_price_mid\": -0.49, \"width\": 3.0, \"max_loss_per_unit\": 52.0, \"max_gain_per_unit\": 248.0, \"qty\": 0, \"thesis\": \"Pay 0.52 for the 298/301 call spread expiring 2026-08-31: 4.8x payoff if the move continues.\", \"tags\": [\"dte:3\", \"payoff:4.8x\", \"iv:0.11\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 201,
+      "ts": "2026-08-28T15:57:08.975840+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260831C00721000\", \"side\": \"buy\", \"strike\": 721.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 1.665, \"bid\": 1.65, \"ask\": 1.68, \"delta\": 0.3498, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260831C00729000\", \"side\": \"sell\", \"strike\": 729.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 0.175, \"bid\": 0.17, \"ask\": 0.18, \"delta\": 0.0596, \"ratio_qty\": 1}], \"net_price\": -1.51, \"net_price_mid\": -1.49, \"width\": 8.0, \"max_loss_per_unit\": 151.0, \"max_gain_per_unit\": 649.0, \"qty\": 0, \"thesis\": \"Pay 1.51 for the 721/729 call spread expiring 2026-08-31: 4.3x payoff if the move continues.\", \"tags\": [\"dte:3\", \"payoff:4.3x\", \"iv:0.11\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
+    {
+      "id": 200,
+      "ts": "2026-08-28T15:57:06.251991+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"SPY\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"SPY260831C00773000\", \"side\": \"buy\", \"strike\": 773.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 1.34, \"bid\": 1.31, \"ask\": 1.37, \"delta\": 0.374, \"ratio_qty\": 1}, {\"symbol\": \"SPY260831C00778000\", \"side\": \"sell\", \"strike\": 778.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 0.155, \"bid\": 0.15, \"ask\": 0.16, \"delta\": 0.0751, \"ratio_qty\": 1}], \"net_price\": -1.22, \"net_price_mid\": -1.185, \"width\": 5.0, \"max_loss_per_unit\": 122.0, \"max_gain_per_unit\": 378.0, \"qty\": 0, \"thesis\": \"Pay 1.22 for the 773/778 call spread expiring 2026-08-31: 3.1x payoff if the move continues.\", \"tags\": [\"dte:3\", \"payoff:3.1x\", \"iv:0.07\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
+    },
     {
       "id": 199,
       "ts": "2026-08-28T15:51:59.648113+00:00",
@@ -1476,46 +1524,6 @@
       "proposal": "{\"sleeve\": \"core\", \"underlying\": \"SPY\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"SPY260831P00765000\", \"side\": \"sell\", \"strike\": 765.0, \"expiry\": \"2026-08-31\", \"is_call\": false, \"mid\": 0.655, \"bid\": 0.65, \"ask\": 0.66, \"delta\": -0.1756, \"ratio_qty\": 1}, {\"symbol\": \"SPY260831P00764000\", \"side\": \"buy\", \"strike\": 764.0, \"expiry\": \"2026-08-31\", \"is_call\": false, \"mid\": 0.495, \"bid\": 0.49, \"ask\": 0.5, \"delta\": -0.1403, \"ratio_qty\": 1}], \"net_price\": 0.15, \"net_price_mid\": 0.16, \"width\": 1.0, \"max_loss_per_unit\": 85.0, \"max_gain_per_unit\": 15.0, \"qty\": 0, \"thesis\": \"Sell the 765 put at 0.18 delta expiring 2026-08-31, buy the 764 wing. Collect 0.15 on 1 wide (15% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:3\", \"delta:0.18\", \"iv:0.10\", \"width:1\"]}",
       "verdict": "rejected",
       "reasons": "[\"G2 budget: already opened 8 structures today\"]"
-    },
-    {
-      "id": 83,
-      "ts": "2026-08-28T14:27:31.549545+00:00",
-      "agent": "risk_officer",
-      "sleeve": "convex",
-      "underlying": "SPY",
-      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"SPY\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"SPY260831C00773000\", \"side\": \"buy\", \"strike\": 773.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 1.385, \"bid\": 1.36, \"ask\": 1.41, \"delta\": 0.3798, \"ratio_qty\": 1}, {\"symbol\": \"SPY260831C00778000\", \"side\": \"sell\", \"strike\": 778.0, \"expiry\": \"2026-08-31\", \"is_call\": true, \"mid\": 0.175, \"bid\": 0.17, \"ask\": 0.18, \"delta\": 0.0816, \"ratio_qty\": 1}], \"net_price\": -1.24, \"net_price_mid\": -1.21, \"width\": 5.0, \"max_loss_per_unit\": 124.0, \"max_gain_per_unit\": 376.0, \"qty\": 0, \"thesis\": \"Pay 1.24 for the 773/778 call spread expiring 2026-08-31: 3.0x payoff if the move continues.\", \"tags\": [\"dte:3\", \"payoff:3.0x\", \"iv:0.08\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
-    },
-    {
-      "id": 82,
-      "ts": "2026-08-28T14:27:29.599032+00:00",
-      "agent": "scout",
-      "sleeve": null,
-      "underlying": "SPY",
-      "proposal": "{\"underlying\": \"SPY\", \"spot\": 771.13, \"sma20\": 769.283, \"sma50\": 753.9505, \"trend\": \"up\", \"ret_5d\": 0.007412099681312512, \"realized_vol\": 0.10291223039064867, \"atm_iv\": 0.08165, \"vol_premium\": -0.021262230390648673, \"bias\": \"bullish\", \"notes\": [\"spot 771.13 vs sma20 769.28 vs sma50 753.95\", \"atm iv 8.2% vs realized 10.3% -> discount -2.1%\", \"options are cheap relative to realized movement; favour buying convexity\"]}",
-      "verdict": "observed",
-      "reasons": "[\"spot 771.13 vs sma20 769.28 vs sma50 753.95\", \"atm iv 8.2% vs realized 10.3% -> discount -2.1%\", \"options are cheap relative to realized movement; favour buying convexity\"]"
-    },
-    {
-      "id": 81,
-      "ts": "2026-08-28T14:24:21.024103+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "IWM",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"IWM\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"IWM260902P00293000\", \"side\": \"sell\", \"strike\": 293.0, \"expiry\": \"2026-09-02\", \"is_call\": false, \"mid\": 0.475, \"bid\": 0.47, \"ask\": 0.48, \"delta\": -0.1663, \"ratio_qty\": 1}, {\"symbol\": \"IWM260902P00291000\", \"side\": \"buy\", \"strike\": 291.0, \"expiry\": \"2026-09-02\", \"is_call\": false, \"mid\": 0.285, \"bid\": 0.28, \"ask\": 0.29, \"delta\": -0.1036, \"ratio_qty\": 1}], \"net_price\": 0.18, \"net_price_mid\": 0.19, \"width\": 2.0, \"max_loss_per_unit\": 182.0, \"max_gain_per_unit\": 18.0, \"qty\": 0, \"thesis\": \"Sell the 293 put at 0.17 delta expiring 2026-09-02, buy the 291 wing. Collect 0.18 on 2 wide (9% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:5\", \"delta:0.17\", \"iv:0.15\", \"width:2\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
-    },
-    {
-      "id": 80,
-      "ts": "2026-08-28T14:24:21.022259+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "IWM",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"IWM\", \"kind\": \"call_credit_spread\", \"legs\": [{\"symbol\": \"IWM260904C00304000\", \"side\": \"sell\", \"strike\": 304.0, \"expiry\": \"2026-09-04\", \"is_call\": true, \"mid\": 0.42, \"bid\": 0.4, \"ask\": 0.44, \"delta\": 0.148, \"ratio_qty\": 1}, {\"symbol\": \"IWM260904C00305000\", \"side\": \"buy\", \"strike\": 305.0, \"expiry\": \"2026-09-04\", \"is_call\": true, \"mid\": 0.29, \"bid\": 0.28, \"ask\": 0.3, \"delta\": 0.1098, \"ratio_qty\": 1}], \"net_price\": 0.1, \"net_price_mid\": 0.13, \"width\": 1.0, \"max_loss_per_unit\": 90.0, \"max_gain_per_unit\": 10.0, \"qty\": 0, \"thesis\": \"Sell the 304 call at 0.15 delta expiring 2026-09-04, buy the 305 wing. Collect 0.10 on 1 wide (10% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:7\", \"delta:0.15\", \"iv:0.13\", \"width:1\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G2 budget: already opened 8 structures today\"]"
     }
   ],
   "recent_orders": [
@@ -1617,6 +1625,14 @@
     }
   ],
   "recent_events": [
+    {
+      "id": 24,
+      "ts": "2026-08-28T15:59:17.644952+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "U.S. equity markets are trading in a mixed and cautious fashion as investors digest a key speech from Federal Reserve Chairman Kevin Warsh at the Jackson Hole symposium. [6, 7] Warsh stated that inflation remains too high and that the Fed may need to raise interest rates, leaving the door open for a potential hike sooner than December. [11, 13] Following the speech, major indices are holding stead",
+      "data": "{\"session_tone\": \"mixed\", \"summary\": \"U.S. equity markets are trading in a mixed and cautious fashion as investors digest a key speech from Federal Reserve Chairman Kevin Warsh at the Jackson Hole symposium. [6, 7] Warsh stated that inflation remains too high and that the Fed may need to raise interest rates, leaving the door open for a potential hike sooner than December. [11, 13] Following the speech, major indices are holding steady near the flat line, with the S&P 500 and Nasdaq showing little change while the Dow Jones Industrial Average is up slightly. [2, 10]\", \"catalysts_today\": [\"Federal Reserve Chairman Kevin Warsh's speech at the Jackson Hole Economic Symposium at 10:00 AM Eastern time. [15]\", \"Bureau of Labor Statistics (BLS) releases preliminary benchmark for Current Employment Statistics at 10:00 AM Eastern time. [17]\"], \"vol_context\": \"The Cboe Volatility Index (VIX) is down, falling to a two-week low of 14.23, suggesting lower expectations for near-term market volatility. [16, 21]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity markets today August 28 2026\", \"market tone today August 28 2026\", \"SPY QQQ IWM trading today August 28 2026\", \"economic data calendar August 28 2026\", \"Fed speakers today August 28 2026\", \"VIX index today August 28 2026\"], \"cached\": false}"
+    },
     {
       "id": 23,
       "ts": "2026-08-28T15:17:32.837381+00:00",
