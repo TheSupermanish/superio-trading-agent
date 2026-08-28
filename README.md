@@ -77,7 +77,25 @@ package. A short leg that finishes in the money is assigned while an
 out-of-the-money long leg simply expires, which leaves an unhedged stock
 position. The manager flattens anything expiring that day at 15:00 ET.
 
-## Running it
+## Where it runs
+
+The agent runs on a Google Compute Engine VM in `us-central1`, the same region
+its model calls go to, under systemd. Three agents, a static dashboard, and a
+snapshot timer that refreshes what the dashboard reads every sixty seconds.
+
+- Live dashboard: http://34.55.253.209:8088
+- Mirror on GitHub Pages: https://thesupermanish.github.io/superio-trading-agent/
+
+It shares a box with an unrelated web stack, so it is installed entirely under
+`/opt/superio` on its own port and never touches 80 or 443. Deploy with
+`scripts/deploy-vm.sh`; it is idempotent and safe to re-run.
+
+```bash
+sudo systemctl status  superio-main superio-test2 superio-test3
+sudo journalctl -u superio-main -f
+```
+
+## Running it locally
 
 ```bash
 uv venv && uv pip install -e .
