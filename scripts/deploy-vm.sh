@@ -84,6 +84,7 @@ WorkingDirectory=$ROOT
 Environment=ALPACA_PROFILE=$prof
 Environment=STRATEGY_VARIANT=$var
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONUNBUFFERED=1
 ExecStart=$ROOT/.venv/bin/python -m engine.loop --interval 300
 Restart=always
 RestartSec=30

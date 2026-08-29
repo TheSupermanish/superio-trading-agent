@@ -299,7 +299,11 @@ def main() -> None:
     state.log_event("loop_start", SETTINGS.describe())
 
     checks = preflight.run(require_competition_balance=args.require_competition_balance)
-    print(preflight.report(checks))
+    # Through the logger, not print: stdout is block-buffered when it is not a
+    # terminal, so under systemd the preflight report would sit unflushed in a
+    # buffer while the log filled with everything that came after it.
+    for check in checks:
+        log.info("preflight %s", check)
     if not preflight.passed(checks):
         log.error("preflight failed, refusing to trade")
         state.log_event("preflight_failed", preflight.report(checks), level="error")
