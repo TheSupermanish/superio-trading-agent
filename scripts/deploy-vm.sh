@@ -85,6 +85,9 @@ Environment=ALPACA_PROFILE=$prof
 Environment=STRATEGY_VARIANT=$var
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUNBUFFERED=1
+# The billing guard shells out to gcloud, which bills its API call to whatever
+# project is configured. Pin it so the check does not depend on ambient state.
+Environment=CLOUDSDK_CORE_PROJECT=gemini-cli-manish-mac-mini
 ExecStart=$ROOT/.venv/bin/python -m engine.loop --interval 300
 Restart=always
 RestartSec=30
