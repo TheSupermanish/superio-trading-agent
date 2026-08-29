@@ -71,7 +71,11 @@ class StrategyParams:
     # Core income sleeve: short vertical spreads, delta-selected.
     core_min_dte: int = 1
     core_max_dte: int = 7
-    core_short_delta: float = 0.16
+    # A 16-delta short yields only about 12% of width at any plausible
+    # volatility premium, so pairing it with an 18% credit floor meant the
+    # income sleeve could never fire: the two settings contradicted each other.
+    # 22 delta clears the floor while staying well out of the money.
+    core_short_delta: float = 0.22
     core_delta_tolerance: float = 0.07
     core_widths: tuple[float, ...] = (1.0, 2.0, 3.0, 5.0)
     core_profit_target: float = 0.55         # buy back at 55% of credit captured
@@ -115,7 +119,7 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             BASE_STRATEGY,
             convex_long_delta=0.40,
             convex_max_dte=5,
-            core_short_delta=0.12,
+            core_short_delta=0.18,
         ),
     ),
 
@@ -123,7 +127,7 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
     "income_only": (
         replace(BASE_RISK, core_risk_share=1.0, convex_risk_share=0.0,
                 max_convex_open_risk_pct=0.0, min_credit_to_width=0.22),
-        replace(BASE_STRATEGY, core_short_delta=0.20, core_max_dte=5),
+        replace(BASE_STRATEGY, core_short_delta=0.30, core_max_dte=5),
     ),
 }
 
