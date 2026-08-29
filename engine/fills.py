@@ -106,10 +106,11 @@ def walk() -> list[dict[str, Any]]:
         rung_index = max(0, _attempts_so_far(int(structure["id"])) - 1)
         if rung_index >= len(LADDER):
             # Already offered the touch and still nothing. Stand down.
-            try:
-                alpaca_cli.cancel_order(str(order.get("id")))
-            except alpaca_cli.AlpacaCliError as exc:
-                log.warning("could not cancel %s: %s", order.get("id"), exc)
+            if not SETTINGS.dry_run:
+                try:
+                    alpaca_cli.cancel_order(str(order.get("id")))
+                except alpaca_cli.AlpacaCliError as exc:
+                    log.warning("could not cancel %s: %s", order.get("id"), exc)
             state.set_structure_status(int(structure["id"]), "rejected")
             state.log_event(
                 "order_abandoned",
@@ -135,12 +136,18 @@ def walk() -> list[dict[str, Any]]:
 
 
 def _reprice(structure: dict[str, Any], order: dict[str, Any], price: float) -> None:
-    """Cancel and resubmit the same package at a price closer to the touch."""
-    try:
-        alpaca_cli.cancel_order(str(order.get("id")))
-    except alpaca_cli.AlpacaCliError as exc:
-        log.warning("could not cancel %s before repricing: %s", order.get("id"), exc)
-        return
+    """Cancel and resubmit the same package at a price closer to the touch.
+
+    The cancel is skipped while simulating. Cancelling for real and then
+    returning before the resubmit would leave a live order orphaned, which is
+    the opposite of what a dry run is supposed to guarantee.
+    """
+    if not SETTINGS.dry_run:
+        try:
+            alpaca_cli.cancel_order(str(order.get("id")))
+        except alpaca_cli.AlpacaCliError as exc:
+            log.warning("could not cancel %s before repricing: %s", order.get("id"), exc)
+            return
 
     payload = {
         "order_class": "mleg",

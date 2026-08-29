@@ -11,6 +11,7 @@ A fatal check failing stops the loop. A warning is reported and the loop runs.
 from __future__ import annotations
 
 import logging
+import subprocess
 from dataclasses import dataclass
 from typing import Any
 
@@ -35,8 +36,24 @@ class Check:
         return f"[{mark}] {self.name}: {self.detail}"
 
 
+def _revision() -> str:
+    """Short git revision, so a stale deployment is visible at a glance."""
+    try:
+        proc = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=10,
+            cwd=str(SETTINGS.db_path.parent.parent),
+        )
+        if proc.returncode == 0:
+            return proc.stdout.strip()
+    except (subprocess.TimeoutExpired, OSError):
+        pass
+    return "unknown"
+
+
 def run(require_competition_balance: bool = False) -> list[Check]:
     checks: list[Check] = []
+    checks.append(Check("revision", True, f"running {_revision()}"))
 
     if not alpaca_cli.available():
         return [
