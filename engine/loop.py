@@ -240,6 +240,23 @@ def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
         log.info("fill walker: %s", action)
 
     marks = manager.manage()
+
+    # If the daily budget is gone there is nothing to decide, so do not build
+    # candidates or call a model just to have every one of them refused by G2.
+    # Left alone this writes hundreds of identical rejections into the journal
+    # and makes the gate report read as though the agent spends its life
+    # blocked by its own budget.
+    remaining = SETTINGS.risk.max_new_trades_per_day - snap.trades_today
+    if remaining <= 0:
+        log.info("daily trade budget used (%d), managing only", snap.trades_today)
+        _publish()
+        return {
+            "traded": False,
+            "reason": "daily trade budget used",
+            "equity": snap.equity,
+            "marks": [m.__dict__ for m in marks],
+        }
+
     opened = scan_and_trade(snap)
     _publish()
 
