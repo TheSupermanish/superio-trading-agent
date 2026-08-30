@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from engine import state
+from engine import premarket, state
 from engine.calendar_gate import EVENTS, upcoming
 from engine.config import SETTINGS
 from engine.risk import GATES
@@ -149,6 +149,7 @@ def build() -> dict[str, Any]:
         "recent_decisions": _rows("decisions", 120),
         "recent_orders": _rows("orders", 60),
         "recent_events": _rows("events", 40),
+        "session_plan": premarket.last_study(),
         "calendar": [
             {
                 "name": e.name,

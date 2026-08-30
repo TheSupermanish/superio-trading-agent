@@ -22,6 +22,7 @@ from engine import (
     manager,
     mcp_research,
     preflight,
+    premarket,
     reconcile,
     report,
     risk,
@@ -206,9 +207,23 @@ def _publish() -> None:
 def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
     is_open, clock = market_open()
     if not is_open and not ignore_market_hours:
+        # Closed does not mean idle. Recompute the volatility signal, read the
+        # news, and rehearse the structures we would open, so the next live
+        # pass starts from a considered position instead of a cold one.
         log.info("market closed, next open %s", clock.get("next_open"))
+        plan = None
+        try:
+            snap = account_snapshot()
+            plan = premarket.study(snap)
+        except Exception as exc:  # noqa: BLE001 - study must never break the loop
+            log.warning("closed-market study failed: %s", exc)
         _publish()
-        return {"traded": False, "reason": "market closed", "clock": clock}
+        return {
+            "traded": False,
+            "reason": "market closed",
+            "clock": clock,
+            "plan": plan,
+        }
 
     # What the broker holds is the truth; correct the journal before sizing
     # anything against it.
