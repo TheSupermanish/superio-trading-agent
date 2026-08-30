@@ -1,0 +1,299 @@
+<title>Superio deck</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@600;700&display=swap">
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  :root {
+    --bg: #0a0c10; --panel: #12151c; --panel2: #171b24;
+    --line: #232936; --text: #e6e9ef; --muted: #8b94a7;
+    --accent: #ffd23f; --up: #3ddc97; --down: #ff5c5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: "JetBrains Mono", ui-monospace, monospace; color: var(--text); }
+
+  .slide {
+    width: 1280px; height: 720px; padding: 64px 76px;
+    display: flex; flex-direction: column; position: relative;
+    page-break-after: always; break-after: page; overflow: hidden;
+    background: var(--bg);
+  }
+  .slide:last-child { page-break-after: auto; }
+
+  .num {
+    position: absolute; right: 76px; bottom: 42px;
+    font-size: 13px; color: var(--muted); letter-spacing: 0.1em;
+  }
+  .eyebrow {
+    font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 22px;
+  }
+  h1 { font-family: "Archivo", sans-serif; font-weight: 700; font-size: 96px; letter-spacing: -0.04em; line-height: 0.95; }
+  h1 .io { color: var(--accent); }
+  h2 {
+    font-family: "Archivo", sans-serif; font-weight: 600;
+    font-size: 42px; letter-spacing: -0.02em; line-height: 1.12; margin-bottom: 26px;
+  }
+  p { font-size: 20px; line-height: 1.62; color: var(--text); max-width: 980px; }
+  p + p { margin-top: 16px; }
+  .muted { color: var(--muted); }
+  .accent { color: var(--accent); }
+  .up { color: var(--up); } .down { color: var(--down); }
+  .spacer { flex: 1; }
+  .big { font-size: 34px; line-height: 1.4; max-width: 1020px; }
+  .big b { color: var(--accent); font-weight: 500; }
+
+  .cols { display: flex; gap: 24px; margin-top: 8px; }
+  .card { background: var(--panel); border: 1px solid var(--line); padding: 22px 24px; flex: 1; }
+  .card .k { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .card .v { font-family: "Archivo", sans-serif; font-weight: 600; font-size: 30px; margin-top: 10px; letter-spacing: -0.02em; }
+  .card .n { font-size: 15px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 17px; margin-top: 6px; }
+  th { text-align: left; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+       color: var(--muted); font-weight: 500; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td.g { color: var(--accent); font-weight: 700; width: 52px; }
+  tr:last-child td { border-bottom: none; }
+
+  pre {
+    background: var(--panel); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent); padding: 20px 24px;
+    font-size: 16px; line-height: 1.65; color: var(--text); white-space: pre-wrap;
+  }
+  pre .c { color: var(--muted); }
+  pre .a { color: var(--accent); }
+  pre .r { color: var(--down); }
+  pre .u { color: var(--up); }
+
+  .flow { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
+  .step { display: flex; align-items: center; gap: 18px; }
+  .step .box {
+    background: var(--panel); border: 1px solid var(--line);
+    padding: 12px 18px; font-size: 17px; width: 232px; flex: none;
+  }
+  .step .box.hard { border-color: var(--accent); color: var(--accent); }
+  .step .desc { font-size: 16px; color: var(--muted); }
+  .arrow { color: var(--line); font-size: 14px; margin-left: 106px; }
+</style>
+
+<!-- 1 -->
+<section class="slide">
+  <div class="eyebrow">Alpaca AI Trading Agents Hackathon · 2026</div>
+  <div class="spacer"></div>
+  <h1>super<span class="io">io</span></h1>
+  <div style="width:120px;height:4px;background:var(--accent);margin:32px 0 30px"></div>
+  <div class="big">
+    An autonomous options agent where<br><b>the model never touches the limits</b>.
+  </div>
+  <div class="spacer"></div>
+  <p class="muted">Defined-risk option structures on SPY, QQQ and IWM · Alpaca paper trading</p>
+  <div class="num">01</div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="eyebrow">The problem</div>
+  <h2>Everyone lets the model size the bet.<br>That's the part it is worst at.</h2>
+  <p>
+    In Nof1's Alpha Arena, four of six language models lost money trading live.
+    GPT-5 finished down 63%, Gemini down 57%, Grok down 58%. The winner's edge was
+    sizing discipline, not prediction.
+  </p>
+  <p>
+    Independent replication of LLM trading research finds the edge disappears out of
+    sample. A 2026 audit rated zero of nineteen such studies at the top
+    reproducibility tier.
+  </p>
+  <div class="spacer"></div>
+  <div class="cols">
+    <div class="card">
+      <div class="k">Models are good at</div>
+      <div class="v up">reading</div>
+      <div class="n">Regime narration, news, choosing between framed options.</div>
+    </div>
+    <div class="card">
+      <div class="k">Models are bad at</div>
+      <div class="v down">arithmetic</div>
+      <div class="n">Position sizing, strike selection, respecting a limit under pressure.</div>
+    </div>
+  </div>
+  <div class="num">02</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="eyebrow">The inversion</div>
+  <h2>The model returns an index.</h2>
+  <p>
+    Deterministic code builds every candidate structure from the live chain, sizes it,
+    and refuses anything failing a gate. Only then is the model asked to choose.
+  </p>
+  <pre>{"action": "trade", "refs": [<span class="a">"QQQ:call_debit_spread"</span>], "confidence": 0.8}</pre>
+  <p>
+    That is its entire output space. It cannot invent a structure, move a strike,
+    change a quantity, or widen a limit, because none of those are things it can say.
+  </p>
+  <div class="spacer"></div>
+  <p class="accent" style="font-size:24px">
+    The worst a confused or prompt-injected model can do is pick a slightly worse
+    safe trade, or refuse to trade.
+  </p>
+  <div class="num">03</div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="eyebrow">Architecture</div>
+  <h2>Four roles. One of them is allowed to be wrong.</h2>
+  <div class="flow">
+    <div class="step"><div class="box">Scout</div><div class="desc">measures trend, realized vol, implied vol, and the spread between them</div></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="box">Analyst</div><div class="desc">Gemini + Google Search. What is actually happening today</div></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="box">Strategist</div><div class="desc">Gemini + 7 tools. Investigates, compares structures, decides</div></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="box hard">Risk officer</div><div class="desc">deterministic. Sizes it or refuses it. No model call in the file</div></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="box">Executor</div><div class="desc">Alpaca CLI. Every order is a reproducible shell command</div></div>
+    <div class="arrow">↓</div>
+    <div class="step"><div class="box">Manager</div><div class="desc">profit target, stop, and a flatten before the assignment window</div></div>
+  </div>
+  <div class="num">04</div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="eyebrow">Risk gates</div>
+  <h2>Seven gates. Numbered, tested, journalled by name.</h2>
+  <table>
+    <thead><tr><th></th><th>Gate</th><th>Limit</th></tr></thead>
+    <tbody>
+      <tr><td class="g">G1</td><td>Kill switches</td><td>−3% on the day flattens · −8% drawdown ends the event</td></tr>
+      <tr><td class="g">G2</td><td>Trade budget</td><td>8 new structures a day, 10 open at once</td></tr>
+      <tr><td class="g">G3</td><td>Defined risk</td><td>Every short leg needs same-expiry cover. No flag disables it</td></tr>
+      <tr><td class="g">G4</td><td>Leg liquidity</td><td>Bid/ask within 12% of mid, per leg</td></tr>
+      <tr><td class="g">G5</td><td>Pricing</td><td>Sell no spread under 18% of width · pay no more than 45%</td></tr>
+      <tr><td class="g">G6</td><td>Event blackout</td><td>No writing premium across a scheduled catalyst</td></tr>
+      <tr><td class="g">G7</td><td>Sizing</td><td>0.75% of equity per structure · 6% total · 3% convex</td></tr>
+    </tbody>
+  </table>
+  <div class="spacer"></div>
+  <p class="muted">
+    Priced at the touch, not the mid. Alpaca's paper engine fills against the NBBO,
+    so sizing off mid prices understates real maximum loss.
+  </p>
+  <div class="num">05</div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="eyebrow">The differentiator</div>
+  <h2>We show you the trades it refused.</h2>
+  <pre><span class="c">risk_officer  SPY</span>  <span class="r">rejected</span>   G5 pricing: credit 17.0% of width
+                             is below the 18% floor
+<span class="c">risk_officer  IWM</span>  <span class="r">rejected</span>   G5 pricing: credit 13.0% of width
+<span class="c">risk_officer  QQQ</span>  <span class="u">approved</span>   G3 all short legs covered by
+                             same-expiry long legs</pre>
+  <p>
+    Every refusal is attributed to the gate that caused it and published on the live
+    dashboard beside the trades that passed.
+  </p>
+  <div class="spacer"></div>
+  <p class="big" style="font-size:26px">
+    An agent that shows only its trades is showing <b>half its behaviour</b> — and the
+    half it refused is the half that explains the risk.
+  </p>
+  <div class="num">06</div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="eyebrow">Alpaca infrastructure</div>
+  <h2>Both interfaces, split on purpose.</h2>
+  <div class="cols">
+    <div class="card">
+      <div class="k">CLI — execution</div>
+      <div class="v accent">reproducible</div>
+      <div class="n">
+        Every order is <span class="accent">alpaca api POST /v2/orders</span> with a JSON
+        body, stored in the journal beside the proposal and the risk verdict that
+        produced it. A judge can paste any trade into a terminal.
+      </div>
+    </div>
+    <div class="card">
+      <div class="k">MCP — research</div>
+      <div class="v accent">read-only</div>
+      <div class="n">
+        41 tools over one stdio session for news and market state, with output wrapped
+        in a trust envelope marking it as data rather than instructions.
+      </div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <p>
+    Execution deliberately avoids MCP: its v2 multi-leg order bug (issue #97) sends the
+    legs array as a raw string, and every structure this agent trades is multi-leg.
+  </p>
+  <p class="muted">
+    Verified end to end: a spread opened at a net 1.05 debit and closed as a package
+    for a net 1.05 credit.
+  </p>
+  <div class="num">07</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="eyebrow">Results</div>
+  <h2>Three variants, one tape.</h2>
+  <p>
+    Four and a half sessions cannot separate skill from variance. So rather than run one
+    account and tell a story about the number, the same engine runs three presets side
+    by side and the week produces a comparison.
+  </p>
+  <div class="cols" style="margin-top:22px">
+    <div class="card">
+      <div class="k">barbell — judged</div>
+      <div class="v">PA3Z3MMXLBZ0</div>
+      <div class="n">Defined-risk premium plus a capped convex sleeve, routed by the volatility signal.</div>
+    </div>
+    <div class="card">
+      <div class="k">convex tilt</div>
+      <div class="v">PA3YJ4131VZX</div>
+      <div class="n">Convexity-led, larger convex cap, lower short delta.</div>
+    </div>
+    <div class="card">
+      <div class="k">income only — control</div>
+      <div class="v">PA3U027VIRFW</div>
+      <div class="n">Premium selling only, no convex sleeve.</div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <p class="accent" style="font-size:22px">Live dashboard · realized P&amp;L, win rate, profit factor, drawdown, and every refusal</p>
+  <div class="num">08</div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="eyebrow">Honest limits</div>
+  <h2>What we would not claim.</h2>
+  <p>
+    Paper fills are more generous than live ones, especially on wide quotes, so any
+    result here is optimistic by construction. The free data feed delays trades by
+    fifteen minutes.
+  </p>
+  <p>
+    No historical option prices are available on this plan, so the replay harness prices
+    entry and exit with the same model and simulates no volatility risk. It validates
+    mechanics, not edge — and we say so in the tool's own output.
+  </p>
+  <p>
+    Four and a half sessions is far too short a sample to distinguish skill from luck.
+    We would say that whichever way the number lands on Friday.
+  </p>
+  <div class="spacer"></div>
+  <div class="cols">
+    <div class="card"><div class="k">Tests</div><div class="v">34</div><div class="n">gates, order ladder, every exit rule</div></div>
+    <div class="card"><div class="k">Naked short exposure</div><div class="v up">structurally impossible</div><div class="n">not a setting</div></div>
+    <div class="card"><div class="k">Licence</div><div class="v">MIT</div><div class="n">public repo, commits across the event</div></div>
+  </div>
+  <div class="num">09</div>
+</section>

@@ -1,0 +1,124 @@
+<title>Superio cover</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Archivo:wght@600;700&display=swap">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --panel: #12151c;
+    --line: #232936;
+    --text: #e6e9ef;
+    --muted: #8b94a7;
+    --accent: #ffd23f;
+    --up: #3ddc97;
+    --down: #ff5c5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1920px; height: 1080px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    overflow: hidden;
+    position: relative;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.25;
+  }
+  .glow {
+    position: absolute; width: 900px; height: 900px;
+    right: -220px; top: -240px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,210,63,0.13) 0%, transparent 62%);
+  }
+  .wrap { position: relative; padding: 92px 100px; height: 100%; display: flex; flex-direction: column; }
+
+  .eyebrow {
+    font-size: 21px; letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 40px;
+  }
+  h1 {
+    font-family: "Archivo", sans-serif; font-weight: 700;
+    font-size: 132px; line-height: 0.94; letter-spacing: -0.045em;
+  }
+  h1 .io { color: var(--accent); }
+  .rule { width: 132px; height: 5px; background: var(--accent); margin: 40px 0 36px; }
+  .claim {
+    font-size: 40px; line-height: 1.36; max-width: 1180px; color: var(--text);
+  }
+  .claim b { color: var(--accent); font-weight: 500; }
+  .sub { font-size: 24px; color: var(--muted); margin-top: 26px; max-width: 1080px; line-height: 1.5; }
+
+  .spacer { flex: 1; }
+
+  .gates { display: flex; gap: 14px; margin-bottom: 40px; flex-wrap: wrap; }
+  .gate {
+    border: 1px solid var(--line); background: var(--panel);
+    padding: 13px 20px; font-size: 19px; color: var(--muted);
+  }
+  .gate b { color: var(--accent); font-weight: 700; margin-right: 10px; }
+
+  footer { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .stats { display: flex; gap: 66px; }
+  .stat .k { font-size: 16px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .stat .v { font-family: "Archivo", sans-serif; font-weight: 600; font-size: 46px; margin-top: 10px; letter-spacing: -0.02em; }
+  .stat .v.up { color: var(--up); }
+  .stat .v.acc { color: var(--accent); }
+  .built { text-align: right; font-size: 19px; color: var(--muted); line-height: 1.7; }
+  .built b { color: var(--text); font-weight: 500; }
+</style>
+
+<div class="grid"></div>
+<div class="glow"></div>
+
+<div class="wrap">
+  <div class="eyebrow">Alpaca AI Trading Agents Hackathon</div>
+
+  <h1>super<span class="io">io</span></h1>
+  <div class="rule"></div>
+
+  <div class="claim">
+    A language model is good at reading a market and bad at respecting a limit.<br>
+    So the model <b>never touches the limits</b>.
+  </div>
+
+  <div class="sub">
+    It reads the volatility surface, compares structures, and returns an index into
+    trades that already passed seven risk gates. It never emits a strike, a size, or a limit.
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="gates">
+    <div class="gate"><b>G1</b>kill switches</div>
+    <div class="gate"><b>G2</b>trade budget</div>
+    <div class="gate"><b>G3</b>no naked shorts</div>
+    <div class="gate"><b>G4</b>leg liquidity</div>
+    <div class="gate"><b>G5</b>credit floor</div>
+    <div class="gate"><b>G6</b>event blackout</div>
+    <div class="gate"><b>G7</b>position sizing</div>
+  </div>
+
+  <footer>
+    <div class="stats">
+      <div class="stat">
+        <div class="k">Max loss per trade</div>
+        <div class="v acc">0.75%</div>
+      </div>
+      <div class="stat">
+        <div class="k">Naked shorts</div>
+        <div class="v up">impossible</div>
+      </div>
+      <div class="stat">
+        <div class="k">Tests</div>
+        <div class="v">34</div>
+      </div>
+    </div>
+    <div class="built">
+      Alpaca <b>Trading API · CLI · MCP</b><br>
+      Reasoning on <b>Gemini 2.5 Pro</b> over Vertex
+    </div>
+  </footer>
+</div>
