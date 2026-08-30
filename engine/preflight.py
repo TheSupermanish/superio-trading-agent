@@ -155,13 +155,25 @@ def run(require_competition_balance: bool = False) -> list[Check]:
             Check("reasoning", True, "no model configured; running fully deterministic")
         )
 
-    checks.append(
-        Check(
-            "execution mode",
-            True,
-            "DRY RUN, no orders will be sent" if SETTINGS.dry_run else "LIVE on paper money",
+    if SETTINGS.arming_misconfigured:
+        checks.append(
+            Check(
+                "execution mode",
+                False,
+                "DRY_RUN is false but LIVE_FROM did not parse; refusing to guess and "
+                "staying simulated. Fix LIVE_FROM in .env",
+                fatal=False,
+            )
         )
-    )
+    else:
+        checks.append(
+            Check(
+                "execution mode",
+                True,
+                "DRY RUN, no orders will be sent" if SETTINGS.dry_run
+                else "LIVE on paper money",
+            )
+        )
     return checks
 
 

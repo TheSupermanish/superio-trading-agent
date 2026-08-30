@@ -12,11 +12,15 @@ from __future__ import annotations
 
 import json
 import os
+import logging
 import shutil
 import subprocess
+import time
 from typing import Any
 
 from engine.config import SETTINGS
+
+log = logging.getLogger(__name__)
 
 
 class AlpacaCliError(RuntimeError):
@@ -42,20 +46,78 @@ def _env() -> dict[str, str]:
     return env
 
 
-def run(args: list[str], stdin: str | None = None, timeout: int = 60) -> Any:
-    """Run an `alpaca` subcommand and return parsed JSON."""
+#: Network hiccups reaching Alpaca are routine: six clock calls timed out in a
+#: single day here, and two of them killed an entire trading pass. Reads are
+#: safe to repeat, so they are retried rather than allowed to abort a pass.
+TRANSIENT = (
+    "context deadline exceeded",
+    "connection reset",
+    "connection refused",
+    "no such host",
+    "timeout",
+    "temporary failure",
+    "EOF",
+    "502",
+    "503",
+    "504",
+)
+
+
+def _is_transient(detail: dict[str, Any], stderr: str) -> bool:
+    haystack = f"{detail.get('error', '')} {stderr}".lower()
+    return any(marker.lower() in haystack for marker in TRANSIENT)
+
+
+def run(
+    args: list[str],
+    stdin: str | None = None,
+    timeout: int = 60,
+    retries: int = 0,
+) -> Any:
+    """Run an `alpaca` subcommand and return parsed JSON.
+
+    `retries` is opt-in and deliberately defaults to zero. Repeating a read
+    costs nothing; repeating an order submission after an ambiguous failure can
+    place the same trade twice, so writes never retry here.
+    """
     binary = cli_path()
     if binary is None:
         raise AlpacaCliError("alpaca CLI not installed (brew install alpacahq/tap/cli)")
 
-    proc = subprocess.run(
-        [binary, *args],
-        input=stdin,
-        capture_output=True,
-        text=True,
-        env=_env(),
-        timeout=timeout,
-    )
+    last: AlpacaCliError | None = None
+    for attempt in range(retries + 1):
+        try:
+            return _run_once(binary, args, stdin, timeout)
+        except AlpacaCliError as exc:
+            last = exc
+            if attempt < retries and _is_transient(exc.payload, str(exc)):
+                delay = 1.5 * (attempt + 1)
+                log.warning(
+                    "transient failure on `alpaca %s`, retrying in %.1fs",
+                    " ".join(args), delay,
+                )
+                time.sleep(delay)
+                continue
+            raise
+    raise last if last else AlpacaCliError("unreachable")
+
+
+def _run_once(binary: str, args: list[str], stdin: str | None, timeout: int) -> Any:
+    try:
+        proc = subprocess.run(
+            [binary, *args],
+            input=stdin,
+            capture_output=True,
+            text=True,
+            env=_env(),
+            timeout=timeout,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise AlpacaCliError(
+            f"alpaca {' '.join(args)} timed out after {timeout}s",
+            {"error": "timeout"},
+        ) from exc
+
     if proc.returncode != 0:
         detail: dict[str, Any] = {}
         try:
@@ -86,24 +148,27 @@ def command_string(args: list[str], stdin: str | None = None) -> str:
 # --- Reads -----------------------------------------------------------------
 
 def account() -> dict[str, Any]:
-    return run(["account", "get"])
+    return run(["account", "get"], retries=2)
 
 
 def clock() -> dict[str, Any]:
-    return run(["clock"])
+    return run(["clock"], retries=3)
 
 
 def positions() -> list[dict[str, Any]]:
-    return run(["position", "list"]) or []
+    return run(["position", "list"], retries=2) or []
 
 
 def orders(status: str = "open") -> list[dict[str, Any]]:
-    return run(["order", "list", "--status", status]) or []
+    return run(["order", "list", "--status", status], retries=2) or []
 
 
 def order_by_client_id(client_order_id: str) -> dict[str, Any] | None:
     try:
-        return run(["api", "GET", f"/v2/orders:by_client_order_id?client_order_id={client_order_id}"])
+        return run(
+            ["api", "GET", f"/v2/orders:by_client_order_id?client_order_id={client_order_id}"],
+            retries=2,
+        )
     except AlpacaCliError:
         return None
 
@@ -112,6 +177,8 @@ def order_by_client_id(client_order_id: str) -> dict[str, Any] | None:
 
 def submit_order(payload: dict[str, Any]) -> dict[str, Any]:
     """POST /v2/orders. Handles single-leg and multi-leg (order_class=mleg)."""
+    # No retry: a resubmission after an ambiguous failure can place the same
+    # trade twice. The fill walker reconciles against the broker instead.
     body = json.dumps(payload, separators=(",", ":"))
     return run(["api", "POST", "/v2/orders"], stdin=body)
 

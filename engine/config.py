@@ -169,8 +169,18 @@ class Settings:
         if self.force_dry_run:
             return True
         if self.live_from is None:
-            return False
+            # Arming was requested but no arming time survived parsing. A
+            # malformed .env once left DRY_RUN holding a whole sentence, and
+            # had LIVE_FROM been mangled the same way this would have gone live
+            # immediately and silently. Failing towards simulation is the only
+            # safe direction for a system that can place orders.
+            return True
         return datetime.now(timezone.utc) < self.live_from
+
+    @property
+    def arming_misconfigured(self) -> bool:
+        """True when live trading was asked for but no arming time was parsed."""
+        return not self.force_dry_run and self.live_from is None
 
     def describe(self) -> str:
         if self.dry_run:
