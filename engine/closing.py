@@ -128,6 +128,26 @@ def close_leg_by_leg(
                 results.append(
                     {"symbol": leg["symbol"], "status": "failed", "error": str(liq_exc)}
                 )
+                if leg["side"] == "sell":
+                    # A short leg we cannot buy back is the one failure that
+                    # must stop everything. Closing the long legs from here
+                    # would strip the cover off a short option and turn a
+                    # defined-risk spread into unlimited exposure. Better to
+                    # hold the whole structure and shout.
+                    log.error(
+                        "ABORTING close of structure %s: short leg %s would not close, "
+                        "so its cover stays on",
+                        structure["id"],
+                        leg["symbol"],
+                    )
+                    state.log_event(
+                        "close_aborted",
+                        f"short leg {leg['symbol']} would not close; long legs left in place "
+                        f"to avoid a naked short",
+                        level="error",
+                        data={"structure_id": structure["id"], "leg": leg["symbol"]},
+                    )
+                    return results
 
     return results
 
@@ -175,10 +195,16 @@ def close_package(
 ) -> tuple[bool, str]:
     """Try to close the spread in one order. Returns (succeeded, detail)."""
     entry = float(structure["net_price"])
-    # Exiting a credit structure costs a debit (positive); exiting a debit
-    # structure raises a credit (negative). Pad the price to stay marketable.
-    magnitude = abs(net_price) * (1 + MARKETABLE_PAD)
-    limit = magnitude if entry > 0 else -magnitude
+    # Exiting a credit structure means buying it back, so we pay a debit and
+    # the limit is positive; being marketable means offering MORE.
+    # Exiting a debit structure means selling it, so we receive a credit and
+    # the limit is negative; being marketable means accepting LESS.
+    # Padding in one direction for both cases makes half the exits unfillable,
+    # which is the worst possible time to be stubborn about a penny.
+    if entry > 0:
+        limit = abs(net_price) * (1 + MARKETABLE_PAD)
+    else:
+        limit = -abs(net_price) * (1 - MARKETABLE_PAD)
 
     payload = _package_close_payload(structure, limit)
     command = alpaca_cli.command_string(

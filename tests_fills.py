@@ -176,6 +176,70 @@ def test_dead_order_marks_the_structure_rejected():
     assert row["status"] == "rejected", row["status"]
 
 
+# --- closing safety -------------------------------------------------------
+
+def test_closing_a_debit_spread_accepts_less_not_more():
+    """Selling to close: being marketable means accepting a smaller credit."""
+    from engine import closing
+    s = {"id": 1, "qty": 1, "net_price": -1.00,
+         "legs": [{"symbol": "L", "side": "buy", "ratio_qty": 1},
+                  {"symbol": "S", "side": "sell", "ratio_qty": 1}]}
+    _set_dry_run(True)
+    ok, detail = closing.close_package(s, net_price=1.20, reason="test")
+    assert ok, detail
+    # The payload is built inside; rebuild it the same way to inspect the sign.
+    payload = closing._package_close_payload(s, -1.20 * (1 - closing.MARKETABLE_PAD))
+    price = float(payload["limit_price"])
+    assert price < 0, "closing a debit spread must be sent as a credit"
+    assert abs(price) < 1.20, f"must accept less than {1.20}, asked {abs(price)}"
+
+
+def test_closing_a_credit_spread_offers_more_not_less():
+    from engine import closing
+    s = {"id": 1, "qty": 1, "net_price": 1.00,
+         "legs": [{"symbol": "S", "side": "sell", "ratio_qty": 1},
+                  {"symbol": "L", "side": "buy", "ratio_qty": 1}]}
+    payload = closing._package_close_payload(s, 0.40 * (1 + closing.MARKETABLE_PAD))
+    price = float(payload["limit_price"])
+    assert price > 0, "buying a spread back must be sent as a debit"
+    assert price > 0.40, f"must offer more than 0.40, offered {price}"
+
+
+def test_failed_short_leg_aborts_before_touching_the_long_leg():
+    """The one failure that must stop everything: a short we cannot buy back."""
+    from engine import closing
+
+    class Broken:
+        def __init__(self):
+            self.closed: list[str] = []
+
+        def submit_order(self, payload):
+            raise closing.alpaca_cli.AlpacaCliError("rejected")
+
+        def close_position(self, symbol, qty=None):
+            self.closed.append(symbol)
+            raise closing.alpaca_cli.AlpacaCliError("also rejected")
+
+    broken = Broken()
+    closing.alpaca_cli.submit_order = broken.submit_order
+    closing.alpaca_cli.close_position = broken.close_position
+    closing.SETTINGS.__class__.dry_run = property(lambda self: False)
+    _reset()
+
+    structure = {
+        "id": 99, "qty": 1,
+        "legs": [{"symbol": "SHORT", "side": "sell", "ratio_qty": 1},
+                 {"symbol": "LONG", "side": "buy", "ratio_qty": 1}],
+    }
+    closing.state.SETTINGS.__class__.db_path = property(lambda self: TMP)
+    results = closing.close_leg_by_leg(structure, {"SHORT": 1.0, "LONG": 2.0}, "test")
+
+    assert results[-1]["status"] == "failed", results
+    assert all(r["symbol"] != "LONG" for r in results), \
+        "the long leg must not be closed once its short leg failed"
+    assert "LONG" not in broken.closed, "long leg was liquidated, stripping the cover"
+
+
 if __name__ == "__main__":
     mod = sys.modules[__name__]
     failed = 0
