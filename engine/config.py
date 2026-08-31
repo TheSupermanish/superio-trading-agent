@@ -82,7 +82,14 @@ class StrategyParams:
     core_stop_multiple: float = 2.0          # cut at 2x the credit received
 
     # Convex sleeve: short-dated debit structures bought for the right tail.
-    convex_min_dte: int = 0
+    # Not zero. Our own research turned up the one category with hard evidence
+    # against it: across a large sample of retail option trades, 0DTE trades
+    # underperformed others by 4.7 percentage points, and 0DTE DEBIT trades --
+    # exactly what the convex sleeve buys -- lost an average of $8.05 per
+    # contract, while 0DTE credit trades made $4.55. Buying same-day premium is
+    # the worst-documented trade available to us, so the sleeve starts at one
+    # day out and keeps the convexity without the lottery ticket.
+    convex_min_dte: int = 1
     convex_max_dte: int = 3
     convex_long_delta: float = 0.35
     convex_widths: tuple[float, ...] = (3.0, 5.0, 8.0)
