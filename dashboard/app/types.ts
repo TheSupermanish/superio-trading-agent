@@ -79,6 +79,20 @@ export type Snapshot = {
   recent_decisions: Decision[];
   recent_events: { id: number; ts: string; level: string; kind: string; message: string }[];
   upcoming: { name: string; when: string; impact: string }[];
+  session_plan?: {
+    generated_at: string;
+    summary: string;
+    note: string;
+    regimes: Record<string, {
+      spot: number; trend: string; bias: string;
+      realized_vol: number | null; atm_iv: number | null; vol_premium: number | null;
+    }>;
+    candidates: {
+      symbol: string; style: string; verdict: string; reason: string;
+      qty?: number; net_price?: number; max_loss?: number; expiry?: string;
+    }[];
+    brief?: { session_tone?: string; summary?: string; vol_context?: string };
+  } | null;
   google?: {
     connected: { label: string; email: string; enabled: boolean; token: string; calendars: number }[];
     tasks: { account: string; list: string; title: string; due: string | null }[];

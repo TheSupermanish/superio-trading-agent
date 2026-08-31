@@ -108,13 +108,16 @@ def study(snapshot: risk.PortfolioSnapshot, force: bool = False) -> dict[str, An
             "vol_premium": round(regime.vol_premium, 4) if regime.vol_premium is not None else None,
         }
 
+        # Try the same breadth the live agent does. Testing one shape per
+        # symbol made the plan report "nothing would clear the gates" while the
+        # live agent, which compares several, was finding spreads at 26% of
+        # width. A rehearsal that is narrower than the real thing is worse than
+        # no rehearsal, because it reports a problem that does not exist.
         cheap = (regime.vol_premium or 0) <= 0
         if cheap:
-            styles = ["call_debit_spread"] if regime.bias != "bearish" else ["put_debit_spread"]
-        elif regime.bias == "neutral":
-            styles = ["iron_condor", "put_credit_spread"]
+            styles = ["call_debit_spread", "put_debit_spread", "put_credit_spread"]
         else:
-            styles = ["put_credit_spread" if regime.bias == "bullish" else "call_credit_spread"]
+            styles = ["put_credit_spread", "call_credit_spread", "iron_condor"]
 
         for style in styles:
             builder = STYLES.get(style)

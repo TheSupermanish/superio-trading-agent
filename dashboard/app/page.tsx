@@ -113,6 +113,79 @@ export default function Page() {
              note={`cap ${pct(snap.limits.max_open_risk_pct, 0)} of equity`} />
       </div>
 
+      {snap.dry_run && snap.session_plan ? (
+        <section>
+          <h2>Waiting to trade — what the agent would do at the next open</h2>
+          <div className="card" style={{ marginBottom: 12 }}>
+            <div className="sub">
+              {snap.session_plan.summary}
+              {snap.session_plan.brief?.session_tone
+                ? ` · session reads ${snap.session_plan.brief.session_tone}`
+                : ""}
+            </div>
+            {snap.session_plan.brief?.summary ? (
+              <div className="sub muted" style={{ marginTop: 8 }}>
+                {snap.session_plan.brief.summary}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="scroll" style={{ marginBottom: 12 }}>
+            <table>
+              <thead>
+                <tr><th>Symbol</th><th>Trend</th><th>Realized vol</th><th>Implied vol</th>
+                    <th>Premium</th><th>Read</th></tr>
+              </thead>
+              <tbody>
+                {Object.entries(snap.session_plan.regimes).map(([sym, r]) => (
+                  <tr key={sym}>
+                    <td><strong>{sym}</strong> <span className="muted">{r.spot}</span></td>
+                    <td>{r.trend} / {r.bias}</td>
+                    <td>{r.realized_vol !== null ? pct(r.realized_vol, 1) : "--"}</td>
+                    <td>{r.atm_iv !== null ? pct(r.atm_iv, 1) : "--"}</td>
+                    <td className={(r.vol_premium ?? 0) > 0 ? "up" : "down"}>
+                      {r.vol_premium !== null ? pct(r.vol_premium, 2) : "--"}
+                    </td>
+                    <td className="muted">
+                      {(r.vol_premium ?? 0) > 0
+                        ? "implied above realized — premium is paid well"
+                        : "implied below realized — options are cheap"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="scroll">
+            <table>
+              <thead><tr><th>Structure</th><th>Verdict</th><th>Size</th><th>Why</th></tr></thead>
+              <tbody>
+                {snap.session_plan.candidates.map((c, i) => (
+                  <tr key={i}>
+                    <td><strong>{c.symbol}</strong> {c.style.replace(/_/g, " ")}</td>
+                    <td>
+                      <span className={`verdict ${c.verdict === "would trade" ? "approved" : "rejected"}`}>
+                        {c.verdict}
+                      </span>
+                    </td>
+                    <td className="muted">
+                      {c.verdict === "would trade" && c.qty
+                        ? `${c.qty} · risk ${money(c.max_loss ?? 0)}`
+                        : "--"}
+                    </td>
+                    <td className="muted">{c.reason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="sub muted" style={{ marginTop: 8 }}>
+            {snap.session_plan.note}
+          </div>
+        </section>
+      ) : null}
+
       <section>
         <h2>Account equity</h2>
         <EquityCurve points={snap.equity_curve} />
