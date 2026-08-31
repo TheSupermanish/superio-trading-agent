@@ -161,9 +161,14 @@ def run(
     years: int = 5,
     equity: float = 100_000.0,
     bars: list[dict[str, Any]] | None = None,
+    config: tuple[Any, Any] | None = None,
 ) -> Result:
-    """Replay one symbol at one volatility-premium assumption."""
-    p, r = SETTINGS.strategy, SETTINGS.risk
+    """Replay one symbol at one volatility-premium assumption.
+
+    `config` is an (risk, strategy) pair, so a variant can be replayed without
+    mutating global settings.
+    """
+    r, p = config if config else (SETTINGS.risk, SETTINGS.strategy)
     bars = bars if bars is not None else daily_bars(symbol, days=252 * years)
     closes = [b["close"] for b in bars]
     dates = [datetime.fromisoformat(b["ts"]).date() for b in bars]
@@ -188,6 +193,15 @@ def run(
         # Same routing rule as the live agent: the volatility premium picks the
         # sleeve, the trend picks the direction.
         selling = vrp > 1.0
+
+        # Honour the variant's convex budget. A preset with no convex sleeve
+        # cannot buy premium at all: live, every debit structure sizes to zero
+        # and the agent stands aside. Skipping that here made the income-only
+        # control look identical to the barbell in cheap-vol regimes, which is
+        # the exact comparison the three accounts exist to make.
+        if not selling and r.max_convex_open_risk_pct <= 0:
+            i += 1
+            continue
         is_call = downtrend if selling else not downtrend
         dte = p.core_max_dte if selling else max(p.convex_max_dte, 2)
         t = year_fraction(dte)
@@ -330,9 +344,37 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Replay the strategy across volatility regimes")
     ap.add_argument("--years", type=int, default=5)
     ap.add_argument("--symbols", default="SPY,QQQ,IWM")
+    ap.add_argument("--variants", action="store_true",
+                    help="compare the configured variants instead of sweeping premia")
     args = ap.parse_args()
 
     symbols = tuple(s.strip().upper() for s in args.symbols.split(","))
+
+    if args.variants:
+        results = compare_variants(symbols, years=args.years)
+        print(f"\nVariant comparison over {args.years}y of {', '.join(symbols)}")
+        print("Every variant replayed against the same tape, weighted across")
+        print("volatility regimes. Compare them to each other, not to reality.\n")
+        print(f"{'variant':<14} {'trades':>7} {'win%':>6} {'weighted P&L':>14} {'PF':>6} {'maxDD':>7}")
+        print("-" * 60)
+        for name, m in results.items():
+            pf = m["profit_factor"]
+            wr = m["win_rate"] or 0
+            print(
+                f"{name:<14} {m['trades']:7d} {wr*100:5.1f}% {m['weighted_pnl']:14,.0f} "
+                f"{(f'{pf:.2f}' if pf else '  inf'):>6} {m['max_drawdown']*100:6.1f}%"
+            )
+        print()
+        for name, m in results.items():
+            sleeves = ", ".join(
+                f"{k} {v['n']} trades {v['pnl']:+,.0f}" for k, v in m["by_sleeve"].items()
+            )
+            print(f"  {name:<14} {sleeves}")
+        print("\nAbsolute P&L is not trustworthy here: entry and exit share a pricing")
+        print("model, so no volatility risk is simulated. The ranking is the finding,")
+        print("because the same modelling error applies to every variant.")
+        return
+
     vrps = (0.80, 0.90, 0.95, 1.00, 1.05, 1.15, 1.30)
     results = sweep(symbols, vrps, years=args.years)
 
@@ -364,6 +406,81 @@ def main() -> None:
     print("What this harness is actually good for: exercising the gates, sizing and")
     print("exit rules over a thousand trades, and catching configurations that")
     print("contradict each other. It found one -- see the note on short delta.")
+
+
+# --- variant comparison ----------------------------------------------------
+
+#: The volatility regimes to weight the comparison over, and how much of the
+#: time each is worth. Implied usually sits a little above realized, which is
+#: the variance risk premium; the discount case is rarer but is exactly where
+#: this week started, so it carries real weight rather than being a footnote.
+REGIME_WEIGHTS = (
+    (0.85, 0.15),   # implied well below realized: options cheap
+    (0.95, 0.20),   # mild discount
+    (1.05, 0.30),   # mild premium, the usual state
+    (1.20, 0.25),   # healthy premium
+    (1.35, 0.10),   # rich, post-shock
+)
+
+
+def compare_variants(
+    symbols: tuple[str, ...] = ("SPY", "QQQ", "IWM"),
+    years: int = 5,
+) -> dict[str, dict[str, Any]]:
+    """Replay every configured variant over identical price history.
+
+    Absolute P&L from this harness is not trustworthy: entry and exit share a
+    pricing model, so no volatility risk is simulated. The RELATIVE ranking is
+    worth more, because every variant is scored against the same tape with the
+    same modelling error, and that error largely cancels when comparing them.
+
+    This is the evidence behind running three accounts rather than one.
+    """
+    from engine.config import VARIANTS
+
+    cached = {s: daily_bars(s, days=252 * years) for s in symbols}
+    out: dict[str, dict[str, Any]] = {}
+
+    for name, (risk_cfg, strategy_cfg) in VARIANTS.items():
+        trades: list[Trade] = []
+        weighted_pnl = 0.0
+        for vrp, weight in REGIME_WEIGHTS:
+            regime_trades: list[Trade] = []
+            for symbol in symbols:
+                res = run(
+                    symbol, vrp, years=years, bars=cached[symbol],
+                    config=(risk_cfg, strategy_cfg),
+                )
+                regime_trades.extend(res.trades)
+            weighted_pnl += sum(t.pnl for t in regime_trades) * weight
+            trades.extend(regime_trades)
+
+        wins = [t for t in trades if t.pnl > 0]
+        losses = [t for t in trades if t.pnl < 0]
+        gross_loss = abs(sum(t.pnl for t in losses))
+
+        # Rebuild an equity path in trade order to measure drawdown honestly.
+        running, peak, worst = 100_000.0, 100_000.0, 0.0
+        for t in sorted(trades, key=lambda x: x.closed or x.opened):
+            running += t.pnl
+            peak = max(peak, running)
+            worst = max(worst, (peak - running) / peak)
+
+        by_sleeve: dict[str, dict[str, float]] = {}
+        for t in trades:
+            b = by_sleeve.setdefault(t.sleeve, {"n": 0, "pnl": 0.0})
+            b["n"] += 1
+            b["pnl"] += t.pnl
+
+        out[name] = {
+            "trades": len(trades),
+            "win_rate": (len(wins) / len(trades)) if trades else None,
+            "weighted_pnl": round(weighted_pnl, 0),
+            "profit_factor": (sum(t.pnl for t in wins) / gross_loss) if gross_loss else None,
+            "max_drawdown": worst,
+            "by_sleeve": {k: {"n": v["n"], "pnl": round(v["pnl"], 0)} for k, v in by_sleeve.items()},
+        }
+    return out
 
 
 if __name__ == "__main__":

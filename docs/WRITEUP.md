@@ -147,3 +147,35 @@ distinguish skill from variance, and we would say so whatever the P&L reads on
 Friday. The same engine runs on two further paper accounts with different
 presets, a convexity-led variant and an income-only control, so the week
 produces a comparison rather than a single number.
+
+## Why three accounts
+
+The replay harness cannot tell us what the strategy will earn: with no
+historical option prices available, entry and exit are priced with the same
+model, so no volatility risk is simulated. What it can do is rank variants
+against each other, because every one is scored on the same tape with the same
+modelling error, and that error largely cancels in the comparison.
+
+Replayed over five years of SPY, QQQ and IWM, weighted across volatility
+regimes:
+
+| Variant | Trades | Win rate | Profit factor |
+| --- | --- | --- | --- |
+| barbell (judged) | 2,875 | 41.8% | 1.39 |
+| convex tilt | 1,441 | 40.1% | 1.39 |
+| income only (control) | 1,971 | **64.6%** | **0.65** |
+
+The control arm is the interesting row. It wins nearly two trades in three and
+still loses money: the classic premium-selling trap, where a few full-width
+losses outweigh a long run of small credits. Its drawdown is the worst of the
+three despite the highest win rate.
+
+That is a falsifiable prediction rather than a story, and it is why the same
+engine runs on three accounts. If income-only finishes the week ahead of the
+barbell, the harness was wrong about something and we will say so.
+
+Two caveats. The harness applies no kill switches, which is why its drawdowns
+run far past the 8% the live agent enforces. And a 41% win rate with a profit
+factor of 1.39 is the shape of a long-gamma book: it loses often and wins big,
+so a four-and-a-half session sample can easily land on the wrong side of that
+distribution.
