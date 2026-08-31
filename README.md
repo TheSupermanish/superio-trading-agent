@@ -49,6 +49,18 @@ sleeve leads. When implied vol sits below realized vol, the market is charging
 too little for the movement it is actually delivering, so the convex sleeve
 leads instead and buys that cheap optionality.
 
+## Connected Google accounts
+
+Several accounts, each labelled. Calendar entries become catalysts in gate G6 and
+Tasks appear on the dashboard, so the blackout calendar can be edited from a phone
+instead of a code change. Read-only, and it can only ever add gates: if Google is
+unreachable the built-in catalysts still apply. See `docs/GOOGLE.md`.
+
+```bash
+python scripts/connect_google.py connect --label personal
+python scripts/connect_google.py list
+```
+
 ## Risk gates
 
 All of these live in `engine/config.py` and are enforced in `engine/risk.py`.

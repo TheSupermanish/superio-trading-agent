@@ -122,6 +122,35 @@ def gate_activity(limit: int = 400) -> dict[str, Any]:
     }
 
 
+def _google_section() -> dict[str, Any]:
+    """Connected accounts, their tasks, and the catalysts they contribute.
+
+    Entirely optional. Any failure here degrades to an empty section rather
+    than costing us the snapshot the dashboard depends on.
+    """
+    try:
+        from engine import calendar_gate, google_accounts
+
+        connected = google_accounts.status()
+        if not connected:
+            return {"connected": [], "tasks": [], "events": []}
+        return {
+            "connected": connected,
+            "tasks": google_accounts.tasks()[:12],
+            "events": [
+                {
+                    "name": e.name,
+                    "when": e.when.isoformat(),
+                    "impact": e.impact,
+                    "affects": list(e.affects),
+                }
+                for e in calendar_gate.external_events()
+            ],
+        }
+    except Exception:  # noqa: BLE001
+        return {"connected": [], "tasks": [], "events": []}
+
+
 def build() -> dict[str, Any]:
     now = datetime.now(timezone.utc)
     open_structures = state.live_structures()
@@ -150,6 +179,7 @@ def build() -> dict[str, Any]:
         "recent_orders": _rows("orders", 60),
         "recent_events": _rows("events", 40),
         "session_plan": premarket.last_study(),
+        "google": _google_section(),
         "calendar": [
             {
                 "name": e.name,

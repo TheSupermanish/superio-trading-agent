@@ -10,3 +10,5 @@ dashboard/.next/
 .gstack/
 dashboard/out/
 logs/
+data/google/
+client_secret.json

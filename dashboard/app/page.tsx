@@ -223,6 +223,66 @@ export default function Page() {
         </div>
       </section>
 
+      {snap.google && snap.google.connected.length > 0 ? (
+        <section>
+          <h2>Connected calendars</h2>
+          <div className="card" style={{ marginBottom: 12 }}>
+            <div className="sub">
+              {snap.google.connected.map((a) => (
+                <span key={a.label} style={{ marginRight: 18 }}>
+                  <span className={a.token === "valid" ? "up" : "down"}>&#9679;</span>{" "}
+                  <strong>{a.label}</strong>{" "}
+                  <span className="muted">
+                    {a.email} · {a.calendars} calendars
+                    {a.enabled ? "" : " · disabled"}
+                  </span>
+                </span>
+              ))}
+            </div>
+            <div className="sub muted" style={{ marginTop: 8 }}>
+              Events from these calendars feed gate G6 alongside the built-in catalysts.
+              Tag an entry <span className="mono">[high]</span> or{" "}
+              <span className="mono">[ignore]</span> to set its impact explicitly.
+            </div>
+          </div>
+
+          {snap.google.events.length > 0 ? (
+            <div className="scroll" style={{ marginBottom: 12 }}>
+              <table>
+                <thead><tr><th>When</th><th>Catalyst</th><th>Impact</th><th>Affects</th></tr></thead>
+                <tbody>
+                  {snap.google.events.map((e) => (
+                    <tr key={e.name + e.when}>
+                      <td className="muted">{new Date(e.when).toLocaleString()}</td>
+                      <td>{e.name}</td>
+                      <td className={e.impact === "high" ? "down" : "muted"}>{e.impact}</td>
+                      <td className="muted">{e.affects.join(", ")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+
+          {snap.google.tasks.length > 0 ? (
+            <div className="scroll">
+              <table>
+                <thead><tr><th>Due</th><th>Task</th><th>Source</th></tr></thead>
+                <tbody>
+                  {snap.google.tasks.map((t, i) => (
+                    <tr key={i}>
+                      <td className="muted">{t.due ? String(t.due).slice(0, 10) : "--"}</td>
+                      <td>{t.title}</td>
+                      <td className="muted">{t.account} / {t.list}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
       <footer>
         Paper trading only. Hypothetical results, not investment advice. Options carry risk
         including total loss of premium. Built for the Alpaca AI Trading Agents Hackathon.

@@ -79,4 +79,9 @@ export type Snapshot = {
   recent_decisions: Decision[];
   recent_events: { id: number; ts: string; level: string; kind: string; message: string }[];
   upcoming: { name: string; when: string; impact: string }[];
+  google?: {
+    connected: { label: string; email: string; enabled: boolean; token: string; calendars: number }[];
+    tasks: { account: string; list: string; title: string; due: string | null }[];
+    events: { name: string; when: string; impact: string; affects: string[] }[];
+  };
 };

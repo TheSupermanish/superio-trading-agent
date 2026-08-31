@@ -23,6 +23,7 @@ Two events land inside the competition window:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 from datetime import date, datetime, time as dt_time, timedelta
 from zoneinfo import ZoneInfo
 
@@ -56,6 +57,96 @@ EVENTS: tuple[Event, ...] = (
     Event("August employment report", _et(2026, 9, 4, 8, 30), "high", ("*",)),
 )
 
+#: Words that mark an event as market-moving. Anything a connected calendar
+#: carries that matches one of these is treated as a catalyst; anything else is
+#: ignored, because a dentist appointment should not gate a trade.
+HIGH_IMPACT_WORDS = (
+    "fomc", "cpi", "ppi", "nfp", "payroll", "jobs report", "rate decision",
+    "powell", "fed chair", "jackson hole", "earnings", "opex", "triple witching",
+)
+MEDIUM_IMPACT_WORDS = (
+    "ism", "pmi", "jolts", "claims", "gdp", "sentiment", "retail sales",
+    "durable goods", "pce", "auction", "speaks", "testimony",
+)
+
+#: An explicit tag anywhere in the title or description wins over keywords, so
+#: a calendar entry can say exactly what it is: "[high] our own catalyst".
+EXPLICIT = {"[high]": "high", "[medium]": "medium", "[ignore]": None}
+
+
+def classify(title: str, description: str = "") -> str | None:
+    """Impact for a calendar entry, or None to ignore it entirely."""
+    haystack = f"{title} {description}".lower()
+    for tag, impact in EXPLICIT.items():
+        if tag in haystack:
+            return impact
+    if any(word in haystack for word in HIGH_IMPACT_WORDS):
+        return "high"
+    if any(word in haystack for word in MEDIUM_IMPACT_WORDS):
+        return "medium"
+    return None
+
+
+def affected_symbols(title: str, universe: tuple[str, ...]) -> tuple[str, ...]:
+    """Tickers named in the entry, or the whole tape if none are."""
+    upper = title.upper()
+    named = tuple(sym for sym in universe if sym in upper)
+    return named or ("*",)
+
+
+#: Connected calendars are read at most this often; the loop runs far more.
+_EXTERNAL_TTL = timedelta(minutes=20)
+_external_cache: dict[str, Any] = {"at": None, "events": ()}
+
+
+def external_events(universe: tuple[str, ...] = ("SPY", "QQQ", "IWM")) -> tuple[Event, ...]:
+    """Catalysts pulled from connected Google calendars.
+
+    Cached, and failure-tolerant by design: if no account is connected or the
+    read fails, this returns nothing and the hard-coded calendar still applies.
+    A calendar outage must never remove a gate, only fail to add to it.
+    """
+    now = datetime.now(ET)
+    cached_at = _external_cache["at"]
+    if cached_at and now - cached_at < _EXTERNAL_TTL:
+        return _external_cache["events"]
+
+    events: list[Event] = []
+    try:
+        from engine import google_accounts
+
+        if google_accounts.accounts(enabled_only=True):
+            for raw in google_accounts.calendar_events(hours_ahead=240):
+                impact = classify(raw.get("title", ""), raw.get("description", ""))
+                if impact is None or raw.get("all_day"):
+                    continue
+                try:
+                    when = datetime.fromisoformat(str(raw["start"]).replace("Z", "+00:00"))
+                except (ValueError, KeyError, TypeError):
+                    continue
+                events.append(
+                    Event(
+                        name=f"{raw['title']} ({raw['account']})",
+                        when=when.astimezone(ET),
+                        impact=impact,
+                        affects=affected_symbols(raw.get("title", ""), universe),
+                    )
+                )
+    except Exception as exc:  # noqa: BLE001
+        import logging
+
+        logging.getLogger(__name__).warning("calendar read failed: %s", exc)
+
+    _external_cache["at"] = now
+    _external_cache["events"] = tuple(events)
+    return tuple(events)
+
+
+def all_events() -> tuple[Event, ...]:
+    """The hard-coded catalysts plus anything from connected calendars."""
+    return EVENTS + external_events()
+
+
 #: How far ahead of a high-impact event new short premium stops being written.
 HIGH_IMPACT_BLACKOUT = timedelta(hours=6)
 MEDIUM_IMPACT_BLACKOUT = timedelta(hours=2)
@@ -68,14 +159,16 @@ def _blackout_for(event: Event) -> timedelta:
 def upcoming(now: datetime | None = None, horizon_hours: int = 48) -> list[Event]:
     now = now or datetime.now(ET)
     limit = now + timedelta(hours=horizon_hours)
-    return [e for e in EVENTS if now <= e.when <= limit]
+    return [e for e in all_events() if now <= e.when <= limit]
 
 
 def events_before(expiry: date, underlying: str, now: datetime | None = None) -> list[Event]:
     """High and medium impact events between now and the close on `expiry`."""
     now = now or datetime.now(ET)
     expiry_close = datetime.combine(expiry, dt_time(16, 0), tzinfo=ET)
-    return [e for e in EVENTS if now < e.when <= expiry_close and e.touches(underlying)]
+    return [
+        e for e in all_events() if now < e.when <= expiry_close and e.touches(underlying)
+    ]
 
 
 def check(
