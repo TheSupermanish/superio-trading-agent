@@ -202,6 +202,7 @@ def build() -> dict[str, Any]:
         "profile": SETTINGS.profile,
         "variant": SETTINGS.variant,
         "dry_run": SETTINGS.dry_run,
+        "diary": SETTINGS.diary,
         "account_id": SETTINGS.account_id,
         "limits": {
             "max_risk_per_trade_pct": SETTINGS.risk.max_risk_per_trade_pct,

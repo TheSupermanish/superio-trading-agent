@@ -53,6 +53,7 @@ export type Snapshot = {
   profile: string;
   variant: string;
   dry_run: boolean;
+  diary?: boolean;
   account_id: string;
   limits: Record<string, number>;
   performance: {

@@ -12,3 +12,10 @@ for pair in test2:convex_tilt test3:income_only; do
   ALPACA_PROFILE="$prof" STRATEGY_VARIANT="$var" "$ROOT/.venv/bin/python" -c \
     "from pathlib import Path; from engine.report import write; write(Path('$OUT/snapshot-$prof.json'))" 2>/dev/null
 done
+
+# Diary books. They read the main account's chain and write their own journal,
+# so the profile is always main and only the variant changes.
+for var in levered vrp_router fat_credit long_gamma; do
+  ALPACA_PROFILE=main STRATEGY_VARIANT="$var" "$ROOT/.venv/bin/python" -c \
+    "from pathlib import Path; from engine.report import write; write(Path('$OUT/snapshot-diary-$var.json'))" 2>/dev/null
+done

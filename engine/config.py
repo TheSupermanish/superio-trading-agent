@@ -144,7 +144,97 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
                 max_convex_open_risk_pct=0.0, min_credit_to_width=0.22),
         replace(BASE_STRATEGY, core_short_delta=0.30, core_max_dte=5),
     ),
+
+    # --- Diary variants -----------------------------------------------------
+    # Below here nothing is wired to a broker account. They exist so the
+    # backtest can rank ideas we are not willing to spend a live account on,
+    # and so the diary book can show what they would have done on the same
+    # tape the live accounts traded. Promoting one to a live account is a
+    # config change and nothing else.
+
+    # Deploy twice the risk of the judged preset. The barbell's problem is not
+    # its win rate, it is its ceiling: credit selling caps the upside at the
+    # credit taken, so at 6% deployed the best possible week is about 2% of
+    # equity. This asks the only honest question about that ceiling, which is
+    # whether the drawdown scales worse than the return does.
+    "levered": (
+        replace(
+            BASE_RISK,
+            max_risk_per_trade_pct=0.015,
+            max_open_risk_pct=0.12,
+            max_convex_open_risk_pct=0.06,
+            max_risk_per_underlying_pct=0.05,
+            max_new_trades_per_day=12,
+            max_open_structures=16,
+        ),
+        BASE_STRATEGY,
+    ),
+
+    # Let the variance risk premium pick the side for the whole book instead of
+    # splitting it into two fixed sleeves. G7 already refuses the wrong side
+    # per trade; this makes the routing the entire strategy, so the backtest
+    # can say whether the sleeve split earns its complexity.
+    "vrp_router": (
+        replace(
+            BASE_RISK,
+            core_risk_share=0.5,
+            convex_risk_share=0.5,
+            max_convex_open_risk_pct=0.06,
+            max_premium_to_buy_convexity=0.0,
+            min_premium_to_sell_convexity=0.0,
+        ),
+        replace(BASE_STRATEGY, core_short_delta=0.25, convex_long_delta=0.40),
+    ),
+
+    # Sell closer to the money for a much fatter credit, and accept the lower
+    # win rate that comes with it. Tests whether the 18% credit floor is
+    # leaving money on the table or protecting us from it.
+    "fat_credit": (
+        replace(
+            BASE_RISK,
+            core_risk_share=1.0,
+            convex_risk_share=0.0,
+            max_convex_open_risk_pct=0.0,
+            min_credit_to_width=0.30,
+        ),
+        replace(
+            BASE_STRATEGY,
+            core_short_delta=0.38,
+            core_widths=(1.0, 2.0, 3.0),
+            core_profit_target=0.50,
+            core_stop_multiple=1.6,
+        ),
+    ),
+
+    # Convexity with no income sleeve at all, and a wide enough allocation to
+    # actually express it. The mirror image of income_only, and the only
+    # preset that can produce a payoff larger than its own risk budget.
+    "long_gamma": (
+        replace(
+            BASE_RISK,
+            core_risk_share=0.0,
+            convex_risk_share=1.0,
+            max_convex_open_risk_pct=0.05,
+            max_open_risk_pct=0.05,
+            max_debit_to_width=0.38,
+        ),
+        replace(
+            BASE_STRATEGY,
+            convex_long_delta=0.42,
+            convex_max_dte=5,
+            convex_widths=(3.0, 5.0, 8.0, 10.0),
+            convex_profit_target=1.50,
+        ),
+    ),
 }
+
+#: Variants wired to a real paper account. Everything else in VARIANTS is
+#: diary-only: backtested and shadowed, never sent to a broker.
+LIVE_VARIANTS: frozenset[str] = frozenset({"barbell", "convex_tilt", "income_only"})
+
+#: Starting equity for the diary book. Deliberately not 100,000, so a diary
+#: number can never be mistaken for a live account number at a glance.
+DIARY_EQUITY: float = 50_000.0
 
 
 @dataclass(frozen=True)
@@ -164,6 +254,7 @@ class Settings:
     expected_billing_account: str
     force_dry_run: bool
     live_from: datetime | None
+    diary: bool
     db_path: Path
     risk: RiskLimits
     strategy: StrategyParams
@@ -181,6 +272,11 @@ class Settings:
         days early and begin trading on its own at the intended moment instead
         of depending on someone being at a keyboard.
         """
+        if self.diary:
+            # A diary variant has no broker account and never gets one from an
+            # environment variable. Arming is refused here rather than in the
+            # executor, so there is no path from a diary preset to an order.
+            return True
         if self.force_dry_run:
             return True
         if self.live_from is None:
@@ -198,6 +294,8 @@ class Settings:
         return not self.force_dry_run and self.live_from is None
 
     def describe(self) -> str:
+        if self.diary:
+            return f"profile={self.profile} variant={self.variant} mode=DIARY (no broker)"
         if self.dry_run:
             mode = "DRY RUN"
             if not self.force_dry_run and self.live_from:
@@ -232,6 +330,12 @@ def load_settings(profile: str | None = None, variant: str | None = None) -> Set
         raise ValueError(f"unknown STRATEGY_VARIANT {variant!r}; known: {sorted(VARIANTS)}")
     risk, strategy = VARIANTS[variant]
 
+    # Membership of LIVE_VARIANTS is what makes a preset tradeable, not an
+    # environment variable. Anything else is a diary book: it reads the same
+    # live chain and journals the same decisions, into its own database, and
+    # cannot place an order.
+    diary = variant not in LIVE_VARIANTS
+
     return Settings(
         profile=profile,
         variant=variant,
@@ -248,7 +352,12 @@ def load_settings(profile: str | None = None, variant: str | None = None) -> Set
         expected_billing_account=os.getenv("EXPECTED_BILLING_ACCOUNT", ""),
         force_dry_run=_env_bool("DRY_RUN", True),
         live_from=_parse_live_from(os.getenv("LIVE_FROM")),
-        db_path=ROOT / "data" / f"superio-{profile}.db",
+        diary=diary,
+        db_path=(
+            ROOT / "data" / f"diary-{variant}.db"
+            if diary
+            else ROOT / "data" / f"superio-{profile}.db"
+        ),
         risk=risk,
         strategy=strategy,
     )

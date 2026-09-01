@@ -172,6 +172,58 @@ def test_no_volatility_reading_does_not_block():
     assert v.approved, v.reasons
 
 
+def test_a_diary_variant_can_never_reach_the_broker():
+    """Diary presets exist to be measured, not traded.
+
+    The guarantee has to hold against the environment, not alongside it: no
+    combination of DRY_RUN and LIVE_FROM may arm a variant that has no account
+    behind it. So the check lives in the same property the executor reads.
+    """
+    import os
+
+    from engine import config
+
+    saved = {k: os.environ.get(k) for k in ("STRATEGY_VARIANT", "DRY_RUN", "LIVE_FROM")}
+    try:
+        os.environ["DRY_RUN"] = "false"
+        os.environ["LIVE_FROM"] = "2020-01-01T00:00:00Z"  # long past: would arm
+        for variant in sorted(set(config.VARIANTS) - config.LIVE_VARIANTS):
+            os.environ["STRATEGY_VARIANT"] = variant
+            settings = config.load_settings()
+            assert settings.diary, variant
+            assert settings.dry_run, f"{variant} armed itself with no account"
+            assert settings.db_path.name == f"diary-{variant}.db", settings.db_path
+    finally:
+        for key, value in saved.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+
+def test_a_live_variant_still_arms_normally():
+    """The diary guard must not quietly disarm the accounts we do trade."""
+    import os
+
+    from engine import config
+
+    saved = {k: os.environ.get(k) for k in ("STRATEGY_VARIANT", "DRY_RUN", "LIVE_FROM")}
+    try:
+        os.environ["DRY_RUN"] = "false"
+        os.environ["LIVE_FROM"] = "2020-01-01T00:00:00Z"
+        for variant in sorted(config.LIVE_VARIANTS):
+            os.environ["STRATEGY_VARIANT"] = variant
+            settings = config.load_settings()
+            assert not settings.diary, variant
+            assert not settings.dry_run, f"{variant} refused to arm"
+    finally:
+        for key, value in saved.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+
 if __name__ == "__main__":
     import sys
     mod = sys.modules[__name__]

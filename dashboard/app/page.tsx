@@ -87,8 +87,8 @@ export default function Page() {
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <span className={`badge ${snap.dry_run ? "dry" : "live"}`}>
-            {snap.dry_run ? "dry run" : "trading"}
+          <span className={`badge ${snap.diary ? "dry" : snap.dry_run ? "dry" : "live"}`}>
+            {snap.diary ? "diary · no broker" : snap.dry_run ? "dry run" : "trading"}
           </span>{" "}
           <span className="badge">{snap.variant}</span>
           <div className="sub" style={{ marginTop: 6 }}>

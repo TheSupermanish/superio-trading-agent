@@ -426,6 +426,7 @@ REGIME_WEIGHTS = (
 def compare_variants(
     symbols: tuple[str, ...] = ("SPY", "QQQ", "IWM"),
     years: int = 5,
+    equity: float = 100_000.0,
 ) -> dict[str, dict[str, Any]]:
     """Replay every configured variant over identical price history.
 
@@ -436,7 +437,7 @@ def compare_variants(
 
     This is the evidence behind running three accounts rather than one.
     """
-    from engine.config import VARIANTS
+    from engine.config import LIVE_VARIANTS, VARIANTS
 
     cached = {s: daily_bars(s, days=252 * years) for s in symbols}
     out: dict[str, dict[str, Any]] = {}
@@ -449,7 +450,7 @@ def compare_variants(
             for symbol in symbols:
                 res = run(
                     symbol, vrp, years=years, bars=cached[symbol],
-                    config=(risk_cfg, strategy_cfg),
+                    config=(risk_cfg, strategy_cfg), equity=equity,
                 )
                 regime_trades.extend(res.trades)
             weighted_pnl += sum(t.pnl for t in regime_trades) * weight
@@ -460,7 +461,7 @@ def compare_variants(
         gross_loss = abs(sum(t.pnl for t in losses))
 
         # Rebuild an equity path in trade order to measure drawdown honestly.
-        running, peak, worst = 100_000.0, 100_000.0, 0.0
+        running, peak, worst = equity, equity, 0.0
         for t in sorted(trades, key=lambda x: x.closed or x.opened):
             running += t.pnl
             peak = max(peak, running)
@@ -473,11 +474,14 @@ def compare_variants(
             b["pnl"] += t.pnl
 
         out[name] = {
+            "live": name in LIVE_VARIANTS,
+            "equity": equity,
             "trades": len(trades),
             "win_rate": (len(wins) / len(trades)) if trades else None,
             "weighted_pnl": round(weighted_pnl, 0),
             "profit_factor": (sum(t.pnl for t in wins) / gross_loss) if gross_loss else None,
             "max_drawdown": worst,
+            "return_pct": round(weighted_pnl / equity, 4) if equity else None,
             "by_sleeve": {k: {"n": v["n"], "pnl": round(v["pnl"], 0)} for k, v in by_sleeve.items()},
         }
     return out

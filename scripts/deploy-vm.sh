@@ -69,8 +69,16 @@ NEXT_PUBLIC_BASE_PATH="" npm run build --silent
 cd "$ROOT"
 
 echo "== systemd =="
-for spec in main:barbell test2:convex_tilt test3:income_only; do
+# main/test2/test3 are wired to real paper accounts. The diary units share the
+# main account's read-only keys to read the same live chain, and cannot place
+# an order: their variants are outside LIVE_VARIANTS, so Settings.dry_run is
+# pinned true no matter what the environment says.
+for spec in main:barbell test2:convex_tilt test3:income_only \
+            diary-levered:levered diary-vrp:vrp_router \
+            diary-fat:fat_credit diary-gamma:long_gamma; do
   prof="${spec%%:*}"; var="${spec##*:}"
+  keys="$prof"
+  case "$prof" in diary-*) keys=main ;; esac
   sudo tee /etc/systemd/system/superio-$prof.service >/dev/null <<UNIT
 [Unit]
 Description=Superio trading agent ($prof / $var)
@@ -81,7 +89,7 @@ Wants=network-online.target
 Type=simple
 User=$USER
 WorkingDirectory=$ROOT
-Environment=ALPACA_PROFILE=$prof
+Environment=ALPACA_PROFILE=$keys
 Environment=STRATEGY_VARIANT=$var
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUNBUFFERED=1
