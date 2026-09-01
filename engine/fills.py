@@ -35,6 +35,13 @@ MAX_REST_SECONDS = 75
 #: Fractions of the way from the mid to the touch. The last rung is the touch.
 LADDER = (0.5, 1.0)
 
+#: A hard ceiling on how long an entry may stay pending, whatever the ladder is
+#: doing. The ladder can stall on a broker error, and a stalled pending
+#: structure keeps charging its max loss against the risk budget while holding
+#: no position at all. That silently starves the agent of room to trade, so the
+#: budget is protected by a timeout that does not depend on the ladder working.
+MAX_PENDING_SECONDS = 15 * 60
+
 RESTING = {"new", "accepted", "pending_new", "accepted_for_bidding", "partially_filled"}
 DEAD = {"canceled", "expired", "rejected", "done_for_day", "replaced"}
 
@@ -100,7 +107,28 @@ def walk() -> list[dict[str, Any]]:
             actions.append({"structure": structure["id"], "action": status})
             continue
 
-        if status not in RESTING or _age_seconds(order) < MAX_REST_SECONDS:
+        if status not in RESTING:
+            continue
+
+        age = _age_seconds(order)
+        if structure["status"] == "pending" and age > MAX_PENDING_SECONDS:
+            if not SETTINGS.dry_run:
+                try:
+                    alpaca_cli.cancel_order(str(order.get("id")))
+                except alpaca_cli.AlpacaCliError as exc:
+                    log.warning("could not cancel stale %s: %s", order.get("id"), exc)
+            state.set_structure_status(int(structure["id"]), "rejected")
+            state.log_event(
+                "order_stale",
+                f"structure {structure['id']} stayed pending for "
+                f"{age / 60:.0f} minutes and was released",
+                level="warning",
+                data={"structure_id": structure["id"], "age_seconds": round(age)},
+            )
+            actions.append({"structure": structure["id"], "action": "stale"})
+            continue
+
+        if age < MAX_REST_SECONDS:
             continue
 
         rung_index = max(0, _attempts_so_far(int(structure["id"])) - 1)

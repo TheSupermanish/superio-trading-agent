@@ -15,7 +15,10 @@ import tempfile
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from engine import fills, state
+from engine import alpaca_cli, fills, state
+
+# Bound before any test installs a fake broker over the module attribute.
+_REAL_CANCEL_ORDER = alpaca_cli.cancel_order
 
 TMP = Path(tempfile.mkdtemp()) / "test.db"
 
@@ -238,6 +241,67 @@ def test_failed_short_leg_aborts_before_touching_the_long_leg():
     assert all(r["symbol"] != "LONG" for r in results), \
         "the long leg must not be closed once its short leg failed"
     assert "LONG" not in broken.closed, "long leg was liquidated, stripping the cover"
+
+
+def test_a_pending_entry_is_released_once_it_has_rested_too_long():
+    """The risk budget must not be starved by an order that never fills.
+
+    A pending structure charges its full max loss against the open-risk cap
+    while holding no position. The ladder normally resolves that within a few
+    minutes, but the ladder itself can stall, so the timeout is independent of
+    it: past the ceiling the entry is cancelled and the budget released.
+    """
+    _reset(); sid = _seed(-1.01, -0.99)
+    broker = FakeBroker(_order("new", age_seconds=fills.MAX_PENDING_SECONDS + 60))
+    _install(broker, dry_run=False)
+
+    actions = fills.walk()
+
+    assert any(a["action"] == "stale" for a in actions), actions
+    assert broker.cancelled == ["order-1"], "the working order must be pulled"
+    assert not broker.submitted, "a released entry must not be resubmitted"
+    with state.db(TMP) as conn:
+        row = conn.execute("SELECT status FROM structures WHERE id = ?", (sid,)).fetchone()
+    assert row["status"] == "rejected", row["status"]
+    assert state.open_risk_total() == 0.0, "released risk must leave the budget"
+
+
+def test_a_filled_structure_is_never_released_for_age():
+    """The timeout is about entries that never happened, not about winners.
+
+    An open structure has a position. Its entry order is long since done, and
+    nothing about its age should cause the walker to cancel anything.
+    """
+    _reset(); sid = _seed(-1.01, -0.99, status="open")
+    broker = FakeBroker(_order("new", age_seconds=fills.MAX_PENDING_SECONDS + 600))
+    _install(broker, dry_run=False)
+
+    actions = fills.walk()
+
+    assert not any(a["action"] == "stale" for a in actions), actions
+    with state.db(TMP) as conn:
+        row = conn.execute("SELECT status FROM structures WHERE id = ?", (sid,)).fetchone()
+    assert row["status"] == "open", row["status"]
+
+
+def test_cancel_passes_the_order_id_as_a_flag():
+    """`alpaca order cancel <id>` exits 1 with "--order-id required".
+
+    Passed positionally the cancel always failed, so the fill walker gave up
+    before resubmitting and every resting entry stayed at its opening price
+    for the rest of the session. The contract is a flag, and it is pinned here
+    because the failure is invisible in the trade log: no error, just orders
+    that quietly never fill.
+    """
+    seen: list[list[str]] = []
+    original = alpaca_cli.run
+    alpaca_cli.run = lambda args, **kw: seen.append(args)
+    try:
+        _REAL_CANCEL_ORDER("abc-123")
+    finally:
+        alpaca_cli.run = original
+
+    assert seen == [["order", "cancel", "--order-id", "abc-123"]], seen
 
 
 if __name__ == "__main__":

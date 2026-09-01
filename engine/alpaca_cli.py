@@ -184,7 +184,15 @@ def submit_order(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def cancel_order(order_id: str) -> Any:
-    return run(["order", "cancel", order_id])
+    """Cancel one working order.
+
+    Same flag-not-positional contract as close_position below. Passed
+    positionally the CLI exits 1 with "--order-id required", which the fill
+    walker treated as an ordinary cancel failure and gave up on, so every
+    resting order stopped being repriced and its structure stayed pending for
+    the rest of the session holding risk budget it was not using.
+    """
+    return run(["order", "cancel", "--order-id", order_id])
 
 
 def close_position(symbol: str, qty: str | None = None) -> Any:

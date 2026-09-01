@@ -33,6 +33,8 @@ export type Structure = {
   realized_pnl: number | null;
   close_reason: string | null;
   thesis: string;
+  held_hours?: number | null;
+  return_on_risk?: number | null;
 };
 
 export type Decision = {
@@ -74,6 +76,7 @@ export type Snapshot = {
     rejections_by_gate: { gate: string; name: string; count: number }[];
   };
   open_structures: Structure[];
+  closed_structures: Structure[];
   open_risk: number;
   equity_curve: EquityPoint[];
   recent_decisions: Decision[];

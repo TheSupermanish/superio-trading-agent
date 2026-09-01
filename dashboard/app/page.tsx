@@ -231,6 +231,65 @@ export default function Page() {
       </section>
 
       <section>
+        <h2>Closed trades — where the P&amp;L came from</h2>
+        <div className="sub muted" style={{ marginBottom: 10 }}>
+          Every closed structure, leg by leg, with the reason it ended. These rows sum to the
+          realized P&amp;L above, and to the same number in Alpaca&apos;s own account history.
+        </div>
+        <div className="scroll">
+          {(snap.closed_structures ?? []).length === 0 ? (
+            <div className="empty">Nothing closed yet.</div>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Closed</th><th>Structure</th><th>Sleeve</th><th>Qty</th>
+                  <th>Entry</th><th>Max loss</th><th>Held</th>
+                  <th>Realized</th><th>On risk</th><th>Exit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(snap.closed_structures ?? []).map((s) => (
+                  <tr key={s.id}>
+                    <td className="muted">
+                      {s.closed_at ? new Date(s.closed_at).toLocaleString() : "--"}
+                    </td>
+                    <td>
+                      <strong>{s.underlying}</strong> {s.kind.replace(/_/g, " ")}
+                      <div className="muted">
+                        {s.legs.map((l) => `${l.side === "sell" ? "-" : "+"}${l.strike}${l.is_call ? "C" : "P"}`).join(" / ")}
+                        {" · "}{s.legs[0]?.expiry}
+                      </div>
+                    </td>
+                    <td>{s.sleeve}</td>
+                    <td>{s.qty}</td>
+                    <td className={s.net_price >= 0 ? "up" : "down"}>
+                      {s.net_price >= 0 ? "+" : ""}{s.net_price.toFixed(2)}
+                    </td>
+                    <td className="down">{money(s.max_loss)}</td>
+                    <td className="muted">
+                      {s.held_hours != null ? `${s.held_hours.toFixed(1)}h` : "--"}
+                    </td>
+                    <td className={(s.realized_pnl ?? 0) >= 0 ? "up" : "down"}>
+                      {s.realized_pnl != null
+                        ? `${s.realized_pnl >= 0 ? "+" : ""}${money(s.realized_pnl)}`
+                        : "--"}
+                    </td>
+                    <td className={(s.return_on_risk ?? 0) >= 0 ? "up" : "down"}>
+                      {s.return_on_risk != null
+                        ? `${(s.return_on_risk * 100).toFixed(0)}%`
+                        : "--"}
+                    </td>
+                    <td className="muted">{s.close_reason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      <section>
         <h2>Risk gates — what the agent refused to do</h2>
         <div className="card">
           <div className="sub" style={{ marginBottom: 10 }}>

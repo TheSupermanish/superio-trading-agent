@@ -90,6 +90,48 @@ def _group(rows: list[Any], field: str) -> dict[str, Any]:
     return out
 
 
+def closed_structures(limit: int = 200) -> list[dict[str, Any]]:
+    """Every closed trade, leg by leg.
+
+    The aggregate in performance() says how much was made. This says which
+    trades made it, what they were, and why each one ended. A judge checking
+    the P&L against Alpaca's own account history needs the second thing.
+    """
+    with state.db() as conn:
+        rows = conn.execute(
+            "SELECT * FROM structures WHERE status = 'closed'"
+            " ORDER BY closed_at DESC LIMIT ?",
+            (limit,),
+        ).fetchall()
+
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        trade = dict(row)
+        try:
+            trade["legs"] = json.loads(trade["legs"])
+        except (TypeError, ValueError):
+            pass
+        opened, closed = trade.get("opened_at"), trade.get("closed_at")
+        trade["held_hours"] = _held_hours(opened, closed)
+        max_loss = float(trade.get("max_loss") or 0.0)
+        pnl = trade.get("realized_pnl")
+        trade["return_on_risk"] = (
+            round(float(pnl) / max_loss, 4) if pnl is not None and max_loss else None
+        )
+        out.append(trade)
+    return out
+
+
+def _held_hours(opened: str | None, closed: str | None) -> float | None:
+    if not opened or not closed:
+        return None
+    try:
+        delta = datetime.fromisoformat(closed) - datetime.fromisoformat(opened)
+    except ValueError:
+        return None
+    return round(delta.total_seconds() / 3600, 2)
+
+
 def gate_activity(limit: int = 400) -> dict[str, Any]:
     """How often each gate refused something. The risk officer's own report card."""
     with state.db() as conn:
@@ -173,6 +215,7 @@ def build() -> dict[str, Any]:
         "performance": performance(),
         "gates": gate_activity(),
         "open_structures": open_structures,
+        "closed_structures": closed_structures(),
         "open_risk": round(state.open_risk_total(), 2),
         "equity_curve": state.equity_curve(limit=2000),
         "recent_decisions": _rows("decisions", 120),
