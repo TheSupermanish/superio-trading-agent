@@ -44,6 +44,13 @@ def market_open() -> tuple[bool, dict[str, Any]]:
 
 def account_snapshot() -> risk.PortfolioSnapshot:
     account = alpaca_cli.account()
+    if SETTINGS.diary:
+        # A diary book reads the live chain through the main account's keys,
+        # but it must not be sized against that account's money. Sizing a
+        # 50,000 book off a 101,000 balance would make every diary number a
+        # fifth too large and the whole comparison meaningless. So the balance
+        # is the diary's own: its stake plus whatever it has closed.
+        account = _diary_account()
     snap = risk.snapshot_from_account(account)
     state.record_equity(
         equity_value=snap.equity,
@@ -53,6 +60,34 @@ def account_snapshot() -> risk.PortfolioSnapshot:
         day_pnl=snap.day_pnl,
     )
     return snap
+
+
+def _diary_account(db_path: Any = None) -> dict[str, Any]:
+    """A synthetic balance sheet for a book with no broker account.
+
+    Equity is the diary stake plus realized P&L. `last_equity` is that same
+    figure less today's realized P&L, so the daily kill switch measures the
+    diary's own day rather than the live account's.
+    """
+    from engine.config import DIARY_EQUITY
+
+    with state.db(db_path) as conn:
+        realized = float(conn.execute(
+            "SELECT COALESCE(SUM(realized_pnl), 0) AS p FROM structures"
+            " WHERE status = 'closed'"
+        ).fetchone()["p"])
+        today = float(conn.execute(
+            "SELECT COALESCE(SUM(realized_pnl), 0) AS p FROM structures"
+            " WHERE status = 'closed' AND date(closed_at) = date('now')"
+        ).fetchone()["p"])
+
+    equity = DIARY_EQUITY + realized
+    return {
+        "equity": equity,
+        "last_equity": equity - today,
+        "cash": equity,
+        "buying_power": equity,
+    }
 
 
 def score(proposal: Proposal) -> float:

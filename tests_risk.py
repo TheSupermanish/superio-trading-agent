@@ -224,6 +224,41 @@ def test_a_live_variant_still_arms_normally():
                 os.environ[key] = value
 
 
+def test_a_diary_book_is_sized_off_its_own_stake():
+    """A diary book borrows the live account's keys, not its money.
+
+    Sizing a 50,000 book against the live account's balance would inflate
+    every diary position and make the comparison it exists for worthless.
+    """
+    import tempfile
+    from pathlib import Path
+
+    from engine import config, loop, state
+
+    tmp = Path(tempfile.mkdtemp()) / "diary.db"
+    state.init_db(tmp)
+    try:
+        account = loop._diary_account(tmp)
+        assert account["equity"] == config.DIARY_EQUITY, account
+        assert account["last_equity"] == config.DIARY_EQUITY, account
+
+        with state.db(tmp) as conn:
+            conn.execute(
+                "INSERT INTO structures (opened_at, closed_at, sleeve, underlying,"
+                " kind, legs, qty, net_price, max_loss, max_gain, status, realized_pnl)"
+                " VALUES (?, date('now'), 'core', 'SPY', 'put_credit_spread', '[]',"
+                " 1, 0.3, 70.0, 30.0, 'closed', 250.0)",
+                (state.utcnow(),),
+            )
+
+        account = loop._diary_account(tmp)
+        assert account["equity"] == config.DIARY_EQUITY + 250.0, account
+        # Closed today, so the day's P&L is the whole gain.
+        assert account["last_equity"] == config.DIARY_EQUITY, account
+    finally:
+        state._INITIALISED.discard(tmp)
+
+
 if __name__ == "__main__":
     import sys
     mod = sys.modules[__name__]

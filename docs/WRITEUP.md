@@ -159,20 +159,52 @@ modelling error, and that error largely cancels in the comparison.
 Replayed over five years of SPY, QQQ and IWM, weighted across volatility
 regimes:
 
-| Variant | Trades | Win rate | Profit factor |
-| --- | --- | --- | --- |
-| barbell (judged) | 2,875 | 41.8% | 1.39 |
-| convex tilt | 1,441 | 40.1% | 1.39 |
-| income only (control) | 1,971 | **64.6%** | **0.65** |
+| Variant | Book | Trades | Win rate | Profit factor | Max drawdown |
+| --- | --- | --- | --- | --- | --- |
+| long gamma | diary | 1,914 | 46.6% | **1.41** | **16.8%** |
+| levered | diary | 2,875 | 40.9% | 1.39 | 97.0% |
+| barbell (judged) | live | 2,874 | 40.9% | 1.38 | 61.5% |
+| convex tilt | live | 1,440 | 39.6% | 1.34 | 18.0% |
+| vrp router | diary | 3,854 | 47.1% | 1.30 | 71.5% |
+| income only (control) | live | 1,975 | **64.7%** | **0.66** | 82.7% |
+| fat credit | diary | 1,318 | 54.5% | 0.65 | 61.8% |
 
 The control arm is the interesting row. It wins nearly two trades in three and
 still loses money: the classic premium-selling trap, where a few full-width
 losses outweigh a long run of small credits. Its drawdown is the worst of the
-three despite the highest win rate.
+three live presets despite the highest win rate.
 
 That is a falsifiable prediction rather than a story, and it is why the same
 engine runs on three accounts. If income-only finishes the week ahead of the
 barbell, the harness was wrong about something and we will say so.
+
+Three of the diary presets exist to attack the strategy rather than defend it,
+and all three answered.
+
+`fat_credit` sells at 38 delta for a much fatter credit, testing whether the
+18% credit-to-width floor is protecting us or costing us. It lands at a profit
+factor of 0.65, indistinguishable from income_only. Selling closer to the money
+buys a higher win rate and pays for it exactly.
+
+`levered` runs the judged preset at twice the risk. It returns 212% against the
+barbell's 76%, and takes a 97% drawdown getting there. The return scales
+roughly with deployment; the drawdown scales worse and lands somewhere no
+account survives. That is the whole answer to "should we deploy more", and it
+is why the 6% cap has not moved.
+
+`long_gamma` is the one that beat the judged preset: the best profit factor of
+the seven and by far the smallest drawdown. Read alongside the sleeve split, it
+is the same finding in every single row of the table, including the losing
+ones: the convex sleeve carries the P&L and the core sleeve is flat to
+negative. Under this harness, premium selling never pays for itself.
+
+The honest caveat is that this is exactly the result a Black-Scholes replay is
+most likely to produce. Entry and exit share a pricing model, so a long option
+is never marked down for the volatility risk premium it really pays. Sweeping
+the premium across regimes softens that but does not remove it. The finding
+worth acting on is the ranking, not the level, and the live accounts are the
+test: main runs the barbell, and if the convex sleeve carries it there too,
+long_gamma has earned a real account.
 
 Two caveats. The harness applies no kill switches, which is why its drawdowns
 run far past the 8% the live agent enforces. And a 41% win rate with a profit
