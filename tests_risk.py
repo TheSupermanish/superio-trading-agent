@@ -120,6 +120,58 @@ def test_convex_into_an_event_is_allowed():
     assert ok, why
 
 
+
+def _near(symbol, side, strike, is_call, mid):
+    """A liquid leg expiring tomorrow, clear of the week's catalysts."""
+    l = leg(symbol, side, strike, is_call, mid)
+    object.__setattr__(l, "expiry", date.today() + timedelta(days=1))
+    return l
+
+
+def test_will_not_buy_convexity_when_premium_is_expensive():
+    """The trade that cost us the first session.
+
+    A put debit spread was bought on the underlying whose implied vol sat 7.1
+    points above realized. The three premium-selling structures made $34
+    between them; that one lost $260.
+    """
+    p = prop("put_debit_spread",
+             [_near("A", "buy", 292, False, 1.20), _near("B", "sell", 287, False, 0.60)],
+             net=-0.60, width=5, max_loss=60, max_gain=440, sleeve="convex")
+    p.vol_premium = 0.0714
+    v = evaluate(p, snap())
+    assert not v.approved, "bought expensive premium"
+    assert "G7" in v.reasons[0] and "above realized" in v.reasons[0], v.reasons
+
+
+def test_will_buy_convexity_when_premium_is_cheap():
+    p = prop("call_debit_spread",
+             [_near("A", "buy", 500, True, 3.0), _near("B", "sell", 505, True, 1.5)],
+             net=-1.50, width=5, max_loss=150, max_gain=350, sleeve="convex")
+    p.vol_premium = -0.03
+    v = evaluate(p, snap())
+    assert v.approved, v.reasons
+
+
+def test_will_not_sell_premium_when_it_is_underpriced():
+    a = _near("A", "sell", 500, False, 2.00)
+    b = _near("B", "buy", 495, False, 0.90)
+    p = prop("put_credit_spread", [a, b], net=1.10, width=5, max_loss=390, max_gain=110)
+    p.vol_premium = -0.05
+    v = evaluate(p, snap())
+    assert not v.approved and "below realized" in v.reasons[0], v.reasons
+
+
+def test_no_volatility_reading_does_not_block():
+    """A missing signal must not become an accidental trading halt."""
+    a = _near("A", "sell", 500, False, 2.00)
+    b = _near("B", "buy", 495, False, 0.90)
+    p = prop("put_credit_spread", [a, b], net=1.10, width=5, max_loss=390, max_gain=110)
+    p.vol_premium = None
+    v = evaluate(p, snap())
+    assert v.approved, v.reasons
+
+
 if __name__ == "__main__":
     import sys
     mod = sys.modules[__name__]

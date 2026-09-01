@@ -45,6 +45,7 @@ class ToolContext:
     universe: tuple[str, ...]
     news: dict[str, list[dict[str, str]]] = field(default_factory=dict)
     approved: dict[str, Proposal] = field(default_factory=dict)
+    regimes: dict[str, Any] = field(default_factory=dict)
     rejected: list[dict[str, Any]] = field(default_factory=list)
     calls: list[dict[str, Any]] = field(default_factory=list)
 
@@ -56,11 +57,18 @@ class ToolContext:
 
 # --- Reads -----------------------------------------------------------------
 
+def _regime_for(ctx: ToolContext, symbol: str) -> Any:
+    """Read a regime once per pass and reuse it, so the gate always has one."""
+    if symbol not in ctx.regimes:
+        ctx.regimes[symbol] = read_regime(symbol)
+    return ctx.regimes[symbol]
+
+
 def tool_get_regime(ctx: ToolContext, symbol: str) -> dict[str, Any]:
     symbol = symbol.upper()
     if symbol not in ctx.universe:
         return {"error": f"{symbol} is not in the tradable universe {list(ctx.universe)}"}
-    regime = read_regime(symbol)
+    regime = _regime_for(ctx, symbol)
     data = regime.as_dict()
     data["interpretation"] = (
         "implied above realized, selling premium is paid well"
@@ -210,6 +218,13 @@ def tool_propose_structure(ctx: ToolContext, symbol: str, style: str) -> dict[st
                 "(delta target, width, or liquidity)"
             ),
         }
+
+    # Stamp the volatility reading on the proposal so G7 can judge whether this
+    # is the right side of the trade to be on.
+    try:
+        proposal.vol_premium = _regime_for(ctx, symbol).vol_premium
+    except Exception:  # noqa: BLE001
+        proposal.vol_premium = None
 
     verdict = risk.evaluate(proposal, ctx.snapshot)
     state.log_decision(

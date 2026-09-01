@@ -82,6 +82,10 @@ class Proposal:
     max_gain_per_unit: float
     thesis: str = ""
     qty: int = 0
+    #: Implied minus realized vol for the underlying at build time. Positive
+    #: means premium is expensive, which is a reason to sell it and a reason
+    #: not to buy it.
+    vol_premium: float | None = None
     tags: list[str] = field(default_factory=list)
 
     @property
@@ -113,6 +117,7 @@ class Proposal:
             "max_loss_per_unit": round(self.max_loss_per_unit, 2),
             "max_gain_per_unit": round(self.max_gain_per_unit, 2),
             "qty": self.qty,
+            "vol_premium": round(self.vol_premium, 4) if self.vol_premium is not None else None,
             "thesis": self.thesis,
             "tags": self.tags,
         }

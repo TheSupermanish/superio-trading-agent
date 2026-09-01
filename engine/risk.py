@@ -178,6 +178,36 @@ def kill_switch(snap: PortfolioSnapshot) -> tuple[bool, str | None]:
 
 # --- Entry point -----------------------------------------------------------
 
+def _volatility_side_ok(proposal: Proposal) -> tuple[bool, str]:
+    """Refuse a structure that sits on the wrong side of the volatility signal.
+
+    This was advisory until it cost us. On the first live session the agent
+    bought a put debit spread on the underlying whose implied vol was 7.1
+    points ABOVE realized, the most expensive premium on the board. Those three
+    premium-selling structures made $34 between them; that one premium-buying
+    structure lost $260, which was the entire day's loss.
+
+    The routing rule existed, but only as guidance the model was free to
+    ignore. Now it is a gate.
+    """
+    r = SETTINGS.risk
+    premium = proposal.vol_premium
+    if premium is None:
+        return True, "no volatility reading available; not blocking on it"
+
+    if not proposal.is_credit and premium > r.max_premium_to_buy_convexity:
+        return False, (
+            f"buying premium on {proposal.underlying} while implied sits {premium:+.1%} "
+            f"above realized; convexity is expensive here"
+        )
+    if proposal.is_credit and premium < r.min_premium_to_sell_convexity:
+        return False, (
+            f"selling premium on {proposal.underlying} while implied sits {premium:+.1%} "
+            f"below realized; the market is paying too little for the movement"
+        )
+    return True, f"volatility premium {premium:+.1%} supports this side of the trade"
+
+
 def _calendar_ok(proposal: Proposal) -> tuple[bool, str]:
     return calendar_gate.check(
         sleeve=proposal.sleeve,
@@ -208,7 +238,8 @@ GATES: list[tuple[str, str]] = [
     ("G4", "leg liquidity"),
     ("G5", "credit floor and debit cap"),
     ("G6", "scheduled event blackout"),
-    ("G7", "position sizing"),
+    ("G7", "volatility side"),
+    ("G8", "position sizing"),
 ]
 
 
@@ -246,10 +277,15 @@ def evaluate(proposal: Proposal, snap: PortfolioSnapshot) -> Verdict:
         return Verdict.reject(f"G6 event blackout: {why}")
     reasons.append(f"G6 {why}")
 
+    ok, why = _volatility_side_ok(proposal)
+    if not ok:
+        return Verdict.reject(f"G7 volatility side: {why}")
+    reasons.append(f"G7 {why}")
+
     qty, notes = size_position(proposal, snap)
-    reasons.extend(f"G7 {n}" for n in notes)
+    reasons.extend(f"G8 {n}" for n in notes)
     if qty < 1:
-        return Verdict(approved=False, reasons=reasons + ["G7 sized to zero contracts"], qty=0)
+        return Verdict(approved=False, reasons=reasons + ["G8 sized to zero contracts"], qty=0)
 
     return Verdict(approved=True, reasons=reasons, qty=qty)
 

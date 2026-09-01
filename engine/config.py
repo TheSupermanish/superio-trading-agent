@@ -61,6 +61,14 @@ class RiskLimits:
     min_credit_to_width: float = 0.18        # never sell a spread for pennies
     max_debit_to_width: float = 0.45         # never overpay for convexity
 
+    #: The barbell, made structural. Buying convexity when implied vol already
+    #: sits well above realized is paying a premium for the thing you are
+    #: trying to buy cheaply; selling premium when implied sits below realized
+    #: is underwriting risk for less than it costs. Inside this band either
+    #: sleeve is allowed, because the signal is not clean enough to insist.
+    max_premium_to_buy_convexity: float = 0.02
+    min_premium_to_sell_convexity: float = -0.02
+
     allow_naked_short: bool = False
 
 

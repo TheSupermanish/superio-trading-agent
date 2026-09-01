@@ -135,6 +135,7 @@ def study(snapshot: risk.PortfolioSnapshot, force: bool = False) -> dict[str, An
                 )
                 continue
 
+            proposal.vol_premium = regime.vol_premium
             verdict = risk.evaluate(proposal, snapshot)
             plan["candidates"].append(
                 {
