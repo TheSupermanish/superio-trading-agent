@@ -58,6 +58,11 @@ class RiskLimits:
     max_new_trades_per_day: int = 8
     max_open_structures: int = 10
 
+    #: Entries that never filled do not spend a trade slot, because they never
+    #: became a position. They are bounded here instead, so a session priced
+    #: where nothing fills gives up rather than churning orders all day.
+    max_failed_entries_per_day: int = 12
+
     min_credit_to_width: float = 0.18        # never sell a spread for pennies
     max_debit_to_width: float = 0.45         # never overpay for convexity
 
@@ -323,6 +328,21 @@ def _profile_value(profile: str, suffix: str, fallback: str = "") -> str:
     return os.getenv(key) or os.getenv(f"ALPACA_{suffix}") or fallback
 
 
+def _db_path(profile: str, variant: str, diary: bool) -> Path:
+    """Where this book keeps its journal.
+
+    SUPERIO_DB overrides it outright, which is how the test suites avoid
+    reading the operator's real journal: a rehearsed structure left in it would
+    otherwise charge risk against a test's imaginary book.
+    """
+    override = os.getenv("SUPERIO_DB", "").strip()
+    if override:
+        return Path(override)
+    if diary:
+        return ROOT / "data" / f"diary-{variant}.db"
+    return ROOT / "data" / f"superio-{profile}.db"
+
+
 def load_settings(profile: str | None = None, variant: str | None = None) -> Settings:
     profile = profile or os.getenv("ALPACA_PROFILE", "main")
     variant = variant or os.getenv("STRATEGY_VARIANT", "barbell")
@@ -353,11 +373,7 @@ def load_settings(profile: str | None = None, variant: str | None = None) -> Set
         force_dry_run=_env_bool("DRY_RUN", True),
         live_from=_parse_live_from(os.getenv("LIVE_FROM")),
         diary=diary,
-        db_path=(
-            ROOT / "data" / f"diary-{variant}.db"
-            if diary
-            else ROOT / "data" / f"superio-{profile}.db"
-        ),
+        db_path=_db_path(profile, variant, diary),
         risk=risk,
         strategy=strategy,
     )

@@ -230,10 +230,29 @@ def close_structure(structure_id: int, realized_pnl: float, reason: str) -> None
         )
 
 
+def _marks(values: tuple[str, ...]) -> str:
+    return ",".join("?" for _ in values)
+
+
+def _live_statuses() -> tuple[str, ...]:
+    """Which journal states count as a live position.
+
+    A simulated structure is a real position to a diary book and nothing at all
+    to a live account: it has no legs at the broker and no money behind it. So
+    it counts while the agent is simulating and stops counting the moment it
+    arms, which also means yesterday's rehearsal cannot charge risk against
+    today's real book.
+    """
+    return ("pending", "open", "dry_run") if SETTINGS.dry_run else ("pending", "open")
+
+
 def live_structures() -> list[dict[str, Any]]:
+    statuses = _live_statuses()
     with db() as conn:
         rows = conn.execute(
-            "SELECT * FROM structures WHERE status IN ('pending', 'open') ORDER BY opened_at"
+            f"SELECT * FROM structures WHERE status IN ({_marks(statuses)})"
+            " ORDER BY opened_at",
+            statuses,
         ).fetchall()
     out = []
     for row in rows:
@@ -244,10 +263,12 @@ def live_structures() -> list[dict[str, Any]]:
 
 
 def open_risk_total() -> float:
+    statuses = _live_statuses()
     with db() as conn:
         row = conn.execute(
-            "SELECT COALESCE(SUM(max_loss), 0) AS total FROM structures"
-            " WHERE status IN ('pending', 'open')"
+            f"SELECT COALESCE(SUM(max_loss), 0) AS total FROM structures"
+            f" WHERE status IN ({_marks(statuses)})",
+            statuses,
         ).fetchone()
     return float(row["total"])
 
@@ -255,29 +276,59 @@ def open_risk_total() -> float:
 def open_risk_by(field: str, value: str) -> float:
     if field not in {"sleeve", "underlying"}:
         raise ValueError(f"unsupported field: {field}")
+    statuses = _live_statuses()
     with db() as conn:
         row = conn.execute(
             f"SELECT COALESCE(SUM(max_loss), 0) AS total FROM structures"
-            f" WHERE status IN ('pending', 'open') AND {field} = ?",
-            (value,),
+            f" WHERE status IN ({_marks(statuses)}) AND {field} = ?",
+            (*statuses, value),
         ).fetchone()
     return float(row["total"])
 
 
-def trades_opened_today(include_simulated: bool | None = None) -> int:
-    """Structures opened today.
+def trades_opened_today(
+    include_simulated: bool | None = None, db_path: Path | None = None
+) -> int:
+    """Structures opened today that reached, or are still reaching, the market.
 
     Simulated structures count while the agent is simulating, so a dry run
     respects the same daily budget a live session would. They stop counting the
     moment the agent arms, because rehearsing a trade never consumed anything.
+
+    A `rejected` structure is one whose entry order died or was released
+    without ever filling. It has no position, no risk and no P&L, and counting
+    it spends a slot on a trade that did not happen. Five of them once ate five
+    of eight slots and the agent stood down for the afternoon holding a book of
+    three. Failed entries are bounded separately, by `failed_entries_today`.
     """
     if include_simulated is None:
         include_simulated = SETTINGS.dry_run
     today = datetime.now(timezone.utc).date().isoformat()
-    clause = "" if include_simulated else " AND status != 'dry_run'"
-    with db() as conn:
+    statuses = ["pending", "open", "closed"]
+    if include_simulated:
+        statuses.append("dry_run")
+    marks = ",".join("?" for _ in statuses)
+    with db(db_path) as conn:
         row = conn.execute(
-            f"SELECT COUNT(*) AS n FROM structures WHERE substr(opened_at, 1, 10) = ?{clause}",
+            f"SELECT COUNT(*) AS n FROM structures"
+            f" WHERE substr(opened_at, 1, 10) = ? AND status IN ({marks})",
+            (today, *statuses),
+        ).fetchone()
+    return int(row["n"])
+
+
+def failed_entries_today(db_path: Path | None = None) -> int:
+    """Entries opened today that never became a position.
+
+    Not counting these against the trade budget is right, but not counting them
+    at all would let a badly priced session churn orders indefinitely. This is
+    what bounds that.
+    """
+    today = datetime.now(timezone.utc).date().isoformat()
+    with db(db_path) as conn:
+        row = conn.execute(
+            "SELECT COUNT(*) AS n FROM structures"
+            " WHERE substr(opened_at, 1, 10) = ? AND status = 'rejected'",
             (today,),
         ).fetchone()
     return int(row["n"])

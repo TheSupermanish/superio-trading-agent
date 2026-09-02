@@ -25,6 +25,7 @@ class PortfolioSnapshot:
     peak_equity: float
     open_structures: int
     trades_today: int
+    failed_today: int = 0
 
     @property
     def day_pnl(self) -> float:
@@ -54,6 +55,7 @@ def snapshot_from_account(account: dict[str, Any]) -> PortfolioSnapshot:
         peak_equity=max(peak, equity),
         open_structures=len(state.live_structures()),
         trades_today=state.trades_opened_today(),
+        failed_today=state.failed_entries_today(),
     )
 
 
@@ -223,9 +225,15 @@ def _budget_ok(snap: PortfolioSnapshot) -> tuple[bool, str]:
         return False, f"already opened {snap.trades_today} structures today"
     if snap.open_structures >= r.max_open_structures:
         return False, f"{snap.open_structures} structures already open"
+    if snap.failed_today >= r.max_failed_entries_per_day:
+        return False, (
+            f"{snap.failed_today} entries failed to fill today; "
+            "the book is not being priced where it can trade"
+        )
     return True, (
         f"{snap.trades_today}/{r.max_new_trades_per_day} trades today, "
-        f"{snap.open_structures}/{r.max_open_structures} open"
+        f"{snap.open_structures}/{r.max_open_structures} open, "
+        f"{snap.failed_today}/{r.max_failed_entries_per_day} failed entries"
     )
 
 

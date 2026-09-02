@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from engine import alpaca_cli, state
+from engine.config import SETTINGS
 
 log = logging.getLogger(__name__)
 
@@ -41,6 +42,13 @@ class Reconciliation:
 
 def run(auto_close_orphans: bool = False) -> Reconciliation:
     result = Reconciliation()
+
+    if SETTINGS.dry_run:
+        # A simulated book has no counterpart at the broker. Reconciling it
+        # against the live position list would find none of its legs and close
+        # every one of them as vanished, which is how a diary book ends the day
+        # with an empty journal and no P&L to compare against anything.
+        return result
 
     try:
         positions = alpaca_cli.positions()

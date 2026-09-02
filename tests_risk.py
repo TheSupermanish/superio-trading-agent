@@ -1,7 +1,9 @@
 """Risk officer unit tests: the gates that must never regress."""
 
+from dataclasses import replace
 from datetime import date, timedelta
 
+from engine import risk
 from engine.risk import PortfolioSnapshot, _is_defined_risk, evaluate, size_position
 from engine.types import Leg, Proposal
 
@@ -183,10 +185,14 @@ def test_a_diary_variant_can_never_reach_the_broker():
 
     from engine import config
 
-    saved = {k: os.environ.get(k) for k in ("STRATEGY_VARIANT", "DRY_RUN", "LIVE_FROM")}
+    keys = ("STRATEGY_VARIANT", "DRY_RUN", "LIVE_FROM", "SUPERIO_DB")
+    saved = {k: os.environ.get(k) for k in keys}
     try:
         os.environ["DRY_RUN"] = "false"
         os.environ["LIVE_FROM"] = "2020-01-01T00:00:00Z"  # long past: would arm
+        # The suite runs against a scratch journal; this check is about where a
+        # diary book files itself when nothing is overriding that.
+        os.environ.pop("SUPERIO_DB", None)
         for variant in sorted(set(config.VARIANTS) - config.LIVE_VARIANTS):
             os.environ["STRATEGY_VARIANT"] = variant
             settings = config.load_settings()
@@ -257,6 +263,67 @@ def test_a_diary_book_is_sized_off_its_own_stake():
         assert account["last_equity"] == config.DIARY_EQUITY, account
     finally:
         state._INITIALISED.discard(tmp)
+
+
+def test_an_entry_that_never_filled_does_not_spend_a_trade_slot():
+    """A released entry has no position, no risk and no P&L.
+
+    Counting it spends a slot on a trade that did not happen. Five of them once
+    ate five of eight slots and the agent stood down for the afternoon holding
+    a book of three, with four fifths of its risk budget free.
+    """
+    import tempfile
+    from pathlib import Path
+
+    from engine import state
+
+    tmp = Path(tempfile.mkdtemp()) / "budget.db"
+    state.init_db(tmp)
+
+    def add(status: str) -> None:
+        with state.db(tmp) as conn:
+            conn.execute(
+                "INSERT INTO structures (opened_at, sleeve, underlying, kind, legs,"
+                " qty, net_price, max_loss, max_gain, status)"
+                " VALUES (?, 'core', 'SPY', 'put_credit_spread', '[]', 1, 0.3, 70, 30, ?)",
+                (state.utcnow(), status),
+            )
+
+    try:
+        for status in ("open", "closed", "pending"):
+            add(status)
+        for _ in range(5):
+            add("rejected")
+
+        counted = state.trades_opened_today(include_simulated=False, db_path=tmp)
+        assert counted == 3, counted
+        failed = state.failed_entries_today(db_path=tmp)
+        assert failed == 5, failed
+    finally:
+        state._INITIALISED.discard(tmp)
+
+
+def test_failed_entries_are_still_bounded():
+    """Not spending a trade slot is not the same as being free.
+
+    A session priced where nothing fills must give up rather than churn orders
+    all day, so G2 refuses once the failed-entry ceiling is reached.
+    """
+    from engine.config import SETTINGS
+
+    snap = risk.PortfolioSnapshot(
+        equity=100_000.0, last_equity=100_000.0, cash=100_000.0,
+        buying_power=200_000.0, open_risk=0.0, peak_equity=100_000.0,
+        open_structures=0, trades_today=0,
+        failed_today=SETTINGS.risk.max_failed_entries_per_day,
+    )
+    ok, why = risk._budget_ok(snap)
+    assert not ok, why
+    assert "failed to fill" in why, why
+
+    snap_ok = replace(snap, failed_today=SETTINGS.risk.max_failed_entries_per_day - 1)
+    ok, why = risk._budget_ok(snap_ok)
+    assert ok, why
 
 
 if __name__ == "__main__":
