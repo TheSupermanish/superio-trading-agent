@@ -186,6 +186,14 @@ BASE_STRATEGY = StrategyParams()
 
 #: Named presets. `barbell` is the competition configuration; the others exist
 #: so a second paper account can run a genuine alternative over the same tape.
+#:
+#: A control arm has to say what it excludes, not assume it. When the carry
+#: sleeve was added to BASE_RISK every preset that had not heard of it
+#: inherited a 3.5% carry budget, so the "income only" arm quietly held
+#: multi-week risk reversals and every variant reported the identical carry
+#: P&L to the dollar. The comparison the three accounts exist to make was gone
+#: and nothing failed. Each arm below now zeroes the sleeves it is a control
+#: for.
 VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
     # Most of the risk budget sells defined-risk premium, a capped sleeve buys
     # convexity. This is the configuration submitted for judging.
@@ -198,6 +206,8 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             BASE_RISK,
             core_risk_share=0.55,
             convex_risk_share=0.45,
+            carry_risk_share=0.0,
+            max_carry_open_risk_pct=0.0,
             max_convex_open_risk_pct=0.025,
             max_risk_per_trade_pct=0.006,
             max_debit_to_width=0.40,
@@ -213,6 +223,7 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
     # Pure income control arm: no convex sleeve at all.
     "income_only": (
         replace(BASE_RISK, core_risk_share=1.0, convex_risk_share=0.0,
+                carry_risk_share=0.0, max_carry_open_risk_pct=0.0,
                 max_convex_open_risk_pct=0.0, min_credit_to_width=0.22),
         replace(BASE_STRATEGY, core_short_delta=0.30, core_max_dte=5),
     ),
@@ -233,8 +244,10 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
         replace(
             BASE_RISK,
             max_risk_per_trade_pct=0.015,
+            max_carry_risk_per_trade_pct=0.025,
             max_open_risk_pct=0.12,
             max_convex_open_risk_pct=0.06,
+            max_carry_open_risk_pct=0.07,
             max_risk_per_underlying_pct=0.05,
             max_new_trades_per_day=12,
             max_open_structures=16,
@@ -251,6 +264,8 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             BASE_RISK,
             core_risk_share=0.5,
             convex_risk_share=0.5,
+            carry_risk_share=0.0,
+            max_carry_open_risk_pct=0.0,
             max_convex_open_risk_pct=0.06,
             max_premium_to_buy_convexity=0.0,
             min_premium_to_sell_convexity=0.0,
@@ -266,6 +281,8 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             BASE_RISK,
             core_risk_share=1.0,
             convex_risk_share=0.0,
+            carry_risk_share=0.0,
+            max_carry_open_risk_pct=0.0,
             max_convex_open_risk_pct=0.0,
             min_credit_to_width=0.30,
         ),
@@ -292,6 +309,7 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             convex_risk_share=0.10,
             carry_risk_share=0.70,
             max_carry_open_risk_pct=0.045,
+            max_carry_risk_per_trade_pct=0.015,
             max_convex_open_risk_pct=0.01,
             max_risk_per_trade_pct=0.010,
             max_risk_per_underlying_pct=0.035,
@@ -304,6 +322,8 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             BASE_RISK,
             core_risk_share=0.0,
             convex_risk_share=1.0,
+            carry_risk_share=0.0,
+            max_carry_open_risk_pct=0.0,
             max_convex_open_risk_pct=0.05,
             max_open_risk_pct=0.05,
             max_debit_to_width=0.38,

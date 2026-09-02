@@ -148,6 +148,71 @@ Friday. The same engine runs on two further paper accounts with different
 presets, a convexity-led variant and an income-only control, so the week
 produces a comparison rather than a single number.
 
+## The sleeve that holds something
+
+The first version of this agent traded nothing that lived longer than a week.
+Every structure was one to seven days out and closed within a day, which has
+two consequences worth stating plainly.
+
+It had no exposure to the one edge in equities with decades of evidence behind
+it. You are not paid the equity risk premium for being flat overnight.
+
+And selling premium caps its own upside at the credit taken. At six percent of
+equity deployed and a credit worth about a quarter of width, the best possible
+week is around two percent however well the week is run.
+
+Those are the same complaint from two directions, so there is a third sleeve.
+
+**Carry.** Sell a thirty delta put spread, use the credit to buy a wider call
+spread, same expiry, five to nine weeks out. Long delta, so the position is
+paid for holding the exposure rather than for predicting a move. Defined risk
+on both sides, so a crash costs the put spread's width and G3 still holds with
+no exception carved for it. And an upside that is a multiple of its risk rather
+than a fraction of its width: on a live SPY chain, 631 dollars of risk against
+1,669 of maximum gain, 2.6x, where a credit spread of the same risk can win
+about 190.
+
+The financing comes from the shape of the surface, not from a view. Index puts
+trade at a higher implied volatility than calls the same distance away, so the
+structure sells the expensive side of the skew to fund the cheap side. That
+holds whether implied volatility overall is rich or cheap, which is why this
+sleeve is deliberately not routed by the variance risk premium the way the
+other two are.
+
+Four things in the engine assumed a position lives for a day. Each would have
+broken this sleeve without ever failing loudly.
+
+G6 refuses credit structures with a high-impact catalyst before expiry. A
+forty-five day structure spans every catalyst on the calendar by construction,
+so the gate would have refused the sleeve outright rather than protected it.
+Holding through events is what a multi-week position is for.
+
+G7 routes on the level of implied volatility. A risk reversal is short put
+volatility and long call volatility at the same time, so a single premium
+reading cannot say which side of it is right. Routed as a credit structure it
+would have been refused in exactly the cheap-volatility regimes where a
+financed long position is most attractive.
+
+G5 compared the net debit to `proposal.width`, which for this package is the
+put width. That asks whether the premium paid is a sensible fraction of a
+number the premium did not buy: it read as a debit of 110 percent of width and
+refused every structure the sleeve could build. `Proposal.pricing_width` now
+states the denominator properly, as what the structure can pay out gross, and
+reduces to exactly the strike width for every vertical.
+
+The manager dispatches exits on the sign of the entry price. A risk reversal
+opens for a small credit or a small debit depending on where the skew sits that
+morning, so run through the credit branch a ten cent credit would be judged
+against fifty-five percent of ten cents: target hit on the first tick, position
+closed for nothing, sleeve useless.
+
+Two more came out of getting it wrong. Maximum loss was left in points where
+the rest of the engine uses per-contract dollars, and the risk officer read six
+dollars of risk where there were 631 and sized 118 contracts into a 750 dollar
+cap. And the P&L sign was inverted, which throws nothing at all: it reports the
+best possible outcome as the worst, stops out every winner and holds every
+loser to expiry while all eight gates still pass. There is a test for each.
+
 ## Why three accounts
 
 The replay harness cannot tell us what the strategy will earn: with no

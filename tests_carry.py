@@ -253,6 +253,55 @@ def test_the_best_possible_outcome_is_reported_as_a_gain():
     assert abs(worst.unrealized_pnl + max_loss_total) < 1.0, worst.unrealized_pnl
 
 
+def test_a_control_arm_holds_only_the_sleeves_it_is_a_control_for():
+    """Adding a sleeve to the base config must not leak into the control arms.
+
+    When carry was added to BASE_RISK, every preset that predated it inherited
+    a 3.5% carry budget. The "income only" arm quietly held multi-week risk
+    reversals, and all seven non-carry variants reported the identical carry
+    P&L to the dollar. The comparison the three accounts exist to make was
+    gone, the backtest still ran, and nothing failed.
+
+    So each arm is pinned to the sleeves it is supposed to isolate. A new
+    sleeve added to BASE_RISK in future breaks this test rather than the
+    experiment.
+    """
+    from engine.config import VARIANTS
+
+    # variant -> the sleeves it is allowed to hold
+    EXPECTED = {
+        "barbell": {"core", "convex", "carry"},
+        "levered": {"core", "convex", "carry"},
+        "carry_led": {"core", "convex", "carry"},
+        "convex_tilt": {"core", "convex"},
+        "vrp_router": {"core", "convex"},
+        "income_only": {"core"},
+        "fat_credit": {"core"},
+        "long_gamma": {"convex"},
+    }
+    assert set(EXPECTED) == set(VARIANTS), (
+        f"a variant was added or renamed without saying which sleeves it holds: "
+        f"{set(VARIANTS) ^ set(EXPECTED)}"
+    )
+
+    for name, allowed in EXPECTED.items():
+        risk_cfg, _strategy = VARIANTS[name]
+        caps = {
+            "convex": risk_cfg.max_convex_open_risk_pct,
+            "carry": risk_cfg.max_carry_open_risk_pct,
+        }
+        for sleeve, cap in caps.items():
+            if sleeve in allowed:
+                assert cap > 0, f"{name} is meant to hold {sleeve} but its cap is {cap}"
+            else:
+                assert cap == 0, (
+                    f"{name} is a control arm without {sleeve}, but its cap is {cap}"
+                )
+        # Core has no cap of its own; its share is what turns it off.
+        if "core" not in allowed:
+            assert risk_cfg.core_risk_share == 0, name
+
+
 if __name__ == "__main__":
     mod = sys.modules[__name__]
     failed = 0
