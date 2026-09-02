@@ -49,7 +49,7 @@ class RiskLimits:
     #: how the agent holds a directional position for weeks instead of hours.
     carry_risk_share: float = 0.45
 
-    max_risk_per_trade_pct: float = 0.0075   # <= 0.75% of equity on one structure
+    max_risk_per_trade_pct: float = 0.0125   # <= 1.25% of equity on one structure
     #: Carry gets its own, larger per-trade cap. At 0.75% a carry position
     #: cannot be expressed at all below a six-figure account: the narrowest
     #: sensible risk reversal on SPY risks about 630 dollars a contract, so a
@@ -57,8 +57,20 @@ class RiskLimits:
     #: never trades. That is a unit problem, not a risk decision: a structure
     #: held for five weeks is one position rather than a scalp, and the
     #: aggregate is still bounded by max_carry_open_risk_pct.
-    max_carry_risk_per_trade_pct: float = 0.0125
-    max_open_risk_pct: float = 0.06          # <= 6% of equity at risk at once
+    max_carry_risk_per_trade_pct: float = 0.020
+    #: Raised from 6% deliberately, and only after the payoff shape was fixed.
+    #: At 6% with the income sleeve uncapped the whole week could produce about
+    #: 2% of equity, so more deployment would have bought more of a 0.33x
+    #: payoff: a bigger hole underneath the same tiny number. With core capped
+    #: and the budget reachable by structures paying 2.2 to 2.6x, deployment
+    #: now scales something worth scaling.
+    #:
+    #: The kill switches moved with it. Fully deployed the worst case IS this
+    #: cap, so a cap above the stand-down threshold means one gap through every
+    #: position ends the event while the switch protects nothing. That
+    #: invariant is enforced by a test, and it is the reason this is 10 and not
+    #: the 15 the replay's headline return would argue for.
+    max_open_risk_pct: float = 0.10          # <= 10% of equity at risk at once
     #: The income sleeve needs a ceiling of its own, and this is the whole
     #: reason the book was capped at a one percent week.
     #:
@@ -72,24 +84,24 @@ class RiskLimits:
     #: is not a deployment problem, it is arithmetic: the account made 1.38%
     #: and had already beaten what the sleeve holding most of its risk can
     #: produce.
-    max_core_open_risk_pct: float = 0.020
+    max_core_open_risk_pct: float = 0.025
     # The convex sleeve gets a real allocation rather than a token one. With
     # implied vol below realized on the whole universe, premium selling is being
     # paid too little for the movement the tape is actually delivering, so the
     # long-gamma side is where the edge is this week.
-    max_convex_open_risk_pct: float = 0.03
+    max_convex_open_risk_pct: float = 0.05
     #: Carry gets the largest sleeve cap because it is the slowest. A 45 day
     #: structure occupies its budget for weeks, so a cap the size of the
     #: tactical sleeves' would let two positions consume the sleeve for the
     #: whole month.
-    max_carry_open_risk_pct: float = 0.045
-    max_risk_per_underlying_pct: float = 0.025
+    max_carry_open_risk_pct: float = 0.070
+    max_risk_per_underlying_pct: float = 0.045
 
-    daily_loss_kill_pct: float = 0.03        # flatten and stand down for the day
-    total_drawdown_kill_pct: float = 0.08    # stand down for the rest of the event
+    daily_loss_kill_pct: float = 0.05        # flatten and stand down for the day
+    total_drawdown_kill_pct: float = 0.14    # stand down for the rest of the event
 
-    max_new_trades_per_day: int = 8
-    max_open_structures: int = 10
+    max_new_trades_per_day: int = 10
+    max_open_structures: int = 14
 
     #: Entries that never filled do not spend a trade slot, because they never
     #: became a position. They are bounded here instead, so a session priced

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T11:06:52.888432+00:00",
+  "generated_at": "2026-09-02T11:14:02.698556+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -587,6 +587,22 @@
     },
     {
       "ts": "2026-09-02T11:06:52.886434+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:09:00.151093+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:14:02.696238+00:00",
       "equity": 101379.16,
       "cash": 102419.16,
       "buying_power": 399276.64,
@@ -2124,6 +2140,22 @@
   ],
   "recent_events": [
     {
+      "id": 47,
+      "ts": "2026-09-02T11:08:56.876611+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 46,
+      "ts": "2026-09-02T11:08:53.440763+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=main variant=barbell mode=LIVE PAPER",
+      "data": null
+    },
+    {
       "id": 45,
       "ts": "2026-09-02T11:05:33.487935+00:00",
       "level": "warning",
@@ -2422,22 +2454,6 @@
     {
       "id": 8,
       "ts": "2026-08-28T14:06:06.258134+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 7,
-      "ts": "2026-08-28T14:06:02.301873+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=main variant=barbell mode=DRY RUN until Mon 31 Aug 19:20 +0545",
-      "data": null
-    },
-    {
-      "id": 6,
-      "ts": "2026-08-28T14:04:59.051527+00:00",
       "level": "info",
       "kind": "preflight",
       "message": "journal write check",

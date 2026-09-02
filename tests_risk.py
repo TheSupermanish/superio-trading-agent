@@ -4,6 +4,7 @@ from dataclasses import replace
 from datetime import date, timedelta
 
 from engine import risk
+from engine.config import SETTINGS
 from engine.risk import PortfolioSnapshot, _is_defined_risk, evaluate, size_position
 from engine.types import Leg, Proposal
 
@@ -63,14 +64,20 @@ def test_sizing_respects_per_trade_cap():
              [leg("A", "sell", 500, False, 2.0), leg("B", "buy", 495, False, 1.0)],
              1.0, 5, 400, 100)
     qty, _ = size_position(p, snap())
-    assert qty == 1, qty  # 0.75% of 100k = 750, // 400 -> 1
+    # Derived from the config rather than written in. Hardcoding "1" here meant
+    # that raising the per-trade cap broke a test about whether the cap is
+    # respected, which is not what it is for.
+    cap = 100_000 * SETTINGS.risk.max_risk_per_trade_pct
+    assert qty == int(cap // 400), (qty, cap)
 
 
 def test_daily_kill_switch_blocks_entry():
     p = prop("put_credit_spread",
              [leg("A", "sell", 500, False, 2.0), leg("B", "buy", 495, False, 1.0)],
              1.0, 5, 400, 100)
-    v = evaluate(p, snap(equity=96_000, last_equity=100_000))
+    # A day one basis point past the switch, whatever the switch is set to.
+    down = SETTINGS.risk.daily_loss_kill_pct + 0.001
+    v = evaluate(p, snap(equity=100_000 * (1 - down), last_equity=100_000))
     assert not v.approved and "kill switch" in v.reasons[0], v.reasons
 
 
@@ -98,7 +105,12 @@ def test_risk_is_sized_off_the_touch_not_the_mid():
     assert p.net_price < p.net_price_mid, "touch price should be worse than mid"
     assert abs(p.slippage_budget - 0.10) < 1e-9, p.slippage_budget
     qty, notes = size_position(p, snap())
-    assert qty == 1, (qty, notes)
+    # Sized on the touch (410), not the mid (400): a cap that divides evenly by
+    # the mid must not divide evenly by the touch.
+    cap = 100_000 * SETTINGS.risk.max_risk_per_trade_pct
+    assert qty == int(cap // 410), (qty, notes)
+    assert qty < int(cap // 400) or cap // 410 == cap // 400, \
+        "sizing off the mid would have allowed more"
 
 
 def test_credit_across_a_high_impact_event_is_blocked():

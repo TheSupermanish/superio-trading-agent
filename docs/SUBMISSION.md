@@ -39,10 +39,19 @@ already sized. It never emits a leg, a strike, a limit, or a quantity.
 The seven gates are numbered and independently tested. G3 makes a naked short
 structurally impossible: every short leg needs same-expiry, same-type cover, and
 no flag disables it. G6 refuses to write premium across a scheduled catalyst.
-Kill switches flatten at minus three percent on the day and stand down at minus
-eight percent. Everything is priced at the touch rather than the mid, because
-Alpaca's paper engine fills against the NBBO and sizing off mid prices
-understates real maximum loss.
+Kill switches flatten at minus five percent on the day and stand down at minus
+fourteen percent, which sits deliberately above the ten percent open-risk cap:
+fully deployed the worst case IS that cap, so a switch below it would let one
+gap end the event having protected nothing. Everything is priced at the touch
+rather than the mid, because Alpaca's paper engine fills against the NBBO and
+sizing off mid prices understates real maximum loss.
+
+Each sleeve is capped separately, and that is the load-bearing part. Short
+premium was bounded only by the portfolio total, and it is the cheapest
+structure to build, so it filled the budget first at a payoff of 0.33 dollars
+per dollar risked. The live book was controlling 2.4 million dollars of
+notional to win 937. Capping it and letting carry and convexity reach the rest
+took the same risk from 937 of maximum gain to 13,193.
 
 Both Alpaca interfaces are used, and the split is deliberate. The CLI is the
 execution path, so every trade is reproducible as a shell command a judge can

@@ -148,6 +148,57 @@ Friday. The same engine runs on two further paper accounts with different
 presets, a convexity-led variant and an income-only control, so the week
 produces a comparison rather than a single number.
 
+## Raising the risk cap, and why only after fixing the payoff
+
+The judged account runs a 10% open-risk cap against a 14% total-drawdown kill
+switch. It ran 6% and 8% for most of the week, and the order of those two
+changes is the point.
+
+At 6% with the income sleeve uncapped, the entire week could produce about 2%
+of equity. Deploying more would have bought more of a 0.33x payoff, which is a
+bigger hole underneath the same small number. The measured book made this
+concrete: three live structures controlling 2.4 million dollars of notional,
+risking 2,863 dollars, able to win 937. One of them risked 1,080 to make 120.
+Doubling that is not ambition, it is just a worse trade twice.
+
+So the allocation was fixed first. Core is capped, and the budget became
+reachable by structures paying 2.2 to 2.6x instead of 0.33x. Only then does
+deployment scale something worth scaling.
+
+| | Before | After |
+| --- | --- | --- |
+| Open-risk cap | 6% | 10% |
+| Drawdown kill switch | 8% | 14% |
+| Blended payoff | 0.33x | ~2.2x |
+| Maximum gain | ~$2,000 | ~$22,300 |
+| Worst case | -$6,083 | -$10,138 |
+
+Measured against the live chain immediately after the change, the three carry
+structures the agent would open went from one contract each to three, two and
+four: 5,507 dollars of risk carrying 13,193 of maximum gain, against 937 for
+the book it replaced. Fourteen times the upside for under three times the risk,
+because the risk is now being spent on a different shape.
+
+The kill switches moved with the cap and that is not cosmetic. Fully deployed,
+the worst case IS the open-risk cap, so a cap above the stand-down threshold
+means one gap through every position ends the event while the switch protects
+nothing. A test enforces `max_open_risk_pct < total_drawdown_kill_pct` across
+every preset, and it caught the `levered` diary book on sight holding 12% of
+risk against an 8% switch, which is what its 264% replayed drawdown actually
+was.
+
+That invariant is also why this is 10 and not 15. The replay's headline return
+argues for 15, and at 15 a single bad gap with two sessions left ends the event
+with no time to recover. The cap is set by what the account can survive, not by
+what the backtest would have preferred.
+
+Two tests had to be rewritten as part of this, and they were wrong in an
+instructive way. `test_sizing_respects_per_trade_cap` asserted `qty == 1` with
+a comment explaining that 0.75% of 100,000 divided by 400 gives 1. Raising the
+cap broke a test whose subject is whether the cap is respected, which is not
+what it was for. Both now derive their expectations from the configuration, so
+they test the behaviour rather than the number.
+
 ## Why the week was capped at one percent
 
 The judged account finished its first four sessions up 1.38%. That looks like
