@@ -61,7 +61,7 @@ books: same live chain, same gates, their own journal, no broker account and no
 way to reach one. They exist to attack the strategy, and they landed: selling
 closer to the money for a fatter credit is a wash, doubling the risk cap
 returns 212 percent with a 97 percent drawdown, and a convexity-only book beats
-the judged preset on both profit factor and drawdown. 68 tests cover the gates, the order
+the judged preset on both profit factor and drawdown. 80 tests cover the gates, the order
 ladder and every exit rule. The public dashboard shows realized P&L beside every
 structure the agent refused and the gate that refused it.
 ```

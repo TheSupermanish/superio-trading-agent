@@ -15,7 +15,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any
 
-from engine import alpaca_cli, state
+from engine import adopt, alpaca_cli, state
 from engine.config import SETTINGS
 
 log = logging.getLogger(__name__)
@@ -26,21 +26,22 @@ class Reconciliation:
     broker_symbols: set[str] = field(default_factory=set)
     journal_symbols: set[str] = field(default_factory=set)
     orphans: list[dict[str, Any]] = field(default_factory=list)
+    adopted: list[int] = field(default_factory=list)
     closed_out: list[int] = field(default_factory=list)
     confirmed: list[int] = field(default_factory=list)
 
     @property
     def clean(self) -> bool:
-        return not self.orphans and not self.closed_out
+        return not self.orphans and not self.closed_out and not self.adopted
 
     def summary(self) -> str:
         return (
             f"{len(self.confirmed)} structures confirmed, {len(self.closed_out)} marked closed, "
-            f"{len(self.orphans)} orphan positions"
+            f"{len(self.adopted)} adopted, {len(self.orphans)} orphan positions"
         )
 
 
-def run(auto_close_orphans: bool = False) -> Reconciliation:
+def run(auto_close_orphans: bool = False, adopt_orphans: bool = True) -> Reconciliation:
     result = Reconciliation()
 
     if SETTINGS.dry_run:
@@ -109,6 +110,29 @@ def run(auto_close_orphans: bool = False) -> Reconciliation:
             except alpaca_cli.AlpacaCliError as exc:
                 log.error("could not close orphan %s: %s", symbol, exc)
 
+    if result.orphans and adopt_orphans and not auto_close_orphans:
+        # A position the journal cannot see is a position the exit rules cannot
+        # act on: no profit target, no stop, and no flatten before assignment.
+        # Adopting what can be shown to be defined-risk is strictly safer than
+        # leaving it invisible, and anything that cannot be shown stays an
+        # orphan and keeps being reported.
+        adopted = adopt.adopt(result.orphans)
+        if adopted:
+            result.adopted = adopted
+            result.orphans = [
+                position
+                for position in result.orphans
+                if position["symbol"] not in _journal_symbols()
+            ]
+
     if not result.clean:
         log.warning("reconciliation: %s", result.summary())
     return result
+
+
+def _journal_symbols() -> set[str]:
+    return {
+        leg["symbol"]
+        for structure in state.live_structures()
+        for leg in structure["legs"]
+    }
