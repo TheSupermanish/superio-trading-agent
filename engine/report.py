@@ -208,6 +208,8 @@ def build() -> dict[str, Any]:
             "max_risk_per_trade_pct": SETTINGS.risk.max_risk_per_trade_pct,
             "max_open_risk_pct": SETTINGS.risk.max_open_risk_pct,
             "max_convex_open_risk_pct": SETTINGS.risk.max_convex_open_risk_pct,
+            "max_carry_open_risk_pct": SETTINGS.risk.max_carry_open_risk_pct,
+            "max_carry_risk_per_trade_pct": SETTINGS.risk.max_carry_risk_per_trade_pct,
             "daily_loss_kill_pct": SETTINGS.risk.daily_loss_kill_pct,
             "total_drawdown_kill_pct": SETTINGS.risk.total_drawdown_kill_pct,
             "min_credit_to_width": SETTINGS.risk.min_credit_to_width,

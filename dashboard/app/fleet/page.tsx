@@ -205,6 +205,40 @@ export default function Fleet() {
             </div>
           </section>
 
+          {p && Object.keys(p.by_sleeve).length ? (
+            <section>
+              <h2>Which sleeve made the money</h2>
+              <div className="scroll">
+                <table>
+                  <thead>
+                    <tr><th>Sleeve</th><th>Closed</th><th>Wins</th><th>Realized</th></tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(p.by_sleeve).map(([name, b]) => (
+                      <tr key={name}>
+                        <td>
+                          <strong>{name}</strong>
+                          <div className="muted">
+                            {name === "core"
+                              ? "short premium, 1 to 7 days"
+                              : name === "convex"
+                                ? "bought convexity, 1 to 3 days"
+                                : "financed long delta, 5 to 9 weeks"}
+                          </div>
+                        </td>
+                        <td>{b.n}</td>
+                        <td>{b.wins}</td>
+                        <td className={tone(b.pnl)}>
+                          {b.pnl >= 0 ? "+" : ""}{money2(b.pnl)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          ) : null}
+
           <section>
             <h2>Open structures</h2>
             <div className="scroll">
