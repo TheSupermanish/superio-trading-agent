@@ -108,39 +108,36 @@ def study(snapshot: risk.PortfolioSnapshot, force: bool = False) -> dict[str, An
             "vol_premium": round(regime.vol_premium, 4) if regime.vol_premium is not None else None,
         }
 
-        # Try the same breadth the live agent does. Testing one shape per
-        # symbol made the plan report "nothing would clear the gates" while the
-        # live agent, which compares several, was finding spreads at 26% of
-        # width. A rehearsal that is narrower than the real thing is worse than
-        # no rehearsal, because it reports a problem that does not exist.
-        cheap = (regime.vol_premium or 0) <= 0
-        if cheap:
-            styles = ["call_debit_spread", "put_debit_spread", "put_credit_spread"]
-        else:
-            styles = ["put_credit_spread", "call_credit_spread", "iron_condor"]
+        # Rehearse exactly what the live agent would build, by calling the
+        # function it uses to build it. Keeping a separate list of styles here
+        # meant the rehearsal drifted from the thing it rehearses twice: first
+        # by testing one shape per symbol while the live agent compared
+        # several, and then by not knowing about the carry sleeve at all, which
+        # by then held most of the risk budget. Both times the plan reported
+        # "nothing would clear the gates" about a book that had plenty it
+        # could trade. A rehearsal narrower than the real thing is worse than
+        # no rehearsal, so it is no longer possible for it to be narrower.
+        from engine.loop import candidates_for
 
-        for style in styles:
-            builder = STYLES.get(style)
-            if builder is None:
-                continue
-            try:
-                proposal = builder(symbol)
-            except Exception as exc:  # noqa: BLE001
-                log.debug("closed-market build failed %s %s: %s", symbol, style, exc)
-                continue
-            if proposal is None:
-                plan["candidates"].append(
-                    {"symbol": symbol, "style": style, "verdict": "unavailable",
-                     "reason": "no contracts fit that shape on last known quotes"}
-                )
-                continue
+        try:
+            proposals = candidates_for(regime)
+        except Exception as exc:  # noqa: BLE001
+            log.debug("closed-market candidates failed for %s: %s", symbol, exc)
+            proposals = []
 
+        if not proposals:
+            plan["candidates"].append(
+                {"symbol": symbol, "style": "any", "verdict": "unavailable",
+                 "reason": "nothing built from last known quotes in this regime"}
+            )
+
+        for proposal in proposals:
             proposal.vol_premium = regime.vol_premium
             verdict = risk.evaluate(proposal, snapshot)
             plan["candidates"].append(
                 {
                     "symbol": symbol,
-                    "style": style,
+                    "style": proposal.kind,
                     "sleeve": proposal.sleeve,
                     "expiry": proposal.expiry.isoformat(),
                     "net_price": round(proposal.net_price, 2),

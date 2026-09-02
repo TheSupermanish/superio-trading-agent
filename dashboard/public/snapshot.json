@@ -1,13 +1,16 @@
 {
-  "generated_at": "2026-08-31T09:37:12.075680+00:00",
+  "generated_at": "2026-09-02T10:40:15.853310+00:00",
   "profile": "main",
   "variant": "barbell",
-  "dry_run": true,
+  "dry_run": false,
+  "diary": false,
   "account_id": "b585f795-0dac-4e23-83bb-636fc071bb00",
   "limits": {
     "max_risk_per_trade_pct": 0.0075,
     "max_open_risk_pct": 0.06,
     "max_convex_open_risk_pct": 0.03,
+    "max_carry_open_risk_pct": 0.045,
+    "max_carry_risk_per_trade_pct": 0.0125,
     "daily_loss_kill_pct": 0.03,
     "total_drawdown_kill_pct": 0.08,
     "min_credit_to_width": 0.18,
@@ -24,8 +27,8 @@
     "profit_factor": null,
     "max_drawdown_pct": 0.0,
     "equity_start": 100000.0,
-    "equity_latest": 100000.0,
-    "return_pct": 0.0,
+    "equity_latest": 101379.16,
+    "return_pct": 0.0138,
     "by_sleeve": {},
     "by_kind": {},
     "by_underlying": {}
@@ -67,12 +70,18 @@
       },
       {
         "gate": "G7",
+        "name": "volatility side",
+        "count": 0
+      },
+      {
+        "gate": "G8",
         "name": "position sizing",
         "count": 0
       }
     ]
   },
   "open_structures": [],
+  "closed_structures": [],
   "open_risk": 0.0,
   "equity_curve": [
     {
@@ -362,6 +371,14 @@
       "buying_power": 400000.0,
       "open_risk": 0.0,
       "day_pnl": 0.0
+    },
+    {
+      "ts": "2026-09-02T10:39:50.137111+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 0.0,
+      "day_pnl": -36.0
     }
   ],
   "recent_decisions": [
@@ -1568,6 +1585,102 @@
   ],
   "recent_orders": [
     {
+      "id": 27,
+      "ts": "2026-09-01T16:57:13.639364+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-94f83ff7d4",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-94f83ff7d4\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 26,
+      "ts": "2026-09-01T16:57:05.458321+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-2cab622e4d",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-2cab622e4d\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 25,
+      "ts": "2026-09-01T16:57:04.524361+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-666b073f94",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-666b073f94\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 24,
+      "ts": "2026-09-01T16:56:58.052484+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-17235324f7",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-17235324f7\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 23,
+      "ts": "2026-09-01T16:56:51.986872+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-e1407e4c58",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-e1407e4c58\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 22,
+      "ts": "2026-09-01T16:38:55.975869+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-343d25689e",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-343d25689e\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 21,
+      "ts": "2026-09-01T04:32:06.180191+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-98d364ddc9",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-98d364ddc9\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
+      "id": 20,
+      "ts": "2026-08-31T09:37:38.763972+00:00",
+      "structure_id": 1,
+      "client_order_id": "superio-main-pkg-6ff23ce842",
+      "broker_order_id": null,
+      "intent": "close_package:test",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"1\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"-1.18\", \"legs\": [{\"symbol\": \"S\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_close\"}, {\"symbol\": \"L\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_close\"}], \"client_order_id\": \"superio-main-pkg-6ff23ce842\"}",
+      "status": "dry_run",
+      "fill_price": null,
+      "error": null
+    },
+    {
       "id": 19,
       "ts": "2026-08-31T09:37:12.072667+00:00",
       "structure_id": 11,
@@ -1797,6 +1910,62 @@
     }
   ],
   "recent_events": [
+    {
+      "id": 36,
+      "ts": "2026-09-02T10:40:15.851667+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "0 of 9 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-02T10:39:50.138016+00:00\", \"equity\": 101379.16, \"regimes\": {\"SPY\": {\"spot\": 761.63, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.0717, \"atm_iv\": 0.1796, \"vol_premium\": 0.1078}, \"QQQ\": {\"spot\": 707.89, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1313, \"atm_iv\": 0.2793, \"vol_premium\": 0.148}, \"IWM\": {\"spot\": 290.55, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1196, \"atm_iv\": 0.2551, \"vol_premium\": 0.1355}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.26, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 174.0, \"reason\": \"G5 pricing: credit 13.0% of width is below the 18% floor\"}, {\"symbol\": \"SPY\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.27, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 73.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"SPY\", \"style\": \"iron_condor\", \"verdict\": \"unavailable\", \"reason\": \"no contracts fit that shape on last known quotes\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.37, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 263.0, \"reason\": \"G5 pricing: credit 12.3% of width is below the 18% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.27, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 73.0, \"reason\": \"G6 event blackout: Broadcom Q3 earnings at Wed 16:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"iron_condor\", \"verdict\": \"unavailable\", \"reason\": \"no contracts fit that shape on last known quotes\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.12, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 88.0, \"reason\": \"G5 pricing: credit 12.0% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.23, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 77.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"IWM\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.35, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 65.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}], \"brief\": {\"session_tone\": \"risk_off\", \"summary\": \"US equity futures are pointing to a lower open, continuing a multi-day losing streak. The main pressure is coming from a global rise in government bond yields and elevated oil prices, which are fueling concerns about inflation and potential interest rate hikes. [1, 2] Technology stocks are among the notable underperformers in the pre-market session. [2, 25]\", \"catalysts_today\": [\"ADP Employment Change (August)\", \"Factory Orders (July)\", \"EIA Crude Oil Inventories\", \"Fed's Beige Book release (2:00 PM ET)\", \"Quarterly earnings from Broadcom (AVGO), Hewlett Packard Enterprise (HPE), and Snowflake (SNOW)\"], \"vol_context\": \"The VIX index, a measure of expected market volatility, is higher, reflecting increased investor uncertainty. [18, 20]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US stock market today September 2 2026\", \"SPY QQQ IWM trading today September 2 2026\", \"economic data calendar September 2 2026\", \"Fed speakers today September 2 2026\", \"VIX index today September 2 2026\", \"market sentiment today risk-on risk-off\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"0 of 9 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 35,
+      "ts": "2026-09-02T10:40:15.850408+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equity futures are pointing to a lower open, continuing a multi-day losing streak. The main pressure is coming from a global rise in government bond yields and elevated oil prices, which are fueling concerns about inflation and potential interest rate hikes. [1, 2] Technology stocks are among the notable underperformers in the pre-market session. [2, 25]",
+      "data": "{\"session_tone\": \"risk_off\", \"summary\": \"US equity futures are pointing to a lower open, continuing a multi-day losing streak. The main pressure is coming from a global rise in government bond yields and elevated oil prices, which are fueling concerns about inflation and potential interest rate hikes. [1, 2] Technology stocks are among the notable underperformers in the pre-market session. [2, 25]\", \"catalysts_today\": [\"ADP Employment Change (August)\", \"Factory Orders (July)\", \"EIA Crude Oil Inventories\", \"Fed's Beige Book release (2:00 PM ET)\", \"Quarterly earnings from Broadcom (AVGO), Hewlett Packard Enterprise (HPE), and Snowflake (SNOW)\"], \"vol_context\": \"The VIX index, a measure of expected market volatility, is higher, reflecting increased investor uncertainty. [18, 20]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US stock market today September 2 2026\", \"SPY QQQ IWM trading today September 2 2026\", \"economic data calendar September 2 2026\", \"Fed speakers today September 2 2026\", \"VIX index today September 2 2026\", \"market sentiment today risk-on risk-off\"], \"cached\": false}"
+    },
+    {
+      "id": 34,
+      "ts": "2026-09-02T10:39:46.621459+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 33,
+      "ts": "2026-09-02T10:39:43.125626+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=main variant=barbell mode=LIVE PAPER",
+      "data": null
+    },
+    {
+      "id": 32,
+      "ts": "2026-09-02T10:33:37.325764+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 31,
+      "ts": "2026-08-31T10:43:53.449065+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "2 of 9 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-08-31T10:43:27.487724+00:00\", \"equity\": 100000.0, \"regimes\": {\"SPY\": {\"spot\": 769.3, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1038, \"atm_iv\": 0.1499, \"vol_premium\": 0.0461}, \"QQQ\": {\"spot\": 716.95, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1817, \"atm_iv\": 0.2268, \"vol_premium\": 0.0451}, \"IWM\": {\"spot\": 295.86, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1458, \"atm_iv\": 0.2288, \"vol_premium\": 0.083}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.33, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 267.0, \"reason\": \"G5 pricing: credit 11.0% of width is below the 18% floor\"}, {\"symbol\": \"SPY\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-03\", \"net_price\": 0.27, \"width\": 1.0, \"verdict\": \"would trade\", \"qty\": 10, \"max_loss\": 730.0, \"reason\": \"G7 buying power room 200,000 -> 10\"}, {\"symbol\": \"SPY\", \"style\": \"iron_condor\", \"verdict\": \"unavailable\", \"reason\": \"no contracts fit that shape on last known quotes\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-03\", \"net_price\": 0.16, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 84.0, \"reason\": \"G5 pricing: credit 16.0% of width is below the 18% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-03\", \"net_price\": 0.23, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 77.0, \"reason\": \"G6 event blackout: Broadcom Q3 earnings at Wed 16:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-03\", \"net_price\": 0.39, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 61.0, \"reason\": \"G6 event blackout: Broadcom Q3 earnings at Wed 16:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.13, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 87.0, \"reason\": \"G5 pricing: credit 13.0% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-01\", \"net_price\": 0.19, \"width\": 1.0, \"verdict\": \"would trade\", \"qty\": 9, \"max_loss\": 729.0, \"reason\": \"G7 buying power room 200,000 -> 9\"}, {\"symbol\": \"IWM\", \"style\": \"iron_condor\", \"verdict\": \"unavailable\", \"reason\": \"no contracts fit that shape on last known quotes\"}], \"brief\": {\"session_tone\": \"risk_off\", \"summary\": \"U.S. equity futures are pointing to a lower open, signaling a risk-off tone to start the week. [11] This follows hawkish remarks from Federal Reserve Chair Kevin Warsh at the Jackson Hole symposium on Friday, which increased expectations for a September rate hike. [8, 18] Escalating military actions between the U.S. and Iran are also contributing to market anxiety, pushing oil prices higher and fueling inflation concerns. [5, 11, 13]\", \"catalysts_today\": [\"Geopolitical tensions in the Middle East pushing oil prices higher. [2, 5]\", \"Market digesting hawkish comments from Fed Chair Kevin Warsh at the Jackson Hole symposium. [8, 10, 12]\", \"Fed data releases: G.20 - Finance Companies, CP - Commercial Paper (1:00 PM ET), H.10 - Foreign Exchange Rates (4:15 PM ET), H.15 - Selected Interest Rates (4:15 PM ET). [27]\", \"No major market-moving economic data scheduled for release in the U.S. today. [15]\"], \"vol_context\": \"The CBOE Volatility Index (VIX) fell on Friday to 14.43 but is being described as a 'bullish volatility watch' amid a cautious index regime. [1, 28]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity markets today August 31 2026\", \"market tone today August 31 2026\", \"SPY QQQ IWM trading today August 31 2026\", \"economic calendar August 31 2026\", \"Federal Reserve speakers today August 31 2026\", \"VIX today August 31 2026\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"2 of 9 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 30,
+      "ts": "2026-08-31T10:43:53.446135+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "U.S. equity futures are pointing to a lower open, signaling a risk-off tone to start the week. [11] This follows hawkish remarks from Federal Reserve Chair Kevin Warsh at the Jackson Hole symposium on Friday, which increased expectations for a September rate hike. [8, 18] Escalating military actions between the U.S. and Iran are also contributing to market anxiety, pushing oil prices higher and fu",
+      "data": "{\"session_tone\": \"risk_off\", \"summary\": \"U.S. equity futures are pointing to a lower open, signaling a risk-off tone to start the week. [11] This follows hawkish remarks from Federal Reserve Chair Kevin Warsh at the Jackson Hole symposium on Friday, which increased expectations for a September rate hike. [8, 18] Escalating military actions between the U.S. and Iran are also contributing to market anxiety, pushing oil prices higher and fueling inflation concerns. [5, 11, 13]\", \"catalysts_today\": [\"Geopolitical tensions in the Middle East pushing oil prices higher. [2, 5]\", \"Market digesting hawkish comments from Fed Chair Kevin Warsh at the Jackson Hole symposium. [8, 10, 12]\", \"Fed data releases: G.20 - Finance Companies, CP - Commercial Paper (1:00 PM ET), H.10 - Foreign Exchange Rates (4:15 PM ET), H.15 - Selected Interest Rates (4:15 PM ET). [27]\", \"No major market-moving economic data scheduled for release in the U.S. today. [15]\"], \"vol_context\": \"The CBOE Volatility Index (VIX) fell on Friday to 14.43 but is being described as a 'bullish volatility watch' amid a cautious index regime. [1, 28]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity markets today August 31 2026\", \"market tone today August 31 2026\", \"SPY QQQ IWM trading today August 31 2026\", \"economic calendar August 31 2026\", \"Federal Reserve speakers today August 31 2026\", \"VIX today August 31 2026\"], \"cached\": false}"
+    },
     {
       "id": 29,
       "ts": "2026-08-31T09:36:17.617870+00:00",
@@ -2030,7 +2199,160 @@
       "data": null
     }
   ],
-  "session_plan": null,
+  "session_plan": {
+    "generated_at": "2026-09-02T10:39:50.138016+00:00",
+    "equity": 101379.16,
+    "regimes": {
+      "SPY": {
+        "spot": 761.63,
+        "trend": "chop",
+        "bias": "neutral",
+        "realized_vol": 0.0717,
+        "atm_iv": 0.1796,
+        "vol_premium": 0.1078
+      },
+      "QQQ": {
+        "spot": 707.89,
+        "trend": "chop",
+        "bias": "neutral",
+        "realized_vol": 0.1313,
+        "atm_iv": 0.2793,
+        "vol_premium": 0.148
+      },
+      "IWM": {
+        "spot": 290.55,
+        "trend": "chop",
+        "bias": "neutral",
+        "realized_vol": 0.1196,
+        "atm_iv": 0.2551,
+        "vol_premium": 0.1355
+      }
+    },
+    "candidates": [
+      {
+        "symbol": "SPY",
+        "style": "put_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-08",
+        "net_price": 0.26,
+        "width": 2.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 174.0,
+        "reason": "G5 pricing: credit 13.0% of width is below the 18% floor"
+      },
+      {
+        "symbol": "SPY",
+        "style": "call_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-09",
+        "net_price": 0.27,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 73.0,
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+      },
+      {
+        "symbol": "SPY",
+        "style": "iron_condor",
+        "verdict": "unavailable",
+        "reason": "no contracts fit that shape on last known quotes"
+      },
+      {
+        "symbol": "QQQ",
+        "style": "put_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-04",
+        "net_price": 0.37,
+        "width": 3.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 263.0,
+        "reason": "G5 pricing: credit 12.3% of width is below the 18% floor"
+      },
+      {
+        "symbol": "QQQ",
+        "style": "call_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-08",
+        "net_price": 0.27,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 73.0,
+        "reason": "G6 event blackout: Broadcom Q3 earnings at Wed 16:30 ET lands before this expiry; not writing premium across it"
+      },
+      {
+        "symbol": "QQQ",
+        "style": "iron_condor",
+        "verdict": "unavailable",
+        "reason": "no contracts fit that shape on last known quotes"
+      },
+      {
+        "symbol": "IWM",
+        "style": "put_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-04",
+        "net_price": 0.12,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 88.0,
+        "reason": "G5 pricing: credit 12.0% of width is below the 18% floor"
+      },
+      {
+        "symbol": "IWM",
+        "style": "call_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-04",
+        "net_price": 0.23,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 77.0,
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+      },
+      {
+        "symbol": "IWM",
+        "style": "iron_condor",
+        "sleeve": "core",
+        "expiry": "2026-09-04",
+        "net_price": 0.35,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 65.0,
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+      }
+    ],
+    "brief": {
+      "session_tone": "risk_off",
+      "summary": "US equity futures are pointing to a lower open, continuing a multi-day losing streak. The main pressure is coming from a global rise in government bond yields and elevated oil prices, which are fueling concerns about inflation and potential interest rate hikes. [1, 2] Technology stocks are among the notable underperformers in the pre-market session. [2, 25]",
+      "catalysts_today": [
+        "ADP Employment Change (August)",
+        "Factory Orders (July)",
+        "EIA Crude Oil Inventories",
+        "Fed's Beige Book release (2:00 PM ET)",
+        "Quarterly earnings from Broadcom (AVGO), Hewlett Packard Enterprise (HPE), and Snowflake (SNOW)"
+      ],
+      "vol_context": "The VIX index, a measure of expected market volatility, is higher, reflecting increased investor uncertainty. [18, 20]",
+      "confidence": 0.8,
+      "grounded": true,
+      "sources": [
+        "US stock market today September 2 2026",
+        "SPY QQQ IWM trading today September 2 2026",
+        "economic data calendar September 2 2026",
+        "Fed speakers today September 2 2026",
+        "VIX index today September 2 2026",
+        "market sentiment today risk-on risk-off"
+      ],
+      "cached": false
+    },
+    "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
+    "summary": "0 of 9 structures would clear the gates at the next open",
+    "ts": "2026-09-02T10:40:15.851667+00:00"
+  },
   "google": {
     "connected": [],
     "tasks": [],
@@ -2087,16 +2409,6 @@
     }
   ],
   "upcoming": [
-    {
-      "name": "ISM Manufacturing PMI",
-      "when": "2026-09-01T10:00:00-04:00",
-      "impact": "medium"
-    },
-    {
-      "name": "JOLTS job openings",
-      "when": "2026-09-01T10:00:00-04:00",
-      "impact": "medium"
-    },
     {
       "name": "Broadcom Q3 earnings",
       "when": "2026-09-02T16:30:00-04:00",

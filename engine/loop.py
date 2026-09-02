@@ -152,17 +152,27 @@ def candidates_for(regime: Regime) -> list[Proposal]:
             call_side = build_credit_spread(regime.underlying, is_call=True)
             if call_side:
                 out.append(call_side)
-    else:
-        # Cheap options: lead with convexity in the direction of the trend, but
-        # still take a credit spread if one clears the credit-to-width floor.
-        if convex_enabled and regime.bias in {"bullish", "neutral"}:
-            debit = build_debit_spread(regime.underlying, is_call=True)
-            if debit:
-                out.append(debit)
-        if convex_enabled and regime.bias in {"bearish", "neutral"}:
-            debit = build_debit_spread(regime.underlying, is_call=False)
-            if debit:
-                out.append(debit)
+    # Convexity is built in every regime and left to G7 to route, rather than
+    # being withheld unless the volatility premium is already negative. The
+    # premium band that gate enforces is wider than the sign of the premium, so
+    # withholding on sign alone meant that on any day with a premium between
+    # zero and the buy threshold the agent built no convex structure at all,
+    # even though the gate would have allowed one. On a day where credit
+    # spreads also failed the credit floor that left nothing to trade, which is
+    # what the rehearsal was reporting all week.
+    #
+    # The principle is the same one the whole design rests on: propose broadly,
+    # let the numbered gates refuse. A structure withheld before the gates
+    # cannot be explained by a gate, so it shows up nowhere.
+    if convex_enabled and regime.bias in {"bullish", "neutral"}:
+        debit = build_debit_spread(regime.underlying, is_call=True)
+        if debit:
+            out.append(debit)
+    if convex_enabled and regime.bias in {"bearish", "neutral"}:
+        debit = build_debit_spread(regime.underlying, is_call=False)
+        if debit:
+            out.append(debit)
+    if not iv_is_rich:
         credit = build_credit_spread(regime.underlying, is_call=(regime.bias == "bearish"))
         if credit:
             out.append(credit)
