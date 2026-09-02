@@ -326,6 +326,66 @@ def test_failed_entries_are_still_bounded():
     assert ok, why
 
 
+def test_the_book_cannot_risk_more_than_the_kill_switch_tolerates():
+    """Open risk has to stay inside the drawdown that stands the agent down.
+
+    Every structure's maximum loss is known, so fully deployed the worst case
+    is the open-risk cap. If that cap is allowed above the total-drawdown kill
+    switch then one gap through every position ends the event, and the kill
+    switch fires having protected nothing. This is the invariant that makes
+    "should we deploy more" a bounded question rather than an open one.
+    """
+    from engine.config import VARIANTS
+
+    for name, (risk_cfg, _strategy) in VARIANTS.items():
+        assert risk_cfg.max_open_risk_pct < risk_cfg.total_drawdown_kill_pct, (
+            f"{name} can hold {risk_cfg.max_open_risk_pct:.1%} of risk against a "
+            f"{risk_cfg.total_drawdown_kill_pct:.1%} kill switch"
+        )
+
+
+def test_short_premium_cannot_eat_the_whole_risk_budget():
+    """The reason the book was capped at a one percent week.
+
+    Only convex and carry had sleeve caps, so premium selling was bounded by
+    nothing but the portfolio total. It is the cheapest structure to build and
+    the most often available, so it filled the budget first and the two sleeves
+    with real payoffs competed for the remainder. At the credit floor a credit
+    spread wins about 0.22 per unit risked, so a book fully deployed in premium
+    has a theoretical best week near 1.3% whatever else is true.
+    """
+    from engine.config import SETTINGS
+
+    r = SETTINGS.risk
+    assert 0 < r.max_core_open_risk_pct < r.max_open_risk_pct, r.max_core_open_risk_pct
+
+    headroom = r.max_open_risk_pct - r.max_core_open_risk_pct
+    assert headroom > r.max_core_open_risk_pct, (
+        "most of the budget must be reachable by the sleeves that pay more than "
+        "a fraction of what they risk"
+    )
+
+
+def test_every_sleeve_is_capped_by_name():
+    """A sleeve with no cap is a sleeve that can consume the others.
+
+    Sizing looks its cap up by sleeve name, so a sleeve added to the Sleeve
+    type without a matching cap is silently unbounded within the portfolio
+    total. That is exactly how core came to hold 85% of the budget.
+    """
+    from typing import get_args
+
+    from engine.config import SETTINGS
+    from engine.types import Sleeve
+
+    r = SETTINGS.risk
+    for sleeve in get_args(Sleeve):
+        assert hasattr(r, f"max_{sleeve}_open_risk_pct"), (
+            f"sleeve {sleeve!r} has no max_{sleeve}_open_risk_pct, so sizing "
+            f"cannot bound it"
+        )
+
+
 if __name__ == "__main__":
     import sys
     mod = sys.modules[__name__]

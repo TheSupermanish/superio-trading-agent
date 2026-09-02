@@ -149,6 +149,7 @@ def size_position(proposal: Proposal, snap: PortfolioSnapshot) -> tuple[int, lis
     notes.append(f"portfolio room {portfolio_room:,.0f} -> {qty}")
 
     SLEEVE_CAPS = {
+        "core": r.max_core_open_risk_pct,
         "convex": r.max_convex_open_risk_pct,
         "carry": r.max_carry_open_risk_pct,
     }

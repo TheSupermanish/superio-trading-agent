@@ -148,6 +148,55 @@ Friday. The same engine runs on two further paper accounts with different
 presets, a convexity-led variant and an income-only control, so the week
 produces a comparison rather than a single number.
 
+## Why the week was capped at one percent
+
+The judged account finished its first four sessions up 1.38%. That looks like
+under-deployment and it is not; it is arithmetic, and it is worth writing out
+because it decides what to fix.
+
+Only the convex and carry sleeves had caps of their own. Short premium was
+bounded by nothing but the portfolio total, and it is the cheapest structure to
+build and the most frequently available, so it filled the budget first and the
+sleeves with real payoffs competed for whatever was left.
+
+At the 18% credit-to-width floor, a credit spread wins 0.22 dollars for every
+dollar it risks. So a book fully deployed in premium selling looks like this:
+
+| | |
+| --- | --- |
+| Full deployment at the 6% cap | $6,083 |
+| Credit per dollar of risk | 0.22 |
+| Best possible week, every spread expiring worthless | **1.32%** of equity |
+| At the 55% profit target actually used | **0.72%** of equity |
+
+The account made 1.38%. It had already beaten the theoretical ceiling of the
+sleeve holding most of its risk, and it did that because one debit spread
+returned 140% on risk and carried the week.
+
+Deploying more does not fix a 0.22x payoff, it scales it. The same $6,083 of
+risk, allocated three ways:
+
+| Sleeve | Payoff | Max gain | As % of equity |
+| --- | --- | --- | --- |
+| core, sell premium | 0.22x | $1,335 | 1.32% |
+| convex, buy convexity | ~3.0x | $18,248 | 18.0% |
+| carry, financed long delta | ~2.6x | $15,815 | 15.6% |
+
+So the fix is allocation, not leverage. Core is now capped at 2% of equity, and
+the 6% portfolio total is unchanged, which means the risk of ruin is exactly
+what it was and roughly two thirds of the budget is now reachable by structures
+that can pay more than a fifth of what they risk. Measured against the live
+chain, that is $4,509 of risk across carry and convex with about $11,000 of
+maximum gain, against a previous ceiling of $1,335 for the same risk.
+
+Two invariants are now pinned by tests, because both were violated in code that
+ran. Every sleeve in the `Sleeve` type must have a cap named after it, or
+sizing cannot bound it: that is how core came to hold most of the budget. And
+open risk must stay below the total-drawdown kill switch, or a gap through
+every position ends the event while the switch protects nothing. The `levered`
+preset failed that second test on sight, holding 12% of risk against an 8%
+switch, which is why it replayed at a 113% drawdown.
+
 ## The sleeve that holds something
 
 The first version of this agent traded nothing that lived longer than a week.

@@ -40,14 +40,14 @@ def _env_bool(name: str, default: bool) -> bool:
 class RiskLimits:
     """Hard limits. The LLM proposes trades; these numbers decide."""
 
-    core_risk_share: float = 0.55
-    convex_risk_share: float = 0.15
+    core_risk_share: float = 0.30
+    convex_risk_share: float = 0.25
     #: The long-horizon sleeve. Everything else this agent trades is a one to
     #: seven day position, which means the book has no exposure at all to the
     #: one edge in equities that is actually well documented: the equity risk
     #: premium. You are not paid it by being flat overnight. This sleeve is
     #: how the agent holds a directional position for weeks instead of hours.
-    carry_risk_share: float = 0.30
+    carry_risk_share: float = 0.45
 
     max_risk_per_trade_pct: float = 0.0075   # <= 0.75% of equity on one structure
     #: Carry gets its own, larger per-trade cap. At 0.75% a carry position
@@ -59,6 +59,20 @@ class RiskLimits:
     #: aggregate is still bounded by max_carry_open_risk_pct.
     max_carry_risk_per_trade_pct: float = 0.0125
     max_open_risk_pct: float = 0.06          # <= 6% of equity at risk at once
+    #: The income sleeve needs a ceiling of its own, and this is the whole
+    #: reason the book was capped at a one percent week.
+    #:
+    #: Only the convex and carry sleeves had caps, so short premium was bounded
+    #: by nothing but the total. It is also the cheapest structure to build and
+    #: the most frequently available, so it filled the budget first and the two
+    #: sleeves with real payoffs competed for whatever was left. At the 18%
+    #: credit-to-width floor a credit spread wins 0.22 dollars per dollar
+    #: risked, so six percent of equity deployed entirely in premium selling
+    #: has a theoretical best week of 1.32% and a realistic one of 0.72%. That
+    #: is not a deployment problem, it is arithmetic: the account made 1.38%
+    #: and had already beaten what the sleeve holding most of its risk can
+    #: produce.
+    max_core_open_risk_pct: float = 0.020
     # The convex sleeve gets a real allocation rather than a token one. With
     # implied vol below realized on the whole universe, premium selling is being
     # paid too little for the movement the tape is actually delivering, so the
@@ -68,7 +82,7 @@ class RiskLimits:
     #: structure occupies its budget for weeks, so a cap the size of the
     #: tactical sleeves' would let two positions consume the sleeve for the
     #: whole month.
-    max_carry_open_risk_pct: float = 0.035
+    max_carry_open_risk_pct: float = 0.045
     max_risk_per_underlying_pct: float = 0.025
 
     daily_loss_kill_pct: float = 0.03        # flatten and stand down for the day
@@ -246,6 +260,14 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
             max_risk_per_trade_pct=0.015,
             max_carry_risk_per_trade_pct=0.025,
             max_open_risk_pct=0.12,
+            # Doubling deployment without moving the kill switches is not a
+            # more aggressive configuration, it is an incoherent one: fully
+            # deployed the worst case is 12% against a switch that stands the
+            # agent down at 8%, so one gap ends the event and the switch has
+            # protected nothing. This is why the preset replayed at a 113%
+            # drawdown, and why it stays a diary book.
+            daily_loss_kill_pct=0.06,
+            total_drawdown_kill_pct=0.16,
             max_convex_open_risk_pct=0.06,
             max_carry_open_risk_pct=0.07,
             max_risk_per_underlying_pct=0.05,
