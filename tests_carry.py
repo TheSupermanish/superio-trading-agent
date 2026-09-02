@@ -302,6 +302,79 @@ def test_a_control_arm_holds_only_the_sleeves_it_is_a_control_for():
             assert risk_cfg.core_risk_share == 0, name
 
 
+def test_a_losing_carry_position_can_actually_be_closed():
+    """The stop-loss has to be fillable in the case it exists for.
+
+    A vertical's cost to close never changes sign: a short spread always costs
+    something to buy back, a long spread is always worth something to sell. A
+    risk reversal is short one spread and long another, so it does change sign.
+    A carry position opened for a debit that then goes against us costs money
+    to close, and dispatching the limit on the ENTRY price sends an order to
+    sell it for a credit instead. That order can never fill, and the moment it
+    matters is the crash the stop exists for.
+
+    Exercised through close_package itself, reading back the limit it actually
+    recorded, so the test cannot pass by agreeing with a copy of the logic.
+    """
+    structure = _structure(net_price=-3.63, qty=1)
+
+    # Rallied: closing pays us, so the package is sold for a credit.
+    rallied = _recorded_close_limit(structure, cost_to_close=-15.00)
+    assert rallied < 0, f"a package that pays to close must be sold for a credit: {rallied}"
+
+    # Crashed: closing costs us, so it must be bought back for a debit even
+    # though the position was opened for one.
+    crashed = _recorded_close_limit(structure, cost_to_close=+5.00)
+    assert crashed > 0, (
+        f"a package that costs money to close must be bought back for a debit, "
+        f"got {crashed}"
+    )
+
+
+def _recorded_close_limit(structure: dict, cost_to_close: float) -> float:
+    """Run close_package in dry run and return the limit price it journaled."""
+    import json
+    import tempfile
+    from pathlib import Path
+
+    from engine import closing, state
+
+    tmp = Path(tempfile.mkdtemp()) / "close.db"
+    state.init_db(tmp)
+    saved_dry = closing.SETTINGS.__class__.dry_run
+    closing.SETTINGS.__class__.dry_run = property(lambda self: True)
+    state.SETTINGS.__class__.db_path = property(lambda self: tmp)
+    try:
+        ok, _detail = closing.close_package(
+            {**structure, "id": 1}, cost_to_close, "stop_loss"
+        )
+        assert ok, "a dry-run close must report success"
+        with state.db(tmp) as conn:
+            row = conn.execute(
+                "SELECT payload FROM orders ORDER BY id DESC LIMIT 1"
+            ).fetchone()
+        assert row is not None, "close_package journaled nothing"
+        return float(json.loads(row["payload"])["limit_price"])
+    finally:
+        closing.SETTINGS.__class__.dry_run = saved_dry
+        state._INITIALISED.discard(tmp)
+
+
+def test_the_close_payload_flips_all_four_legs():
+    """Every leg has to reverse, not just the two that opened as shorts."""
+    from engine import executor
+
+    structure = _structure(net_price=-3.63, qty=1)
+    payload = executor.build_close_payload(structure["legs"], 1, 4.00)
+
+    assert len(payload["legs"]) == 4, payload["legs"]
+    assert payload["order_class"] == "mleg"
+    opened = {leg["symbol"]: leg["side"] for leg in structure["legs"]}
+    for leg in payload["legs"]:
+        assert leg["side"] != opened[leg["symbol"]], leg
+        assert leg["position_intent"].endswith("_to_close"), leg
+
+
 if __name__ == "__main__":
     mod = sys.modules[__name__]
     failed = 0

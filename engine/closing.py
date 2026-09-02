@@ -194,14 +194,22 @@ def close_package(
     structure: dict[str, Any], net_price: float, reason: str
 ) -> tuple[bool, str]:
     """Try to close the spread in one order. Returns (succeeded, detail)."""
-    entry = float(structure["net_price"])
-    # Exiting a credit structure means buying it back, so we pay a debit and
-    # the limit is positive; being marketable means offering MORE.
-    # Exiting a debit structure means selling it, so we receive a credit and
-    # the limit is negative; being marketable means accepting LESS.
-    # Padding in one direction for both cases makes half the exits unfillable,
-    # which is the worst possible time to be stubborn about a penny.
-    if entry > 0:
+    # `net_price` is what it costs to close RIGHT NOW, and its sign is what
+    # decides the limit: pay a debit and the limit is positive, with marketable
+    # meaning offer MORE; receive a credit and the limit is negative, with
+    # marketable meaning accept LESS. Padding one way for both cases makes half
+    # the exits unfillable, which is the worst possible moment to be stubborn
+    # about a penny.
+    #
+    # This used to dispatch on the entry price instead, which is right for
+    # every vertical and wrong for a risk reversal. A short spread always costs
+    # something to buy back and a long spread is always worth something to sell,
+    # so a vertical's cost to close never changes sign. A risk reversal is short
+    # one spread and long another, so it does: a carry position opened for a
+    # debit that then goes against us costs money to close, and dispatching on
+    # the entry would send an order to SELL it for a credit. That order can
+    # never fill, and the one time it matters is the crash the stop exists for.
+    if net_price > 0:
         limit = abs(net_price) * (1 + MARKETABLE_PAD)
     else:
         limit = -abs(net_price) * (1 - MARKETABLE_PAD)
