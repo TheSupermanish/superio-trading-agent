@@ -67,6 +67,73 @@ def _structure_value(legs: list[dict[str, Any]], mids: dict[str, float]) -> floa
     return total
 
 
+def _mark_carry(
+    structure: dict[str, Any], entry: float, current: float, qty: int, dte: int
+) -> Mark:
+    """Exit rules for a long-horizon risk reversal.
+
+    This sleeve cannot be marked by the sign of its entry price, which is how
+    every other structure here is dispatched. A risk reversal is a financed
+    package: it can open for a small credit or a small debit depending on where
+    the skew is that morning, and the sign says nothing about the position. Run
+    through the credit branch, a carry position opened for a ten cent credit
+    would be judged against 55% of ten cents, hit that target on the first tick
+    and be closed for nothing.
+
+    So it is marked against its own risk instead: profit and loss as a fraction
+    of the maximum loss underwritten at entry, which is the number the risk
+    officer actually sized.
+    """
+    p = SETTINGS.strategy
+    max_loss = float(structure["max_loss"])
+    max_gain = float(structure["max_gain"])
+
+    # `current` is what it costs to close, the same convention the credit
+    # branch uses: a package that has gained is cheaper to close, or pays more
+    # to close, so profit is entry minus current. Getting this backwards would
+    # not throw: it would report the best possible outcome as the worst, stop
+    # out every winner and hold every loser to expiry.
+    unrealized = (entry - current) * CONTRACT_MULTIPLIER * qty
+    risk_fraction = unrealized / max_loss if max_loss else 0.0
+    gain_fraction = unrealized / max_gain if max_gain else 0.0
+
+    if gain_fraction >= p.carry_profit_target:
+        action, why = "take_profit", (
+            f"up {unrealized:,.0f} on {max_gain:,.0f} of maximum gain, "
+            f"{gain_fraction:.0%} of it, target is {p.carry_profit_target:.0%}"
+        )
+    elif risk_fraction <= -p.carry_stop_fraction:
+        action, why = "stop_loss", (
+            f"down {-unrealized:,.0f} against {max_loss:,.0f} underwritten, "
+            f"{-risk_fraction:.1f}x, stop is {p.carry_stop_fraction:.1f}x"
+        )
+    elif dte <= p.carry_min_hold_dte:
+        action, why = "time_exit", (
+            f"{dte} days left, below the {p.carry_min_hold_dte} day floor; "
+            "gamma rises into the last fortnight and the thesis was about weeks"
+        )
+    else:
+        action, why = "hold", (
+            f"{risk_fraction:+.0%} of risk, {gain_fraction:+.0%} of max gain, "
+            f"{dte} days to expiry"
+        )
+
+    return Mark(
+        structure_id=int(structure["id"]),
+        kind=structure["kind"],
+        sleeve=structure["sleeve"],
+        underlying=structure["underlying"],
+        qty=qty,
+        entry_price=entry,
+        current_price=current,
+        unrealized_pnl=unrealized,
+        pct_of_max_gain=gain_fraction,
+        dte=dte,
+        action=action,
+        rationale=why,
+    )
+
+
 def mark_structure(structure: dict[str, Any], mids: dict[str, float]) -> Mark | None:
     legs = structure["legs"]
     qty = int(structure["qty"])
@@ -79,6 +146,10 @@ def mark_structure(structure: dict[str, Any], mids: dict[str, float]) -> Mark | 
     dte = (expiry - datetime.now(timezone.utc).date()).days
 
     p = SETTINGS.strategy
+
+    if structure["sleeve"] == "carry":
+        return _mark_carry(structure, entry, current, qty, dte)
+
     if entry > 0:
         # Credit structure: we sold for `entry`, we buy it back for `current`.
         unrealized = (entry - current) * CONTRACT_MULTIPLIER * qty

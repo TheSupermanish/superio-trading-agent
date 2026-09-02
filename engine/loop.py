@@ -31,7 +31,12 @@ from engine import (
 from engine.agents import agent
 from engine.config import SETTINGS
 from engine.regime import Regime, read as read_regime
-from engine.strategies import build_credit_spread, build_debit_spread, build_iron_condor
+from engine.strategies import (
+    build_credit_spread,
+    build_debit_spread,
+    build_iron_condor,
+    build_risk_reversal,
+)
 from engine.types import Proposal
 
 log = logging.getLogger("superio")
@@ -97,9 +102,16 @@ def score(proposal: Proposal) -> float:
     structures score on payoff ratio, scaled down so a lottery ticket does not
     automatically outrank a solid premium sale.
     """
+    payoff = proposal.max_gain_per_unit / proposal.max_loss_per_unit
+    if proposal.sleeve == "carry":
+        # Carry is scored on payoff like a debit structure, but not discounted
+        # like one. A convex spread is discounted because it is a short-dated
+        # bet that usually expires worthless; a risk reversal is a financed
+        # multi-week position that is long delta, so its payoff is not the same
+        # kind of number and should not be marked down as if it were.
+        return payoff * 0.30
     if proposal.is_credit:
         return proposal.net_price / proposal.width
-    payoff = proposal.max_gain_per_unit / proposal.max_loss_per_unit
     return payoff * 0.10
 
 
@@ -114,6 +126,18 @@ def candidates_for(regime: Regime) -> list[Proposal]:
     premium = regime.vol_premium
     iv_is_rich = premium is not None and premium > 0
     convex_enabled = SETTINGS.risk.max_convex_open_risk_pct > 0
+    carry_enabled = SETTINGS.risk.max_carry_open_risk_pct > 0
+
+    # Carry is offered in every regime rather than routed by the volatility
+    # premium. It is not a view on whether options are cheap this week: it is
+    # long equity exposure held for weeks, financed by the skew, and the skew
+    # is there whatever the level of implied vol is doing. Refusing it in rich
+    # vol would mean the book only ever holds a directional position in the
+    # regimes where it least needs the help.
+    if carry_enabled and regime.bias in {"bullish", "neutral"}:
+        reversal = build_risk_reversal(regime.underlying)
+        if reversal:
+            out.append(reversal)
 
     if iv_is_rich or regime.bias == "neutral":
         if regime.bias == "neutral":
@@ -145,6 +169,8 @@ def candidates_for(regime: Regime) -> list[Proposal]:
 
     if not convex_enabled:
         out = [p for p in out if p.sleeve != "convex"]
+    if not carry_enabled:
+        out = [p for p in out if p.sleeve != "carry"]
 
     return sorted(out, key=score, reverse=True)
 

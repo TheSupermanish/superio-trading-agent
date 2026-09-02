@@ -110,9 +110,10 @@ def _liquidity_ok(proposal: Proposal) -> tuple[bool, str]:
 
 def _pricing_ok(proposal: Proposal) -> tuple[bool, str]:
     r = SETTINGS.risk
-    if proposal.width <= 0:
+    width = proposal.pricing_width
+    if width <= 0:
         return False, "structure has no width"
-    ratio = abs(proposal.net_price) / proposal.width
+    ratio = abs(proposal.net_price) / width
     if proposal.is_credit:
         if ratio < r.min_credit_to_width:
             return False, (
@@ -134,7 +135,12 @@ def size_position(proposal: Proposal, snap: PortfolioSnapshot) -> tuple[int, lis
     if unit_risk <= 0:
         return 0, ["structure reports zero max loss, refusing to size it"]
 
-    per_trade_cap = snap.equity * r.max_risk_per_trade_pct
+    per_trade_pct = (
+        r.max_carry_risk_per_trade_pct
+        if proposal.sleeve == "carry"
+        else r.max_risk_per_trade_pct
+    )
+    per_trade_cap = snap.equity * per_trade_pct
     qty = int(per_trade_cap // unit_risk)
     notes.append(f"per-trade cap {per_trade_cap:,.0f} / unit risk {unit_risk:,.0f} -> {qty}")
 
@@ -142,12 +148,15 @@ def size_position(proposal: Proposal, snap: PortfolioSnapshot) -> tuple[int, lis
     qty = min(qty, int(max(portfolio_room, 0) // unit_risk))
     notes.append(f"portfolio room {portfolio_room:,.0f} -> {qty}")
 
-    if proposal.sleeve == "convex":
-        sleeve_room = snap.equity * r.max_convex_open_risk_pct - state.open_risk_by(
-            "sleeve", "convex"
-        )
+    SLEEVE_CAPS = {
+        "convex": r.max_convex_open_risk_pct,
+        "carry": r.max_carry_open_risk_pct,
+    }
+    if proposal.sleeve in SLEEVE_CAPS:
+        cap = SLEEVE_CAPS[proposal.sleeve]
+        sleeve_room = snap.equity * cap - state.open_risk_by("sleeve", proposal.sleeve)
         qty = min(qty, int(max(sleeve_room, 0) // unit_risk))
-        notes.append(f"convex sleeve room {sleeve_room:,.0f} -> {qty}")
+        notes.append(f"{proposal.sleeve} sleeve room {sleeve_room:,.0f} -> {qty}")
 
     underlying_room = snap.equity * r.max_risk_per_underlying_pct - state.open_risk_by(
         "underlying", proposal.underlying
@@ -194,6 +203,16 @@ def _volatility_side_ok(proposal: Proposal) -> tuple[bool, str]:
     """
     r = SETTINGS.risk
     premium = proposal.vol_premium
+
+    if proposal.sleeve == "carry":
+        # A risk reversal is short put volatility and long call volatility at
+        # the same time, so the level of implied vol is not what decides
+        # whether it is a good trade: the shape is. It sells the expensive side
+        # of the skew to fund the cheap side, which holds whether the surface
+        # as a whole is rich or cheap. Routing it on a single premium reading
+        # would refuse it for a reason that does not apply to it.
+        return True, "carry sells the skew, not the level; premium routing does not apply"
+
     if premium is None:
         return True, "no volatility reading available; not blocking on it"
 

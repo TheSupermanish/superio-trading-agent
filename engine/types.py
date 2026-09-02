@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from typing import Any, Literal
 
-Sleeve = Literal["core", "convex"]
+Sleeve = Literal["core", "convex", "carry"]
 Side = Literal["buy", "sell"]
 
 CONTRACT_MULTIPLIER = 100
@@ -91,6 +91,30 @@ class Proposal:
     @property
     def is_credit(self) -> bool:
         return self.net_price > 0
+
+    @property
+    def pricing_width(self) -> float:
+        """The width the price should be judged against.
+
+        For a vertical this is just the strike width, and the arithmetic below
+        reduces to exactly that. For a package with two different widths it is
+        not: a risk reversal risks the put width and can win the call width, so
+        judging its debit against the put width asks whether the premium paid
+        is a sensible fraction of a number the premium did not buy. On a live
+        SPY chain that read as a debit of 110% of width and refused every
+        structure the sleeve could build.
+
+        Stated properly, the denominator is what the structure can pay out
+        gross: the maximum gain plus whatever was paid to get it, or the
+        maximum loss plus whatever was received for taking it.
+        """
+        # max_loss_per_unit and max_gain_per_unit are per-contract dollars;
+        # net_price is per-share points. Mixing them silently turned a 1.2
+        # credit on a 5 wide spread into 0.3% of width and refused the whole
+        # income sleeve, so the conversion is explicit here.
+        if self.is_credit:
+            return self.max_loss_per_unit / CONTRACT_MULTIPLIER + self.net_price
+        return self.max_gain_per_unit / CONTRACT_MULTIPLIER + abs(self.net_price)
 
     @property
     def slippage_budget(self) -> float:

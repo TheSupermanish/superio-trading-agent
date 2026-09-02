@@ -178,10 +178,17 @@ def check(
 
     Convex structures are always allowed: being long gamma into a scheduled
     catalyst is the trade, not the hazard.
+
+    Carry is allowed for a different reason. This gate exists to stop the agent
+    writing short-dated premium directly into a known event, where the whole
+    move lands inside the position's remaining life. A structure five to nine
+    weeks out spans every catalyst on the calendar by construction, so applying
+    the blackout to it would refuse the sleeve entirely rather than protect it.
+    Holding through events is what a multi-week position is for.
     """
     now = now or datetime.now(ET)
 
-    if not is_credit or sleeve == "convex":
+    if not is_credit or sleeve in {"convex", "carry"}:
         pending = events_before(expiry, underlying, now)
         if pending:
             names = ", ".join(e.name for e in pending)

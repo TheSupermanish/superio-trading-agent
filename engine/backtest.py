@@ -423,6 +423,168 @@ REGIME_WEIGHTS = (
 )
 
 
+#: How often a new carry position is opened, in trading days. The sleeve holds
+#: for five to nine weeks, so opening one every fortnight keeps two or three
+#: overlapping rather than replacing the position every session.
+CARRY_CADENCE = 10
+
+
+def _reversal_value(
+    spot: float,
+    short_put: float,
+    long_put: float,
+    long_call: float,
+    short_call: float,
+    t: float,
+    iv: float,
+) -> float:
+    """Cost to close the four-leg package, signed as the live manager signs it.
+
+    Sold legs cost money to buy back, bought legs return money when sold, so a
+    package that has gained is cheaper (or pays more) to close.
+    """
+    def price(strike: float, is_call: bool) -> float:
+        return bs_price(spot, strike, t, skewed_iv(iv, spot, strike), is_call)
+
+    return (
+        price(short_put, False)
+        - price(long_put, False)
+        - price(long_call, True)
+        + price(short_call, True)
+    )
+
+
+def run_carry(
+    symbol: str,
+    vrp: float,
+    years: int = 5,
+    equity: float = 100_000.0,
+    bars: list[dict[str, Any]] | None = None,
+    config: tuple[Any, Any] | None = None,
+) -> list[Trade]:
+    """Replay the carry sleeve: financed bullish risk reversals held for weeks.
+
+    Run as its own pass rather than folded into the tactical loop, because that
+    loop advances by the life of each position. A forty-five day structure
+    would consume the whole replay and the other sleeves would never trade.
+
+    The volatility premium is swept here as everywhere else, but this sleeve is
+    much less sensitive to it than the other two: it is short put volatility
+    and long call volatility at once, so a uniform shift in implied vol largely
+    cancels. What it is sensitive to is the skew, which is modelled, and the
+    direction of the tape, which is real.
+    """
+    r, p = config if config else (SETTINGS.risk, SETTINGS.strategy)
+    if r.max_carry_open_risk_pct <= 0:
+        return []
+
+    bars = bars if bars is not None else daily_bars(symbol, days=252 * years)
+    closes = [b["close"] for b in bars]
+    dates = [datetime.fromisoformat(b["ts"]).date() for b in bars]
+
+    trades: list[Trade] = []
+    cash = equity
+    dte = (p.carry_min_dte + p.carry_max_dte) // 2
+
+    i = 60
+    while i < len(bars) - 1:
+        window = closes[: i + 1]
+        rv = realized_vol(window)
+        if rv is None or rv <= 0:
+            i += 1
+            continue
+
+        iv = rv * vrp
+        spot = closes[i]
+        sma20 = mean(window[-20:])
+        sma50 = mean(window[-50:]) if len(window) >= 50 else sma20
+        # Long delta only when the tape is not actively falling. This sleeve is
+        # paid for holding equity risk; it is not paid for holding it into a
+        # downtrend.
+        if spot < sma20 < sma50:
+            i += CARRY_CADENCE
+            continue
+
+        t = year_fraction(dte)
+        short_put = strike_for_delta(spot, t, iv, p.carry_put_delta, False)
+        long_call = strike_for_delta(spot, t, iv, p.carry_call_delta, True)
+
+        best: tuple[float, float, float, float, float, float] | None = None
+        for put_width in p.carry_put_widths:
+            for call_width in p.carry_call_widths:
+                long_put = short_put - put_width
+                short_call = long_call + call_width
+                # The cost to close a package at entry IS its net price in the
+                # credit-positive convention: both are
+                # short_put - long_put - long_call + short_call. Crossing four
+                # spreads makes a credit smaller and a debit larger, which is
+                # one subtraction either way.
+                net = _reversal_value(
+                    spot, short_put, long_put, long_call, short_call, t, iv
+                ) - 4 * LEG_COST
+                loss_points = put_width - net
+                gain_points = call_width + net
+                if loss_points <= 0 or gain_points <= 0:
+                    continue
+                if net < 0 and (-net) / call_width > p.carry_max_net_debit_to_call_width:
+                    continue
+                payoff = gain_points / loss_points
+                if best is None or payoff > best[0]:
+                    best = (payoff, net, short_put, long_put, long_call, short_call)
+
+        if best is None:
+            i += CARRY_CADENCE
+            continue
+
+        _payoff, net, short_put, long_put, long_call, short_call = best
+        put_width = short_put - long_put
+        call_width = short_call - long_call
+        max_loss = (put_width - net) * 100
+        max_gain = (call_width + net) * 100
+        qty = int((cash * r.max_carry_risk_per_trade_pct) // max_loss)
+        if qty < 1:
+            i += CARRY_CADENCE
+            continue
+
+        trade = Trade(
+            opened=dates[i], closed=None, symbol=symbol, sleeve="carry",
+            kind="risk_reversal", qty=qty, net_price=net,
+            max_loss_per_unit=max_loss,
+        )
+
+        for j in range(i + 1, min(i + dte + 1, len(bars))):
+            days_left = dte - (j - i)
+            tj = year_fraction(max(days_left, 1e-4))
+            rvj = realized_vol(closes[: j + 1]) or rv
+            current = _reversal_value(
+                closes[j], short_put, long_put, long_call, short_call, tj, rvj * vrp
+            )
+            unrealized = (net - current) * 100 * qty
+            if unrealized >= max_gain * qty * p.carry_profit_target:
+                trade.pnl = unrealized - 4 * LEG_COST * 100 * qty
+                trade.reason = "profit target"
+            elif unrealized <= -max_loss * qty * p.carry_stop_fraction:
+                trade.pnl = unrealized - 4 * LEG_COST * 100 * qty
+                trade.reason = "stop"
+            elif days_left <= p.carry_min_hold_dte:
+                trade.pnl = unrealized - 4 * LEG_COST * 100 * qty
+                trade.reason = "time exit"
+
+            if trade.reason:
+                trade.closed = dates[j]
+                break
+
+        if trade.closed is None:
+            trade.closed = dates[min(i + dte, len(dates) - 1)]
+            trade.reason = trade.reason or "time exit"
+
+        cash += trade.pnl
+        trades.append(trade)
+        i += CARRY_CADENCE
+
+    return trades
+
+
 def compare_variants(
     symbols: tuple[str, ...] = ("SPY", "QQQ", "IWM"),
     years: int = 5,
@@ -453,6 +615,10 @@ def compare_variants(
                     config=(risk_cfg, strategy_cfg), equity=equity,
                 )
                 regime_trades.extend(res.trades)
+                regime_trades.extend(run_carry(
+                    symbol, vrp, years=years, bars=cached[symbol],
+                    config=(risk_cfg, strategy_cfg), equity=equity,
+                ))
             weighted_pnl += sum(t.pnl for t in regime_trades) * weight
             trades.extend(regime_trades)
 

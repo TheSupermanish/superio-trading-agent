@@ -13,7 +13,7 @@ failed=0
 SCRATCH="$(mktemp -d)"
 trap 'rm -rf "$SCRATCH"' EXIT
 
-for suite in tests_risk.py tests_fills.py tests_manager.py tests_retry.py; do
+for suite in tests_risk.py tests_carry.py tests_fills.py tests_manager.py tests_retry.py; do
   echo "=== $suite ==="
   DRY_RUN=true SUPERIO_DB="$SCRATCH/${suite%.py}.db" "$PY" "$suite" || failed=1
 done

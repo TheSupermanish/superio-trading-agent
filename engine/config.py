@@ -40,16 +40,35 @@ def _env_bool(name: str, default: bool) -> bool:
 class RiskLimits:
     """Hard limits. The LLM proposes trades; these numbers decide."""
 
-    core_risk_share: float = 0.85
+    core_risk_share: float = 0.55
     convex_risk_share: float = 0.15
+    #: The long-horizon sleeve. Everything else this agent trades is a one to
+    #: seven day position, which means the book has no exposure at all to the
+    #: one edge in equities that is actually well documented: the equity risk
+    #: premium. You are not paid it by being flat overnight. This sleeve is
+    #: how the agent holds a directional position for weeks instead of hours.
+    carry_risk_share: float = 0.30
 
     max_risk_per_trade_pct: float = 0.0075   # <= 0.75% of equity on one structure
+    #: Carry gets its own, larger per-trade cap. At 0.75% a carry position
+    #: cannot be expressed at all below a six-figure account: the narrowest
+    #: sensible risk reversal on SPY risks about 630 dollars a contract, so a
+    #: 0.75% cap on a 50,000 book sizes it to zero and the sleeve silently
+    #: never trades. That is a unit problem, not a risk decision: a structure
+    #: held for five weeks is one position rather than a scalp, and the
+    #: aggregate is still bounded by max_carry_open_risk_pct.
+    max_carry_risk_per_trade_pct: float = 0.0125
     max_open_risk_pct: float = 0.06          # <= 6% of equity at risk at once
     # The convex sleeve gets a real allocation rather than a token one. With
     # implied vol below realized on the whole universe, premium selling is being
     # paid too little for the movement the tape is actually delivering, so the
     # long-gamma side is where the edge is this week.
     max_convex_open_risk_pct: float = 0.03
+    #: Carry gets the largest sleeve cap because it is the slowest. A 45 day
+    #: structure occupies its budget for weeks, so a cap the size of the
+    #: tactical sleeves' would let two positions consume the sleeve for the
+    #: whole month.
+    max_carry_open_risk_pct: float = 0.035
     max_risk_per_underlying_pct: float = 0.025
 
     daily_loss_kill_pct: float = 0.03        # flatten and stand down for the day
@@ -107,6 +126,54 @@ class StrategyParams:
     convex_long_delta: float = 0.35
     convex_widths: tuple[float, ...] = (3.0, 5.0, 8.0)
     convex_profit_target: float = 1.20       # take profit at 120% of debit paid
+
+    # Carry sleeve: long-horizon bullish risk reversals. Sell a put spread to
+    # finance a wider call spread, same expiry, five to nine weeks out.
+    #
+    # This is the only structure the agent trades that is an investment rather
+    # than a trade. It is long delta, so it is paid for holding equity risk; it
+    # is defined risk on both sides, so a crash costs the put spread's width
+    # and not the account; and its upside is a multiple of its risk rather than
+    # the fraction of width that a credit spread is capped at.
+    #
+    # The skew does the financing. Index puts trade at a higher implied
+    # volatility than equidistant calls, so selling the put spread and buying
+    # the call spread means selling the expensive side of the surface to fund
+    # the cheap side. That is true regardless of the overall level of implied
+    # volatility, which is why this sleeve is not routed by the vol premium.
+    carry_min_dte: int = 25
+    carry_max_dte: int = 65
+    #: A 30 delta short put, roughly a 70% chance of expiring worthless. At 22
+    #: delta the put spread barely finances anything: measured on a live SPY
+    #: chain, moving the short put from 22 to 30 delta cut the net cost of the
+    #: package by nine percent of its own risk and improved the payoff ratio
+    #: from 2.4x to 2.6x, because the extra premium comes off the debit while
+    #: the maximum loss is set by the width.
+    carry_put_delta: float = 0.30
+    carry_call_delta: float = 0.32       # the long call we are buying
+    #: Narrow, and that is the finding rather than an oversight. The maximum
+    #: loss is the put width less the financing, so a wider put spread adds
+    #: risk far faster than it adds credit: on the same chain, going from a
+    #: three wide to a five wide put spread raised the risk from 621 to 783
+    #: dollars a contract and dropped the payoff from 2.7x to 2.2x. A wide
+    #: short put spread is a worse trade wearing the same name.
+    carry_put_widths: tuple[float, ...] = (3.0, 5.0)
+    carry_call_widths: tuple[float, ...] = (10.0, 15.0, 20.0)
+    #: Never pay more than this fraction of the call width in net debit. Above
+    #: it the structure stops being financed and turns into an outright long
+    #: call spread wearing a short put spread as a hat.
+    carry_max_net_debit_to_call_width: float = 0.30
+    #: Take profit at a full multiple of risk rather than a fraction of it. The
+    #: point of holding for weeks is to be paid more than a credit spread pays
+    #: in a day; exiting at 20% would forfeit exactly the thing being bought.
+    carry_profit_target: float = 0.60    # 60% of max gain
+    #: Cut at 1.2x the risk budgeted. Wider than the tactical sleeves on
+    #: purpose: a five week position that is stopped out on its first bad week
+    #: was never really a five week position.
+    carry_stop_fraction: float = 1.20
+    #: Close with this many days left regardless. Gamma rises sharply into the
+    #: last fortnight and the thesis was about weeks, not the final days.
+    carry_min_hold_dte: int = 10
 
     # Liquidity gates applied to every leg before it can be traded.
     max_bid_ask_pct: float = 0.12
@@ -214,6 +281,24 @@ VARIANTS: dict[str, tuple[RiskLimits, StrategyParams]] = {
     # Convexity with no income sleeve at all, and a wide enough allocation to
     # actually express it. The mirror image of income_only, and the only
     # preset that can produce a payoff larger than its own risk budget.
+    # Carry-led: the long-horizon sleeve gets most of the budget. The question
+    # this asks is the one the other six presets cannot: whether holding a
+    # financed long position for weeks beats trading the same underlyings for
+    # hours. Every other variant is a way of being flat overnight.
+    "carry_led": (
+        replace(
+            BASE_RISK,
+            core_risk_share=0.20,
+            convex_risk_share=0.10,
+            carry_risk_share=0.70,
+            max_carry_open_risk_pct=0.045,
+            max_convex_open_risk_pct=0.01,
+            max_risk_per_trade_pct=0.010,
+            max_risk_per_underlying_pct=0.035,
+        ),
+        replace(BASE_STRATEGY, carry_call_widths=(10.0, 15.0, 20.0, 25.0)),
+    ),
+
     "long_gamma": (
         replace(
             BASE_RISK,
