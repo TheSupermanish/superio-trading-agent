@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T10:58:19.538593+00:00",
+  "generated_at": "2026-09-02T11:06:52.888432+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -80,9 +80,150 @@
       }
     ]
   },
-  "open_structures": [],
+  "open_structures": [
+    {
+      "id": 12,
+      "opened_at": "2026-09-02T11:05:33.479879+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "IWM260902C00296000",
+          "side": "sell",
+          "strike": 296.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 0.02,
+          "delta": null
+        },
+        {
+          "symbol": "IWM260902C00297000",
+          "side": "buy",
+          "strike": 297.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 0.01,
+          "delta": null
+        },
+        {
+          "symbol": "IWM260902P00290000",
+          "side": "buy",
+          "strike": 290.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 0.78,
+          "delta": null
+        },
+        {
+          "symbol": "IWM260902P00291000",
+          "side": "sell",
+          "strike": 291.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 1.26,
+          "delta": null
+        }
+      ],
+      "qty": 11,
+      "net_price": 0.35,
+      "max_loss": 715.0,
+      "max_gain": 385.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": null,
+      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
+      "net_price_mid": 0.35
+    },
+    {
+      "id": 13,
+      "opened_at": "2026-09-02T11:05:33.484540+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "SPY",
+      "kind": "call_credit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260903C00768000",
+          "side": "sell",
+          "strike": 768.0,
+          "expiry": "2026-09-03",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 0.58,
+          "delta": null
+        },
+        {
+          "symbol": "SPY260903C00769000",
+          "side": "buy",
+          "strike": 769.0,
+          "expiry": "2026-09-03",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 0.39,
+          "delta": null
+        }
+      ],
+      "qty": 15,
+      "net_price": 0.29,
+      "max_loss": 1068.0,
+      "max_gain": 432.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": null,
+      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
+      "net_price_mid": 0.29
+    },
+    {
+      "id": 14,
+      "opened_at": "2026-09-02T11:05:33.486922+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "SPY",
+      "kind": "put_credit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260903P00755000",
+          "side": "buy",
+          "strike": 755.0,
+          "expiry": "2026-09-03",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 0.98,
+          "delta": null
+        },
+        {
+          "symbol": "SPY260903P00756000",
+          "side": "sell",
+          "strike": 756.0,
+          "expiry": "2026-09-03",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 1.16,
+          "delta": null
+        }
+      ],
+      "qty": 12,
+      "net_price": 0.1,
+      "max_loss": 1080.0,
+      "max_gain": 120.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": null,
+      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
+      "net_price_mid": 0.1
+    }
+  ],
   "closed_structures": [],
-  "open_risk": 0.0,
+  "open_risk": 2863.0,
   "equity_curve": [
     {
       "ts": "2026-08-28T13:50:40.371768+00:00",
@@ -434,6 +575,22 @@
       "cash": 102419.16,
       "buying_power": 399276.64,
       "open_risk": 0.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:01:51.273654+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 0.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:06:52.886434+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
       "day_pnl": -36.0
     }
   ],
@@ -1967,6 +2124,46 @@
   ],
   "recent_events": [
     {
+      "id": 45,
+      "ts": "2026-09-02T11:05:33.487935+00:00",
+      "level": "warning",
+      "kind": "adopted",
+      "message": "adopted SPY put_credit_spread x12 expiring 2026-09-03 into the journal as #14",
+      "data": "{\"underlying\": \"SPY\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"SPY260903P00755000\", \"side\": \"buy\", \"strike\": 755.0, \"expiry\": \"2026-09-03\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 0.98, \"delta\": null}, {\"symbol\": \"SPY260903P00756000\", \"side\": \"sell\", \"strike\": 756.0, \"expiry\": \"2026-09-03\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 1.16, \"delta\": null}], \"qty\": 12, \"net_price\": 0.1, \"max_loss\": 1080.0, \"max_gain\": 120.0}"
+    },
+    {
+      "id": 44,
+      "ts": "2026-09-02T11:05:33.485696+00:00",
+      "level": "warning",
+      "kind": "adopted",
+      "message": "adopted SPY call_credit_spread x15 expiring 2026-09-03 into the journal as #13",
+      "data": "{\"underlying\": \"SPY\", \"kind\": \"call_credit_spread\", \"legs\": [{\"symbol\": \"SPY260903C00768000\", \"side\": \"sell\", \"strike\": 768.0, \"expiry\": \"2026-09-03\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 0.58, \"delta\": null}, {\"symbol\": \"SPY260903C00769000\", \"side\": \"buy\", \"strike\": 769.0, \"expiry\": \"2026-09-03\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 0.39, \"delta\": null}], \"qty\": 15, \"net_price\": 0.29, \"max_loss\": 1068.0, \"max_gain\": 432.0}"
+    },
+    {
+      "id": 43,
+      "ts": "2026-09-02T11:05:33.482820+00:00",
+      "level": "warning",
+      "kind": "adopted",
+      "message": "adopted IWM iron_condor x11 expiring 2026-09-02 into the journal as #12",
+      "data": "{\"underlying\": \"IWM\", \"kind\": \"iron_condor\", \"legs\": [{\"symbol\": \"IWM260902C00296000\", \"side\": \"sell\", \"strike\": 296.0, \"expiry\": \"2026-09-02\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 0.02, \"delta\": null}, {\"symbol\": \"IWM260902C00297000\", \"side\": \"buy\", \"strike\": 297.0, \"expiry\": \"2026-09-02\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 0.01, \"delta\": null}, {\"symbol\": \"IWM260902P00290000\", \"side\": \"buy\", \"strike\": 290.0, \"expiry\": \"2026-09-02\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 0.78, \"delta\": null}, {\"symbol\": \"IWM260902P00291000\", \"side\": \"sell\", \"strike\": 291.0, \"expiry\": \"2026-09-02\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 1.26, \"delta\": null}], \"qty\": 11, \"net_price\": 0.35, \"max_loss\": 715.0, \"max_gain\": 385.0}"
+    },
+    {
+      "id": 42,
+      "ts": "2026-09-02T11:01:47.527902+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 41,
+      "ts": "2026-09-02T11:01:44.106643+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=main variant=barbell mode=LIVE PAPER",
+      "data": null
+    },
+    {
       "id": 40,
       "ts": "2026-09-02T10:43:11.128224+00:00",
       "level": "info",
@@ -2244,46 +2441,6 @@
       "level": "info",
       "kind": "preflight",
       "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 5,
-      "ts": "2026-08-28T14:04:54.611277+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=main variant=barbell mode=DRY RUN until Mon 31 Aug 19:20 +0545",
-      "data": null
-    },
-    {
-      "id": 4,
-      "ts": "2026-08-28T14:00:02.308474+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 3,
-      "ts": "2026-08-28T13:59:58.057956+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=main variant=barbell mode=DRY RUN",
-      "data": null
-    },
-    {
-      "id": 2,
-      "ts": "2026-08-28T13:59:53.561586+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 1,
-      "ts": "2026-08-28T13:50:38.642757+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=main variant=barbell mode=DRY RUN",
       "data": null
     }
   ],

@@ -22,6 +22,10 @@ from engine.calendar_gate import EVENTS, upcoming
 from engine.config import SETTINGS
 from engine.risk import GATES
 
+import logging
+
+log = logging.getLogger(__name__)
+
 
 def _rows(table: str, limit: int, order: str = "DESC") -> list[dict[str, Any]]:
     with state.db() as conn:
@@ -240,6 +244,159 @@ def build() -> dict[str, Any]:
             for e in upcoming(horizon_hours=168)
         ],
     }
+
+
+def chart_data(sessions: int = 120) -> dict[str, Any]:
+    """Candles per underlying, plus every structure placed on that timeline.
+
+    The dashboard needs to answer "why there" and not just "how much", so each
+    structure carries the levels that actually matter on a price chart. For an
+    option spread those are the strikes: the short strike is where the
+    position starts losing, the long strike is where the loss stops, and the
+    breakeven sits between them. A take-profit on a spread is a premium level
+    rather than a price level, so it is reported in premium terms and labelled
+    as such instead of being drawn as a line that would be a lie.
+    """
+    from engine import marketdata
+
+    out: dict[str, Any] = {"generated_at": datetime.now(timezone.utc).isoformat()}
+    symbols = SETTINGS.strategy.universe
+
+    bars: dict[str, list[dict[str, Any]]] = {}
+    for symbol in symbols:
+        try:
+            bars[symbol] = marketdata.daily_bars(symbol, days=sessions)
+        except Exception as exc:  # noqa: BLE001 - a missing chart must not break the snapshot
+            log.warning("bars failed for %s: %s", symbol, exc)
+            bars[symbol] = []
+    out["bars"] = bars
+
+    with state.db() as conn:
+        rows = conn.execute(
+            "SELECT * FROM structures WHERE status IN ('open', 'closed', 'dry_run')"
+            " ORDER BY opened_at ASC"
+        ).fetchall()
+        decisions = conn.execute(
+            "SELECT ts, underlying, verdict, reasons, proposal FROM decisions"
+            " WHERE agent != 'manager' AND verdict = 'approve'"
+            " ORDER BY id ASC"
+        ).fetchall()
+
+    # The gate trail that approved a structure is not linked to it by id, so it
+    # is matched on underlying and the nearest approval at or before the open.
+    # Approximate by construction, and labelled that way in the UI rather than
+    # presented as a hard join.
+    approvals: dict[str, list[tuple[str, str]]] = {}
+    for row in decisions:
+        approvals.setdefault(str(row["underlying"]), []).append(
+            (str(row["ts"]), str(row["reasons"]))
+        )
+
+    trades: list[dict[str, Any]] = []
+    for row in rows:
+        trade = dict(row)
+        try:
+            trade["legs"] = json.loads(trade["legs"] or "[]")
+        except (TypeError, ValueError):
+            trade["legs"] = []
+
+        shorts = [leg for leg in trade["legs"] if leg.get("side") == "sell"]
+        longs = [leg for leg in trade["legs"] if leg.get("side") == "buy"]
+        strikes = [float(leg["strike"]) for leg in trade["legs"] if leg.get("strike")]
+
+        net = float(trade.get("net_price") or 0)
+        qty = int(trade.get("qty") or 1)
+        max_loss = float(trade.get("max_loss") or 0)
+        max_gain = float(trade.get("max_gain") or 0)
+        sleeve = str(trade.get("sleeve") or "core")
+        p = SETTINGS.strategy
+
+        # Exit levels, in the units the manager actually compares against.
+        if sleeve == "carry":
+            take_profit = {
+                "basis": "fraction of maximum gain",
+                "target_pct": p.carry_profit_target,
+                "target_value": round(max_gain * p.carry_profit_target, 2),
+            }
+            stop = {
+                "basis": "multiple of the risk underwritten",
+                "target_pct": p.carry_stop_fraction,
+                "target_value": round(-max_loss * p.carry_stop_fraction, 2),
+            }
+        elif net > 0:
+            take_profit = {
+                "basis": "fraction of the credit captured",
+                "target_pct": p.core_profit_target,
+                "target_value": round(net * 100 * qty * p.core_profit_target, 2),
+            }
+            stop = {
+                "basis": "multiple of the credit received",
+                "target_pct": p.core_stop_multiple,
+                "target_value": round(-net * 100 * qty * (p.core_stop_multiple - 1), 2),
+            }
+        else:
+            debit = abs(net) * 100 * qty
+            take_profit = {
+                "basis": "gain on the debit paid",
+                "target_pct": p.convex_profit_target,
+                "target_value": round(debit * p.convex_profit_target, 2),
+            }
+            stop = {
+                "basis": "share of the debit remaining",
+                "target_pct": 0.25,
+                "target_value": round(-debit * 0.75, 2),
+            }
+
+        # Breakeven on the underlying, which is a real price level.
+        breakeven = None
+        if shorts and len(trade["legs"]) == 2:
+            short_strike = float(shorts[0]["strike"])
+            is_call = bool(shorts[0].get("is_call"))
+            breakeven = round(
+                short_strike + net if is_call else short_strike - net, 2
+            )
+
+        gates = ""
+        opened = str(trade.get("opened_at") or "")
+        for ts, reasons in approvals.get(str(trade.get("underlying")), []):
+            if ts <= opened:
+                gates = reasons
+        trade["gates"] = gates
+
+        trade["levels"] = {
+            "short_strikes": sorted(float(leg["strike"]) for leg in shorts),
+            "long_strikes": sorted(float(leg["strike"]) for leg in longs),
+            "min_strike": min(strikes) if strikes else None,
+            "max_strike": max(strikes) if strikes else None,
+            "breakeven": breakeven,
+        }
+        trade["take_profit"] = take_profit
+        trade["stop"] = stop
+        trade["held_hours"] = _held_hours(
+            trade.get("opened_at"), trade.get("closed_at")
+        )
+        trades.append(trade)
+
+    out["trades"] = trades
+    out["exit_rules"] = {
+        "core_profit_target": SETTINGS.strategy.core_profit_target,
+        "core_stop_multiple": SETTINGS.strategy.core_stop_multiple,
+        "convex_profit_target": SETTINGS.strategy.convex_profit_target,
+        "carry_profit_target": SETTINGS.strategy.carry_profit_target,
+        "carry_stop_fraction": SETTINGS.strategy.carry_stop_fraction,
+        "carry_min_hold_dte": SETTINGS.strategy.carry_min_hold_dte,
+    }
+    return out
+
+
+def write_chart(path: Path | None = None) -> Path:
+    """Publish the chart payload beside the snapshot."""
+    target = path or (
+        Path(__file__).resolve().parent.parent / "dashboard" / "public" / "chart.json"
+    )
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(chart_data(), indent=2, default=str))
+    return target
 
 
 def write(path: Path | None = None) -> Path:

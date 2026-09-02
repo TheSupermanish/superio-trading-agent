@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import logging
 import time
+from datetime import datetime, timedelta, timezone
 from dataclasses import asdict
 from typing import Any
 
@@ -267,12 +268,29 @@ def scan_and_trade(snap: risk.PortfolioSnapshot) -> list[dict[str, Any]]:
     return results
 
 
+#: The chart payload carries a hundred and twenty sessions of bars for three
+#: symbols and changes once a day, so it is refreshed on a timer of its own
+#: rather than on every pass.
+_CHART_TTL = timedelta(minutes=30)
+_chart_written_at: datetime | None = None
+
+
 def _publish() -> None:
-    """Refresh the snapshot the dashboard reads. Never fatal."""
+    """Refresh what the dashboard reads. Never fatal."""
+    global _chart_written_at
+
     try:
         report.write()
     except Exception as exc:  # noqa: BLE001
         log.warning("could not write snapshot: %s", exc)
+
+    now = datetime.now(timezone.utc)
+    if _chart_written_at is None or now - _chart_written_at > _CHART_TTL:
+        try:
+            report.write_chart()
+            _chart_written_at = now
+        except Exception as exc:  # noqa: BLE001
+            log.warning("could not write chart: %s", exc)
 
 
 def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:

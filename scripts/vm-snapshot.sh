@@ -46,6 +46,9 @@ for profile, variant, filename in BOOKS:
 
     try:
         engine.report.write(out / filename)
+        # The chart payload is per-account and only the judged one is charted.
+        if filename == "snapshot.json":
+            engine.report.write_chart(out / "chart.json")
     except Exception as exc:  # noqa: BLE001 - one bad book must not stop the rest
         print(f"{filename}: {exc}", file=sys.stderr)
 PY
