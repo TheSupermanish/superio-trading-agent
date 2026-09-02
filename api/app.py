@@ -58,11 +58,28 @@ LIVE_STATES = ("pending", "open", "dry_run")
 app = Flask(__name__, static_folder=None)
 
 
+#: Long enough to ride out a writer committing a pass, short enough that a
+#: wedged journal cannot hold the whole listing open.
+BUSY_TIMEOUT_S = 3.0
+
+
 def connect(agent: Agent) -> sqlite3.Connection | None:
-    """Open the journal read-only. A book that has not traded yet has no file."""
+    """Open the journal read-only, or give up quickly.
+
+    These are live SQLite files with a writer attached, in WAL mode, so a
+    reader needs to touch the -shm sidecar. If that file is not readable by
+    this process, or the journal is mid-recovery, the open fails: the monitor
+    reports the book as unreadable and moves on. One unhappy journal must never
+    be able to stall the view of the other six.
+    """
     if not agent.db.exists():
         return None
-    conn = sqlite3.connect(f"file:{agent.db}?mode=ro", uri=True, timeout=5)
+    try:
+        conn = sqlite3.connect(
+            f"file:{agent.db}?mode=ro", uri=True, timeout=BUSY_TIMEOUT_S
+        )
+    except sqlite3.Error:
+        return None
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -100,7 +117,7 @@ def performance(conn: sqlite3.Connection, stake: float) -> dict[str, Any]:
     losses = [p for p in pnls if p < 0]
     gross_win, gross_loss = sum(wins), abs(sum(losses))
 
-    curve = rows(conn, "SELECT ts, equity FROM equity ORDER BY ts ASC")
+    curve = rows(conn, "SELECT ts, equity FROM equity ORDER BY ts ASC LIMIT 20000")
     values = [float(p["equity"]) for p in curve]
     peak, drawdown = 0.0, 0.0
     for value in values:
@@ -185,7 +202,8 @@ def summarise(agent: Agent) -> dict[str, Any]:
     }
     conn = connect(agent)
     if conn is None:
-        return {**base, "status": "no journal yet", "performance": None}
+        status = "no journal yet" if not agent.db.exists() else "journal unreadable"
+        return {**base, "status": status, "performance": None}
     try:
         marks = ",".join("?" for _ in LIVE_STATES)
         open_row = conn.execute(
@@ -205,6 +223,10 @@ def summarise(agent: Agent) -> dict[str, Any]:
             "gates": gate_activity(conn, limit=200),
             "last_seen": last["ts"] if last else None,
         }
+    except sqlite3.Error as exc:
+        # A read that fails is a fact about one book, not a reason to fail the
+        # request that was asked about all of them.
+        return {**base, "status": f"read failed: {exc}", "performance": None}
     finally:
         conn.close()
 
