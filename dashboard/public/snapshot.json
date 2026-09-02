@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-02T11:14:02.698556+00:00",
+  "generated_at": "2026-09-02T12:03:26.459096+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
   "diary": false,
   "account_id": "b585f795-0dac-4e23-83bb-636fc071bb00",
   "limits": {
-    "max_risk_per_trade_pct": 0.0075,
-    "max_open_risk_pct": 0.06,
-    "max_convex_open_risk_pct": 0.03,
-    "max_carry_open_risk_pct": 0.045,
-    "max_carry_risk_per_trade_pct": 0.0125,
-    "daily_loss_kill_pct": 0.03,
-    "total_drawdown_kill_pct": 0.08,
+    "max_risk_per_trade_pct": 0.0125,
+    "max_open_risk_pct": 0.1,
+    "max_convex_open_risk_pct": 0.05,
+    "max_carry_open_risk_pct": 0.07,
+    "max_carry_risk_per_trade_pct": 0.02,
+    "daily_loss_kill_pct": 0.05,
+    "total_drawdown_kill_pct": 0.14,
     "min_credit_to_width": 0.18,
     "max_debit_to_width": 0.45
   },
@@ -603,6 +603,86 @@
     },
     {
       "ts": "2026-09-02T11:14:02.696238+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:17:34.571457+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:22:36.973452+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:27:38.617837+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:32:40.292980+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:37:41.964661+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:42:43.541457+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:48:20.217917+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:53:23.248820+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T11:58:24.853422+00:00",
+      "equity": 101379.16,
+      "cash": 102419.16,
+      "buying_power": 399276.64,
+      "open_risk": 2863.0,
+      "day_pnl": -36.0
+    },
+    {
+      "ts": "2026-09-02T12:03:26.456326+00:00",
       "equity": 101379.16,
       "cash": 102419.16,
       "buying_power": 399276.64,
@@ -2140,6 +2220,38 @@
   ],
   "recent_events": [
     {
+      "id": 51,
+      "ts": "2026-09-02T11:43:18.626149+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "3 of 15 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-02T11:42:43.543204+00:00\", \"equity\": 101379.16, \"regimes\": {\"SPY\": {\"spot\": 761.63, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.0717, \"atm_iv\": 0.1855, \"vol_premium\": 0.1137}, \"QQQ\": {\"spot\": 707.89, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1313, \"atm_iv\": 0.2537, \"vol_premium\": 0.1224}, \"IWM\": {\"spot\": 290.55, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1196, \"atm_iv\": 0.2593, \"vol_premium\": 0.1397}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-09-30\", \"net_price\": -3.31, \"width\": 3.0, \"verdict\": \"would trade\", \"qty\": 3, \"max_loss\": 1893.0, \"reason\": \"G8 buying power room 199,638 -> 3\"}, {\"symbol\": \"SPY\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-03\", \"net_price\": -1.43, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 143.0, \"reason\": \"G7 volatility side: buying premium on SPY while implied sits +11.4% above realized; convexity is expensive here\"}, {\"symbol\": \"SPY\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-03\", \"net_price\": -1.7, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 170.0, \"reason\": \"G7 volatility side: buying premium on SPY while implied sits +11.4% above realized; convexity is expensive here\"}, {\"symbol\": \"SPY\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.49, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 151.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.19, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 81.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-09-30\", \"net_price\": -4.36, \"width\": 3.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 1472.0, \"reason\": \"G8 buying power room 199,638 -> 2\"}, {\"symbol\": \"QQQ\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-03\", \"net_price\": -1.31, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 131.0, \"reason\": \"G7 volatility side: buying premium on QQQ while implied sits +12.2% above realized; convexity is expensive here\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-04\", \"net_price\": 0.27, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 73.0, \"reason\": \"G6 event blackout: Broadcom Q3 earnings at Wed 16:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-03\", \"net_price\": -2.28, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 228.0, \"reason\": \"G7 volatility side: buying premium on QQQ while implied sits +12.2% above realized; convexity is expensive here\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-03\", \"net_price\": 0.27, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 173.0, \"reason\": \"G5 pricing: credit 13.5% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-03\", \"net_price\": -0.89, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 89.0, \"reason\": \"G7 volatility side: buying premium on IWM while implied sits +14.0% above realized; convexity is expensive here\"}, {\"symbol\": \"IWM\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-10-02\", \"net_price\": -1.94, \"width\": 3.0, \"verdict\": \"would trade\", \"qty\": 4, \"max_loss\": 1976.0, \"reason\": \"G8 buying power room 199,638 -> 4\"}, {\"symbol\": \"IWM\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-04\", \"net_price\": -1.01, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 101.0, \"reason\": \"G7 volatility side: buying premium on IWM while implied sits +14.0% above realized; convexity is expensive here\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.17, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 83.0, \"reason\": \"G5 pricing: credit 17.0% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.27, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 173.0, \"reason\": \"G5 pricing: credit 13.5% of width is below the 18% floor\"}], \"brief\": {\"session_tone\": \"risk_off\", \"summary\": \"U.S. equity futures are pointing to a lower open as rising global bond yields and elevated oil prices are creating a risk-off tone. [2, 3] Renewed tensions in the Middle East following U.S. airstrikes against Iranian targets are pushing crude prices higher and fueling inflation concerns. [6, 7] This sentiment is weighing on major indices, with the tech-heavy Nasdaq showing the most weakness in pre-market trading. [2, 25] Investors are also looking ahead to the ADP private payrolls data and the Fed's Beige Book for further direction. [3]\", \"catalysts_today\": [\"ADP Employment Change (8:15 AM ET) [12]\", \"PMI Composite Final (9:45 AM ET) [12]\", \"Factory Orders (10:00 AM ET) [12]\", \"EIA Crude Oil Inventory (10:30 AM ET) [12]\", \"Fed's Beige Book (2:00 PM ET) [3, 28]\", \"Earnings from Broadcom (AVGO), Snowflake (SNOW), and NetApp (NTAP) after market close [2]\"], \"vol_context\": \"Volatility is being bid, with the VIX index showing a significant increase from the previous day as geopolitical tensions and inflation fears rise. [16, 17]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US stock market today September 2 2026\", \"US equity market tone September 2 2026\", \"SPY QQQ IWM trading today September 2 2026\", \"economic data calendar September 2 2026\", \"Federal Reserve speakers today September 2 2026\", \"VIX index today September 2 2026\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"3 of 15 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 50,
+      "ts": "2026-09-02T11:43:18.622393+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "U.S. equity futures are pointing to a lower open as rising global bond yields and elevated oil prices are creating a risk-off tone. [2, 3] Renewed tensions in the Middle East following U.S. airstrikes against Iranian targets are pushing crude prices higher and fueling inflation concerns. [6, 7] This sentiment is weighing on major indices, with the tech-heavy Nasdaq showing the most weakness in pre",
+      "data": "{\"session_tone\": \"risk_off\", \"summary\": \"U.S. equity futures are pointing to a lower open as rising global bond yields and elevated oil prices are creating a risk-off tone. [2, 3] Renewed tensions in the Middle East following U.S. airstrikes against Iranian targets are pushing crude prices higher and fueling inflation concerns. [6, 7] This sentiment is weighing on major indices, with the tech-heavy Nasdaq showing the most weakness in pre-market trading. [2, 25] Investors are also looking ahead to the ADP private payrolls data and the Fed's Beige Book for further direction. [3]\", \"catalysts_today\": [\"ADP Employment Change (8:15 AM ET) [12]\", \"PMI Composite Final (9:45 AM ET) [12]\", \"Factory Orders (10:00 AM ET) [12]\", \"EIA Crude Oil Inventory (10:30 AM ET) [12]\", \"Fed's Beige Book (2:00 PM ET) [3, 28]\", \"Earnings from Broadcom (AVGO), Snowflake (SNOW), and NetApp (NTAP) after market close [2]\"], \"vol_context\": \"Volatility is being bid, with the VIX index showing a significant increase from the previous day as geopolitical tensions and inflation fears rise. [16, 17]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US stock market today September 2 2026\", \"US equity market tone September 2 2026\", \"SPY QQQ IWM trading today September 2 2026\", \"economic data calendar September 2 2026\", \"Federal Reserve speakers today September 2 2026\", \"VIX index today September 2 2026\"], \"cached\": false}"
+    },
+    {
+      "id": 49,
+      "ts": "2026-09-02T11:17:31.972729+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 48,
+      "ts": "2026-09-02T11:17:28.490484+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=main variant=barbell mode=LIVE PAPER",
+      "data": null
+    },
+    {
       "id": 47,
       "ts": "2026-09-02T11:08:56.876611+00:00",
       "level": "info",
@@ -2426,42 +2538,10 @@
       "kind": "market_brief",
       "message": "US equity markets are trading in a mixed and cautious manner as investors await a highly anticipated speech by Federal Reserve Chair Kevin Warsh at the Jackson Hole economic symposium. [8, 12] Early trading saw the S&P 500 and Nasdaq little changed, while the Dow Jones Industrial Average posted a slight gain. [8, 9] The market is in a holding pattern, with investors looking to Warsh's remarks for ",
       "data": "{\"session_tone\": \"mixed\", \"summary\": \"US equity markets are trading in a mixed and cautious manner as investors await a highly anticipated speech by Federal Reserve Chair Kevin Warsh at the Jackson Hole economic symposium. [8, 12] Early trading saw the S&P 500 and Nasdaq little changed, while the Dow Jones Industrial Average posted a slight gain. [8, 9] The market is in a holding pattern, with investors looking to Warsh's remarks for clarity on the future path of interest rates and the central bank's stance on inflation. [5, 8]\", \"catalysts_today\": [\"Federal Reserve Chair Kevin Warsh's speech at the Jackson Hole symposium at 10:00 AM ET. [5, 10, 15]\", \"US Durable Goods Orders for July rose 1.1%. [2]\", \"PCE Price Index for July increased by 0.2%. [2]\", \"Bureau of Labor Statistics preliminary benchmark revision of employment data for March 2026 at 10:00 AM ET. [18]\"], \"vol_context\": \"The VIX index is lower today, suggesting a decrease in near-term volatility expectations ahead of the Fed chair's speech. [20, 22]\", \"confidence\": 0.8, \"grounded\": false, \"sources\": [], \"cached\": false}"
-    },
-    {
-      "id": 11,
-      "ts": "2026-08-28T14:10:40.606874+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 10,
-      "ts": "2026-08-28T14:10:36.613660+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=main variant=barbell mode=DRY RUN until Mon 31 Aug 19:20 +0545",
-      "data": null
-    },
-    {
-      "id": 9,
-      "ts": "2026-08-28T14:10:03.860969+00:00",
-      "level": "info",
-      "kind": "daily_entry",
-      "message": "Opened 7 structures and closed 0. Realized P&L stands at +0.00 across 0 closed structures.",
-      "data": "{\"summary\": \"Opened 7 structures and closed 0. Realized P&L stands at +0.00 across 0 closed structures.\", \"notable\": [\"G5 pricing: 7 rejections\", \"pricing: 4 rejections\", \"not defined risk: 2 rejections\"], \"social_post\": \"\"}"
-    },
-    {
-      "id": 8,
-      "ts": "2026-08-28T14:06:06.258134+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-02T10:42:13.123872+00:00",
+    "generated_at": "2026-09-02T11:42:43.543204+00:00",
     "equity": 101379.16,
     "regimes": {
       "SPY": {
@@ -2469,24 +2549,24 @@
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.0717,
-        "atm_iv": 0.1792,
-        "vol_premium": 0.1075
+        "atm_iv": 0.1855,
+        "vol_premium": 0.1137
       },
       "QQQ": {
         "spot": 707.89,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1313,
-        "atm_iv": 0.2792,
-        "vol_premium": 0.1479
+        "atm_iv": 0.2537,
+        "vol_premium": 0.1224
       },
       "IWM": {
         "spot": 290.55,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1196,
-        "atm_iv": 0.255,
-        "vol_premium": 0.1353
+        "atm_iv": 0.2593,
+        "vol_premium": 0.1397
       }
     },
     "candidates": [
@@ -2495,90 +2575,90 @@
         "style": "risk_reversal",
         "sleeve": "carry",
         "expiry": "2026-09-30",
-        "net_price": -3.72,
+        "net_price": -3.31,
         "width": 3.0,
         "verdict": "would trade",
-        "qty": 1,
-        "max_loss": 672.0,
-        "reason": "G8 buying power room 199,638 -> 1"
+        "qty": 3,
+        "max_loss": 1893.0,
+        "reason": "G8 buying power room 199,638 -> 3"
       },
       {
         "symbol": "SPY",
         "style": "put_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-03",
-        "net_price": -1.01,
+        "net_price": -1.43,
         "width": 8.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 101.0,
-        "reason": "G7 volatility side: buying premium on SPY while implied sits +10.7% above realized; convexity is expensive here"
-      },
-      {
-        "symbol": "SPY",
-        "style": "call_credit_spread",
-        "sleeve": "core",
-        "expiry": "2026-09-09",
-        "net_price": 0.27,
-        "width": 1.0,
-        "verdict": "would refuse",
-        "qty": 0,
-        "max_loss": 73.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+        "max_loss": 143.0,
+        "reason": "G7 volatility side: buying premium on SPY while implied sits +11.4% above realized; convexity is expensive here"
       },
       {
         "symbol": "SPY",
         "style": "call_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-03",
-        "net_price": -2.19,
+        "net_price": -1.7,
         "width": 8.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 219.0,
-        "reason": "G7 volatility side: buying premium on SPY while implied sits +10.7% above realized; convexity is expensive here"
+        "max_loss": 170.0,
+        "reason": "G7 volatility side: buying premium on SPY while implied sits +11.4% above realized; convexity is expensive here"
+      },
+      {
+        "symbol": "SPY",
+        "style": "call_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-04",
+        "net_price": 0.49,
+        "width": 2.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 151.0,
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
       },
       {
         "symbol": "SPY",
         "style": "put_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-08",
-        "net_price": 0.26,
-        "width": 2.0,
+        "expiry": "2026-09-09",
+        "net_price": 0.19,
+        "width": 1.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 174.0,
-        "reason": "G5 pricing: credit 13.0% of width is below the 18% floor"
-      },
-      {
-        "symbol": "QQQ",
-        "style": "put_debit_spread",
-        "sleeve": "convex",
-        "expiry": "2026-09-03",
-        "net_price": -1.12,
-        "width": 8.0,
-        "verdict": "would refuse",
-        "qty": 0,
-        "max_loss": 112.0,
-        "reason": "G7 volatility side: buying premium on QQQ while implied sits +14.8% above realized; convexity is expensive here"
+        "max_loss": 81.0,
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
       },
       {
         "symbol": "QQQ",
         "style": "risk_reversal",
         "sleeve": "carry",
         "expiry": "2026-09-30",
-        "net_price": -5.05,
+        "net_price": -4.36,
         "width": 3.0,
         "verdict": "would trade",
-        "qty": 1,
-        "max_loss": 805.0,
-        "reason": "G8 buying power room 199,638 -> 1"
+        "qty": 2,
+        "max_loss": 1472.0,
+        "reason": "G8 buying power room 199,638 -> 2"
+      },
+      {
+        "symbol": "QQQ",
+        "style": "put_debit_spread",
+        "sleeve": "convex",
+        "expiry": "2026-09-03",
+        "net_price": -1.31,
+        "width": 8.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 131.0,
+        "reason": "G7 volatility side: buying premium on QQQ while implied sits +12.2% above realized; convexity is expensive here"
       },
       {
         "symbol": "QQQ",
         "style": "call_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-08",
+        "expiry": "2026-09-04",
         "net_price": 0.27,
         "width": 1.0,
         "verdict": "would refuse",
@@ -2591,124 +2671,113 @@
         "style": "call_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-03",
-        "net_price": -2.67,
+        "net_price": -2.28,
         "width": 8.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 267.0,
-        "reason": "G7 volatility side: buying premium on QQQ while implied sits +14.8% above realized; convexity is expensive here"
+        "max_loss": 228.0,
+        "reason": "G7 volatility side: buying premium on QQQ while implied sits +12.2% above realized; convexity is expensive here"
       },
       {
         "symbol": "QQQ",
         "style": "put_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-04",
-        "net_price": 0.37,
-        "width": 3.0,
+        "expiry": "2026-09-03",
+        "net_price": 0.27,
+        "width": 2.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 263.0,
-        "reason": "G5 pricing: credit 12.3% of width is below the 18% floor"
+        "max_loss": 173.0,
+        "reason": "G5 pricing: credit 13.5% of width is below the 18% floor"
       },
       {
         "symbol": "IWM",
         "style": "put_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-03",
-        "net_price": -0.53,
-        "width": 5.0,
+        "net_price": -0.89,
+        "width": 8.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 53.0,
-        "reason": "G7 volatility side: buying premium on IWM while implied sits +13.5% above realized; convexity is expensive here"
+        "max_loss": 89.0,
+        "reason": "G7 volatility side: buying premium on IWM while implied sits +14.0% above realized; convexity is expensive here"
       },
       {
         "symbol": "IWM",
         "style": "risk_reversal",
         "sleeve": "carry",
         "expiry": "2026-10-02",
-        "net_price": -2.05,
+        "net_price": -1.94,
         "width": 3.0,
         "verdict": "would trade",
-        "qty": 2,
-        "max_loss": 1010.0,
-        "reason": "G8 buying power room 199,638 -> 2"
-      },
-      {
-        "symbol": "IWM",
-        "style": "iron_condor",
-        "sleeve": "core",
-        "expiry": "2026-09-04",
-        "net_price": 0.35,
-        "width": 1.0,
-        "verdict": "would refuse",
-        "qty": 0,
-        "max_loss": 65.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+        "qty": 4,
+        "max_loss": 1976.0,
+        "reason": "G8 buying power room 199,638 -> 4"
       },
       {
         "symbol": "IWM",
         "style": "call_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-04",
-        "net_price": -1.34,
+        "net_price": -1.01,
         "width": 5.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 134.0,
-        "reason": "G7 volatility side: buying premium on IWM while implied sits +13.5% above realized; convexity is expensive here"
+        "max_loss": 101.0,
+        "reason": "G7 volatility side: buying premium on IWM while implied sits +14.0% above realized; convexity is expensive here"
       },
       {
         "symbol": "IWM",
         "style": "call_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-04",
-        "net_price": 0.23,
+        "expiry": "2026-09-08",
+        "net_price": 0.17,
         "width": 1.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 77.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+        "max_loss": 83.0,
+        "reason": "G5 pricing: credit 17.0% of width is below the 18% floor"
       },
       {
         "symbol": "IWM",
         "style": "put_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-04",
-        "net_price": 0.12,
-        "width": 1.0,
+        "expiry": "2026-09-09",
+        "net_price": 0.27,
+        "width": 2.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 88.0,
-        "reason": "G5 pricing: credit 12.0% of width is below the 18% floor"
+        "max_loss": 173.0,
+        "reason": "G5 pricing: credit 13.5% of width is below the 18% floor"
       }
     ],
     "brief": {
       "session_tone": "risk_off",
-      "summary": "US equity futures are pointing to a lower open, continuing a multi-day losing streak. The main pressure is coming from a global rise in government bond yields and elevated oil prices, which are fueling concerns about inflation and potential interest rate hikes. [1, 2] Technology stocks are among the notable underperformers in the pre-market session. [2, 25]",
+      "summary": "U.S. equity futures are pointing to a lower open as rising global bond yields and elevated oil prices are creating a risk-off tone. [2, 3] Renewed tensions in the Middle East following U.S. airstrikes against Iranian targets are pushing crude prices higher and fueling inflation concerns. [6, 7] This sentiment is weighing on major indices, with the tech-heavy Nasdaq showing the most weakness in pre-market trading. [2, 25] Investors are also looking ahead to the ADP private payrolls data and the Fed's Beige Book for further direction. [3]",
       "catalysts_today": [
-        "ADP Employment Change (August)",
-        "Factory Orders (July)",
-        "EIA Crude Oil Inventories",
-        "Fed's Beige Book release (2:00 PM ET)",
-        "Quarterly earnings from Broadcom (AVGO), Hewlett Packard Enterprise (HPE), and Snowflake (SNOW)"
+        "ADP Employment Change (8:15 AM ET) [12]",
+        "PMI Composite Final (9:45 AM ET) [12]",
+        "Factory Orders (10:00 AM ET) [12]",
+        "EIA Crude Oil Inventory (10:30 AM ET) [12]",
+        "Fed's Beige Book (2:00 PM ET) [3, 28]",
+        "Earnings from Broadcom (AVGO), Snowflake (SNOW), and NetApp (NTAP) after market close [2]"
       ],
-      "vol_context": "The VIX index, a measure of expected market volatility, is higher, reflecting increased investor uncertainty. [18, 20]",
+      "vol_context": "Volatility is being bid, with the VIX index showing a significant increase from the previous day as geopolitical tensions and inflation fears rise. [16, 17]",
       "confidence": 0.8,
       "grounded": true,
       "sources": [
         "US stock market today September 2 2026",
+        "US equity market tone September 2 2026",
         "SPY QQQ IWM trading today September 2 2026",
         "economic data calendar September 2 2026",
-        "Fed speakers today September 2 2026",
-        "VIX index today September 2 2026",
-        "market sentiment today risk-on risk-off"
+        "Federal Reserve speakers today September 2 2026",
+        "VIX index today September 2 2026"
       ],
-      "cached": true
+      "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
-    "summary": "3 of 16 structures would clear the gates at the next open",
-    "ts": "2026-09-02T10:42:39.248852+00:00"
+    "summary": "3 of 15 structures would clear the gates at the next open",
+    "ts": "2026-09-02T11:43:18.626149+00:00"
   },
   "google": {
     "connected": [],

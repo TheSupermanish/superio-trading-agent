@@ -184,3 +184,136 @@ tr.clickable.on td { background: var(--panel-2); box-shadow: inset 2px 0 0 var(-
 .thesis .note { color: var(--muted); font-size: 10px; margin-top: 8px; line-height: 1.5; }
 .gatelist { margin: 8px 0 0; padding-left: 16px; font-size: 11.5px; line-height: 1.7; color: var(--muted); }
 .gatelist li::marker { color: var(--accent); }
+
+/* --- hero --------------------------------------------------------------- */
+
+.hero {
+  display: grid; grid-template-columns: minmax(260px, 340px) 1fr;
+  gap: 12px; margin-bottom: 24px;
+}
+@media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
+
+.hero-main {
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line); border-radius: 6px; padding: 18px 20px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.hero-main .label {
+  color: var(--muted); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.hero-eq {
+  font-size: 38px; letter-spacing: -0.03em; margin: 6px 0 2px; line-height: 1;
+}
+.hero-ret { font-size: 14px; }
+.hero-open { font-size: 11.5px; margin-top: 10px; }
+.hero-kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 0; }
+
+h2 .h2-note {
+  text-transform: none; letter-spacing: 0; font-weight: 400;
+  color: var(--muted); margin-left: 10px; font-size: 11px;
+}
+
+/* --- risk budget -------------------------------------------------------- */
+
+.rb { padding: 16px 18px; }
+.rb-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 10px; }
+.rb .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; }
+.rb-total { font-size: 26px; letter-spacing: -0.02em; margin-top: 4px; }
+.rb-of { color: var(--muted); font-size: 13px; margin-left: 8px; letter-spacing: 0; }
+.rb-util { text-align: right; }
+.rb-util-n { font-size: 22px; letter-spacing: -0.02em; }
+.rb-util .note { color: var(--muted); font-size: 10.5px; }
+
+.rb-track {
+  height: 9px; background: var(--bg); border: 1px solid var(--line);
+  border-radius: 3px; overflow: hidden;
+}
+.rb-fill { height: 100%; transition: width 0.35s ease; }
+.rb-fill.total { background: linear-gradient(90deg, var(--accent), #ffb020); }
+.rb-fill.core { background: #5b9dff; }
+.rb-fill.convex { background: var(--up); }
+.rb-fill.carry { background: var(--accent); }
+.rb-fill.over { background: repeating-linear-gradient(45deg, var(--down), var(--down) 5px, #b33 5px, #b33 10px); }
+
+.rb-sleeves { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
+.rb-row { display: grid; grid-template-columns: 190px 1fr 150px; gap: 12px; align-items: center; }
+@media (max-width: 760px) { .rb-row { grid-template-columns: 1fr; gap: 4px; } }
+.rb-name { font-size: 11.5px; color: var(--muted); }
+.rb-payoff { color: var(--accent); margin-left: 8px; }
+.rb-nums { font-size: 11.5px; text-align: right; }
+
+.rb-foot {
+  display: flex; flex-wrap: wrap; gap: 22px; font-size: 11px;
+  border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px;
+}
+.rb-note { font-size: 10.5px; color: var(--muted); line-height: 1.6; margin-top: 8px; }
+
+/* --- position cards ----------------------------------------------------- */
+
+.positions {
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+}
+.pos {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 6px; padding: 14px 16px;
+}
+.pos.acting { border-color: var(--accent); }
+.pos-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.pos-sym { font-size: 15px; margin-right: 8px; }
+.pos-kind { color: var(--muted); font-size: 12px; margin-right: 8px; }
+.pos-pnl { font-size: 17px; letter-spacing: -0.02em; }
+.pos-legs {
+  font-size: 11.5px; background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 4px; padding: 6px 9px; margin: 10px 0 12px;
+}
+.pos-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+.pos-stats .label {
+  color: var(--muted); font-size: 9.5px;
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px;
+}
+.pos-stats > div > div:nth-child(2) { font-size: 13px; }
+.pos-stats .note { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+.pos-exits { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.pg-top { display: flex; justify-content: space-between; align-items: baseline; }
+.pg-label { font-size: 9px; letter-spacing: 0.09em; color: var(--muted); }
+.pg-val { font-size: 12px; }
+.pg-track {
+  height: 5px; background: var(--bg); border: 1px solid var(--line);
+  border-radius: 3px; overflow: hidden; margin: 4px 0 3px;
+}
+.pg-fill { height: 100%; transition: width 0.35s ease; opacity: 0.55; }
+.pg-fill.up { background: var(--up); }
+.pg-fill.down { background: var(--down); }
+.pg-fill.armed { opacity: 1; }
+.pg-basis { font-size: 9.5px; color: var(--muted); }
+
+.pos-action {
+  border-top: 1px solid var(--line); padding-top: 10px;
+  font-size: 11px; line-height: 1.5;
+}
+.pos-action-tag {
+  display: inline-block; font-size: 9px; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 3px;
+  padding: 2px 7px; margin-right: 8px;
+}
+.pos-action.acting .pos-action-tag { color: var(--accent); border-color: var(--accent); }
+.pos-rationale { color: var(--muted); }
+.pos-thesis {
+  font-size: 10.5px; color: var(--muted); line-height: 1.6;
+  border-top: 1px solid var(--line); margin-top: 10px; padding-top: 10px;
+}
+
+/* --- nav ---------------------------------------------------------------- */
+
+.nav { display: flex; gap: 6px; margin-bottom: 18px; }
+.nav a {
+  text-decoration: none; color: var(--muted); font-size: 11.5px;
+  border: 1px solid var(--line); border-radius: 4px;
+  padding: 5px 14px; background: var(--panel);
+}
+.nav a:hover { border-color: var(--muted); color: var(--text); }
+.nav a.on { border-color: var(--accent); color: var(--accent); background: var(--panel-2); }

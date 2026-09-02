@@ -220,6 +220,8 @@ def build() -> dict[str, Any]:
             "max_debit_to_width": SETTINGS.risk.max_debit_to_width,
         },
         "performance": performance(),
+        "live": live_marks(),
+        "budget": risk_budget(),
         "gates": gate_activity(),
         "open_structures": open_structures,
         "closed_structures": closed_structures(),
@@ -243,6 +245,162 @@ def build() -> dict[str, Any]:
             {"name": e.name, "when": e.when.isoformat(), "impact": e.impact}
             for e in upcoming(horizon_hours=168)
         ],
+    }
+
+
+def live_marks() -> dict[str, Any]:
+    """What every open structure is worth right now, and how close it is to an exit.
+
+    The journal says what was risked. It does not say that a position is eighty
+    percent of the way to its profit target with four days left, or that spot
+    is sitting a dollar under the short strike. That is the difference between
+    a dashboard and a table, and the manager already computes all of it on
+    every pass to decide whether to close anything.
+
+    Broker calls, so it is allowed to fail: a dashboard without live marks is
+    worse than one with them and far better than a snapshot that does not get
+    written.
+    """
+    from engine import manager, marketdata
+
+    out: dict[str, Any] = {"marks": [], "spots": {}, "ok": False}
+
+    try:
+        for symbol in SETTINGS.strategy.universe:
+            try:
+                out["spots"][symbol] = round(marketdata.underlying_price(symbol), 2)
+            except Exception:  # noqa: BLE001
+                continue
+
+        marks = manager.mark_book()
+    except Exception as exc:  # noqa: BLE001
+        log.warning("live marks unavailable: %s", exc)
+        return out
+
+    structures = {int(s["id"]): s for s in state.live_structures()}
+    for mark in marks:
+        structure = structures.get(mark.structure_id)
+        if structure is None:
+            continue
+
+        max_gain = float(structure.get("max_gain") or 0)
+        max_loss = float(structure.get("max_loss") or 0)
+        sleeve = str(structure.get("sleeve") or "core")
+        p = SETTINGS.strategy
+
+        # How far along the two exits this position is, as a fraction. The
+        # dashboard draws these as progress, so they are clamped and the basis
+        # is named rather than assumed.
+        if sleeve == "carry":
+            tp_target, sl_target = p.carry_profit_target, p.carry_stop_fraction
+            tp_progress = (mark.unrealized_pnl / max_gain / tp_target) if max_gain and tp_target else 0.0
+            sl_progress = (-mark.unrealized_pnl / max_loss / sl_target) if max_loss and sl_target else 0.0
+            tp_basis = f"{tp_target:.0%} of max gain"
+            sl_basis = f"{sl_target:.1f}x risk"
+        elif mark.entry_price > 0:
+            credit = mark.entry_price * 100 * mark.qty
+            captured = (mark.unrealized_pnl / credit) if credit else 0.0
+            tp_progress = captured / p.core_profit_target if p.core_profit_target else 0.0
+            loss_multiple = (-mark.unrealized_pnl / credit) if credit else 0.0
+            sl_progress = loss_multiple / (p.core_stop_multiple - 1) if p.core_stop_multiple > 1 else 0.0
+            tp_basis = f"{p.core_profit_target:.0%} of credit"
+            sl_basis = f"{p.core_stop_multiple:.1f}x credit"
+        else:
+            debit = abs(mark.entry_price) * 100 * mark.qty
+            gain = (mark.unrealized_pnl / debit) if debit else 0.0
+            tp_progress = gain / p.convex_profit_target if p.convex_profit_target else 0.0
+            sl_progress = (-mark.unrealized_pnl / debit / 0.75) if debit else 0.0
+            tp_basis = f"{p.convex_profit_target:.0%} on debit"
+            sl_basis = "75% of debit lost"
+
+        legs = structure.get("legs") or []
+        shorts = [leg for leg in legs if leg.get("side") == "sell"]
+        spot = out["spots"].get(mark.underlying)
+
+        # Distance to the nearest short strike, which is the level that decides
+        # whether this position is comfortable or not.
+        nearest = None
+        if spot is not None and shorts:
+            nearest = min(shorts, key=lambda leg: abs(float(leg["strike"]) - spot))
+
+        out["marks"].append({
+            "structure_id": mark.structure_id,
+            "underlying": mark.underlying,
+            "kind": mark.kind,
+            "sleeve": mark.sleeve,
+            "qty": mark.qty,
+            "entry_price": round(mark.entry_price, 2),
+            "current_price": round(mark.current_price, 2),
+            "unrealized_pnl": round(mark.unrealized_pnl, 2),
+            "pct_of_max_gain": round(mark.pct_of_max_gain, 4),
+            "dte": mark.dte,
+            "action": mark.action,
+            "rationale": mark.rationale,
+            "max_loss": max_loss,
+            "max_gain": max_gain,
+            "spot": spot,
+            "short_strike": float(nearest["strike"]) if nearest else None,
+            "distance_pct": (
+                round((float(nearest["strike"]) - spot) / spot, 4)
+                if nearest and spot else None
+            ),
+            "tp_progress": round(max(min(tp_progress, 1.5), 0.0), 4),
+            "sl_progress": round(max(min(sl_progress, 1.5), 0.0), 4),
+            "tp_basis": tp_basis,
+            "sl_basis": sl_basis,
+        })
+
+    out["ok"] = True
+    return out
+
+
+def risk_budget() -> dict[str, Any]:
+    """Deployed risk against every cap that binds, sleeve by sleeve.
+
+    The single "open risk" figure hid the finding that mattered all week: the
+    income sleeve had no cap of its own and filled the budget first, so the
+    sleeves that pay a multiple of what they risk were competing for scraps.
+    A dashboard that shows one number cannot show that.
+    """
+    r = SETTINGS.risk
+    equity = 0.0
+    curve = state.equity_curve(limit=1)
+    if curve:
+        equity = float(curve[0]["equity"])
+
+    sleeves = []
+    for name, cap in (
+        ("core", r.max_core_open_risk_pct),
+        ("convex", r.max_convex_open_risk_pct),
+        ("carry", r.max_carry_open_risk_pct),
+    ):
+        used = state.open_risk_by("sleeve", name)
+        sleeves.append({
+            "sleeve": name,
+            "used": round(used, 2),
+            "cap_pct": cap,
+            "cap": round(equity * cap, 2),
+            "used_pct_of_equity": round(used / equity, 5) if equity else 0.0,
+            "utilisation": round(used / (equity * cap), 4) if equity and cap else None,
+        })
+
+    total_used = state.open_risk_total()
+    return {
+        "equity": round(equity, 2),
+        "sleeves": sleeves,
+        "total_used": round(total_used, 2),
+        "total_cap": round(equity * r.max_open_risk_pct, 2),
+        "total_cap_pct": r.max_open_risk_pct,
+        "total_utilisation": (
+            round(total_used / (equity * r.max_open_risk_pct), 4)
+            if equity and r.max_open_risk_pct else None
+        ),
+        "daily_kill_pct": r.daily_loss_kill_pct,
+        "drawdown_kill_pct": r.total_drawdown_kill_pct,
+        "max_new_trades_per_day": r.max_new_trades_per_day,
+        "max_open_structures": r.max_open_structures,
+        "trades_today": state.trades_opened_today(),
+        "failed_today": state.failed_entries_today(),
     }
 
 

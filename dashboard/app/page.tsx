@@ -1,8 +1,11 @@
 "use client";
 
+import Nav from "./Nav";
 import { useEffect, useState } from "react";
 import EquityCurve from "./EquityCurve";
-import type { Snapshot } from "./types";
+import PositionCard from "./PositionCard";
+import RiskBudget from "./RiskBudget";
+import type { LiveMark, Snapshot } from "./types";
 
 const POLL_MS = 60_000;
 // GitHub Pages serves a project site under a path prefix; a bare "/snapshot.json"
@@ -58,6 +61,7 @@ export default function Page() {
     if (loading) {
       return (
         <div className="wrap">
+      <Nav here="/" />
           <h1>super<span>io</span></h1>
           <p className="empty">Loading the latest snapshot...</p>
         </div>
@@ -65,6 +69,7 @@ export default function Page() {
     }
     return (
       <div className="wrap">
+      <Nav here="/" />
         <h1>super<span>io</span></h1>
         <p className="empty">
           No snapshot yet. Run <code>python -m engine.report</code> to generate one.
@@ -75,10 +80,17 @@ export default function Page() {
 
   const p = snap.performance;
   const pnlTone = p.realized_pnl >= 0 ? "up" : "down";
+  const marks: LiveMark[] = snap.live?.marks ?? [];
+  const markById = new Map(marks.map((m) => [m.structure_id, m]));
+  const openPnl = marks.length
+    ? marks.reduce((sum, m) => sum + m.unrealized_pnl, 0)
+    : null;
+  const acting = marks.filter((m) => m.action !== "hold");
   const maxRejections = Math.max(1, ...snap.gates.rejections_by_gate.map((g) => g.count));
 
   return (
     <div className="wrap">
+      <Nav here="/" />
       <header className="top">
         <div>
           <h1>super<span>io</span></h1>
@@ -98,20 +110,42 @@ export default function Page() {
         </div>
       </header>
 
-      <div className="grid kpis">
-        <Kpi label="Realized P&L" value={money(p.realized_pnl)} tone={pnlTone}
-             note={`${p.trades_closed} closed structures`} />
-        <Kpi label="Return" value={pct(p.return_pct)} tone={(p.return_pct ?? 0) >= 0 ? "up" : "down"}
-             note={`from ${money(p.equity_start)}`} />
-        <Kpi label="Win rate" value={p.win_rate === null ? "--" : pct(p.win_rate, 1)}
-             note={`${p.wins}W / ${p.losses}L`} />
-        <Kpi label="Profit factor" value={p.profit_factor?.toFixed(2) ?? "--"}
-             note="gross win / gross loss" />
-        <Kpi label="Max drawdown" value={pct(p.max_drawdown_pct)}
-             note={`kill switch at ${pct(snap.limits.total_drawdown_kill_pct, 0)}`} />
-        <Kpi label="Open risk" value={money(snap.open_risk)}
-             note={`cap ${pct(snap.limits.max_open_risk_pct, 0)} of equity`} />
+      <div className="hero">
+        <div className="hero-main">
+          <div className="label">Equity</div>
+          <div className="hero-eq">{money(p.equity_latest)}</div>
+          <div className={`hero-ret ${(p.return_pct ?? 0) >= 0 ? "up" : "down"}`}>
+            {(p.return_pct ?? 0) >= 0 ? "+" : ""}{pct(p.return_pct)}
+            <span className="muted"> from {money(p.equity_start)}</span>
+          </div>
+          {openPnl !== null ? (
+            <div className="hero-open">
+              <span className="muted">open positions marked at</span>{" "}
+              <span className={openPnl >= 0 ? "up" : "down"}>
+                {openPnl >= 0 ? "+" : ""}{money(openPnl)}
+              </span>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="grid kpis hero-kpis">
+          <Kpi label="Realized P&L" value={money(p.realized_pnl)} tone={pnlTone}
+               note={`${p.trades_closed} closed`} />
+          <Kpi label="Win rate" value={p.win_rate === null ? "--" : pct(p.win_rate, 1)}
+               note={`${p.wins}W / ${p.losses}L`} />
+          <Kpi label="Profit factor" value={p.profit_factor?.toFixed(2) ?? "--"}
+               note="gross win / gross loss" />
+          <Kpi label="Max drawdown" value={pct(p.max_drawdown_pct)}
+               note={`stands down at ${pct(snap.limits.total_drawdown_kill_pct, 0)}`} />
+        </div>
       </div>
+
+      {snap.budget ? (
+        <section>
+          <h2>Where the risk is, and what each sleeve pays for it</h2>
+          <RiskBudget budget={snap.budget} />
+        </section>
+      ) : null}
 
       {snap.dry_run && snap.session_plan ? (
         <section>
@@ -192,42 +226,32 @@ export default function Page() {
       </section>
 
       <section>
-        <h2>Open structures</h2>
-        <div className="scroll">
-          {snap.open_structures.length === 0 ? (
-            <div className="empty">Flat. No open structures.</div>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Structure</th><th>Sleeve</th><th>Qty</th>
-                  <th>Net</th><th>Max loss</th><th>Max gain</th><th>Thesis</th>
-                </tr>
-              </thead>
-              <tbody>
-                {snap.open_structures.map((s) => (
-                  <tr key={s.id}>
-                    <td>
-                      <strong>{s.underlying}</strong> {s.kind.replace(/_/g, " ")}
-                      <div className="muted">
-                        {s.legs.map((l) => `${l.side === "sell" ? "-" : "+"}${l.strike}${l.is_call ? "C" : "P"}`).join(" / ")}
-                        {" · "}{s.legs[0]?.expiry}
-                      </div>
-                    </td>
-                    <td>{s.sleeve}</td>
-                    <td>{s.qty}</td>
-                    <td className={s.net_price >= 0 ? "up" : "down"}>
-                      {s.net_price >= 0 ? "+" : ""}{s.net_price.toFixed(2)}
-                    </td>
-                    <td className="down">{money(s.max_loss)}</td>
-                    <td className="up">{money(s.max_gain)}</td>
-                    <td className="muted">{s.thesis}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+        <h2>
+          Open book
+          {marks.length ? (
+            <span className="h2-note">
+              {marks.length} live · marked against the chain right now
+              {acting.length ? (
+                <span className="down"> · {acting.length} at an exit rule</span>
+              ) : null}
+            </span>
+          ) : null}
+        </h2>
+        {snap.open_structures.length === 0 ? (
+          <div className="empty">Flat. No open structures.</div>
+        ) : (
+          <div className="positions">
+            {snap.open_structures.map((s) => (
+              <PositionCard key={s.id} structure={s} mark={markById.get(s.id) ?? null} />
+            ))}
+          </div>
+        )}
+        {snap.live && !snap.live.ok ? (
+          <div className="sub muted" style={{ marginTop: 8 }}>
+            Live marks unavailable on the last pass, so the cards show what was
+            journaled at entry rather than what the book is worth now.
+          </div>
+        ) : null}
       </section>
 
       <section>

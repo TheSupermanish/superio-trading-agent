@@ -1,3 +1,51 @@
+export type LiveMark = {
+  structure_id: number;
+  underlying: string;
+  kind: string;
+  sleeve: string;
+  qty: number;
+  entry_price: number;
+  current_price: number;
+  unrealized_pnl: number;
+  pct_of_max_gain: number;
+  dte: number;
+  action: string;
+  rationale: string;
+  max_loss: number;
+  max_gain: number;
+  spot: number | null;
+  short_strike: number | null;
+  distance_pct: number | null;
+  tp_progress: number;
+  sl_progress: number;
+  tp_basis: string;
+  sl_basis: string;
+};
+
+export type SleeveBudget = {
+  sleeve: string;
+  used: number;
+  cap: number;
+  cap_pct: number;
+  used_pct_of_equity: number;
+  utilisation: number | null;
+};
+
+export type Budget = {
+  equity: number;
+  sleeves: SleeveBudget[];
+  total_used: number;
+  total_cap: number;
+  total_cap_pct: number;
+  total_utilisation: number | null;
+  daily_kill_pct: number;
+  drawdown_kill_pct: number;
+  max_new_trades_per_day: number;
+  max_open_structures: number;
+  trades_today: number;
+  failed_today: number;
+};
+
 export type EquityPoint = {
   ts: string;
   equity: number;
@@ -56,6 +104,8 @@ export type Snapshot = {
   diary?: boolean;
   account_id: string;
   limits: Record<string, number>;
+  live?: { ok: boolean; marks: LiveMark[]; spots: Record<string, number> };
+  budget?: Budget;
   performance: {
     trades_closed: number;
     wins: number;

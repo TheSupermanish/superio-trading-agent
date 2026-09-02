@@ -1,5 +1,6 @@
 "use client";
 
+import Nav from "../Nav";
 import { useEffect, useMemo, useState } from "react";
 import PriceChart from "./PriceChart";
 import type { ChartPayload, Trade } from "./types";
@@ -177,6 +178,7 @@ export default function ChartPage() {
   if (!data) {
     return (
       <div className="wrap">
+      <Nav here="/chart" />
         <header className="top">
           <h1>super<span>io</span> chart</h1>
         </header>
@@ -189,6 +191,7 @@ export default function ChartPage() {
 
   return (
     <div className="wrap">
+      <Nav here="/chart" />
       <header className="top">
         <div>
           <h1>super<span>io</span> chart</h1>

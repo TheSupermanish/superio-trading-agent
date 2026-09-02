@@ -1,5 +1,6 @@
 "use client";
 
+import Nav from "../Nav";
 import { useCallback, useEffect, useState } from "react";
 import type { AgentDetail, AgentSummary, Structure } from "./types";
 import { GATE_NAMES } from "./types";
@@ -95,6 +96,7 @@ export default function Fleet() {
   if (!agents) {
     return (
       <div className="wrap">
+      <Nav here="/fleet" />
         <header className="top">
           <h1>super<span>io</span> fleet</h1>
         </header>
@@ -117,6 +119,7 @@ export default function Fleet() {
 
   return (
     <div className="wrap">
+      <Nav here="/fleet" />
       <header className="top">
         <div>
           <h1>super<span>io</span> fleet</h1>
