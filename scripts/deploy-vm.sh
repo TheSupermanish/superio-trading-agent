@@ -9,6 +9,7 @@ set -euo pipefail
 REPO="https://github.com/TheSupermanish/superio-trading-agent.git"
 ROOT=/opt/superio
 DASH_PORT=8088
+API_PORT=8090
 
 echo "== packages =="
 sudo apt-get update -qq
@@ -108,6 +109,30 @@ WantedBy=multi-user.target
 UNIT
 done
 
+# The fleet API. Read-only over the journals, broker-free, and it serves the
+# exported dashboard from the same origin so the browser needs no CORS dance.
+sudo tee /etc/systemd/system/superio-api.service >/dev/null <<UNIT
+[Unit]
+Description=Superio fleet API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=$ROOT
+Environment=PYTHONUNBUFFERED=1
+ExecStart=$ROOT/.venv/bin/python $ROOT/api/app.py --port $API_PORT
+Restart=always
+RestartSec=10
+StandardOutput=append:$ROOT/logs/api.log
+StandardError=append:$ROOT/logs/api.log
+MemoryMax=300M
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
 sudo tee /etc/systemd/system/superio-dashboard.service >/dev/null <<UNIT
 [Unit]
 Description=Superio dashboard (static)
@@ -152,6 +177,6 @@ UNIT
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now superio-main superio-test2 superio-test3 \
-  superio-dashboard superio-snapshot.timer >/dev/null 2>&1
+  superio-dashboard superio-api superio-snapshot.timer >/dev/null 2>&1
 echo "== done =="
 systemctl --no-pager --plain list-units 'superio-*' | head -12
