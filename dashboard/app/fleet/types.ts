@@ -54,7 +54,10 @@ export type AgentSummary = {
   performance: Perf | null;
   open_structures?: number;
   open_risk?: number;
-  last_seen?: string | null;
+  generated_at?: string | null;
+  age_seconds?: number | null;
+  dry_run?: boolean;
+  diary?: boolean;
   gates?: {
     considered: number;
     approved: number;

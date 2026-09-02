@@ -126,7 +126,16 @@ export default function Fleet() {
           </div>
         </div>
         <div className="sub">
-          {error ? <span className="down">API unreachable</span> : `updated ${updated}`}
+          {error ? (
+            <span className="down">API unreachable</span>
+          ) : (
+            <>
+              updated {updated}
+              {detail?.age_seconds != null ? (
+                <span className="muted"> · snapshot {Math.round(detail.age_seconds)}s old</span>
+              ) : null}
+            </>
+          )}
         </div>
       </header>
 
