@@ -28,7 +28,7 @@ const AGENT_INFO: Record<string, { title: string; desc: string; icon: string; mo
   },
   risk_officer: {
     title: "Risk Officer",
-    desc: "Mathematical firewall. Enforces 8 inviolable gates (G1-G8): tactical sizing <=0.75%, carry sizing <=1%, aggregate risk <=6%, no naked short options, credit floors, and calendar blackout windows.",
+    desc: "Mathematical firewall. Enforces 8 inviolable gates (G1-G8): tactical sizing <=1%, carry sizing <=1.25%, aggregate risk <=8%, no naked short options, credit floors, and calendar blackout windows.",
     icon: "🛡️",
     model: "Deterministic Gatekeeper (0 Model Calls)",
   },

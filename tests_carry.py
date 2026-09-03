@@ -419,6 +419,16 @@ def test_every_builder_is_reachable_from_the_agent():
         assert style in described, f"style {style!r} is not offered to the model"
 
 
+def test_the_live_universe_is_not_only_three_index_etfs():
+    """More liquid ETF regimes create opportunity without earnings roulette."""
+    from engine.config import SETTINGS
+
+    universe = set(SETTINGS.strategy.universe)
+    assert {"SPY", "QQQ", "IWM"} < universe
+    assert {"GLD", "TLT", "SMH"} <= universe
+    assert {"GLD", "TLT"}.isdisjoint(SETTINGS.strategy.carry_universe)
+
+
 if __name__ == "__main__":
     mod = sys.modules[__name__]
     failed = 0

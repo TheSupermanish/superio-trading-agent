@@ -36,11 +36,11 @@ before the model sees it, so a rejection names the gate that refused it and the
 model adapts. Its final answer is an index into structures already approved and
 already sized. It never emits a leg, a strike, a limit, or a quantity.
 
-The seven gates are numbered and independently tested. G3 makes a naked short
+The eight gates are numbered and independently tested. G3 makes a naked short
 structurally impossible: every short leg needs same-expiry, same-type cover, and
 no flag disables it. G6 refuses to write premium across a scheduled catalyst.
-Kill switches flatten at minus five percent on the day and stand down at minus
-fourteen percent, which sits deliberately above the ten percent open-risk cap:
+Kill switches flatten at minus four percent on the day and stand down at minus
+ten percent, which sits deliberately above the eight percent open-risk cap:
 fully deployed the worst case IS that cap, so a switch below it would let one
 gap end the event having protected nothing. Everything is priced at the touch
 rather than the mid, because Alpaca's paper engine fills against the NBBO and

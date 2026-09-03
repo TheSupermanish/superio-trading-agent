@@ -49,7 +49,7 @@ class RiskLimits:
     #: how the agent holds a directional position for weeks instead of hours.
     carry_risk_share: float = 0.45
 
-    max_risk_per_trade_pct: float = 0.0075   # <= 0.75% of equity on one structure
+    max_risk_per_trade_pct: float = 0.010    # <= 1% of equity on one structure
     #: Carry gets its own, larger per-trade cap. At 0.75% a carry position
     #: cannot be expressed at all below a six-figure account: the narrowest
     #: sensible risk reversal on SPY risks about 630 dollars a contract, so a
@@ -57,12 +57,12 @@ class RiskLimits:
     #: never trades. That is a unit problem, not a risk decision: a structure
     #: held for five weeks is one position rather than a scalp, and the
     #: aggregate is still bounded by max_carry_open_risk_pct.
-    max_carry_risk_per_trade_pct: float = 0.010
+    max_carry_risk_per_trade_pct: float = 0.0125
     #: Keep total defined risk below the event drawdown switch. Increasing this
     #: number cannot create edge; it only scales whatever edge (or error) the
     #: strategy already has. The synthetic replay is explicitly not evidence
     #: for levering the paper account.
-    max_open_risk_pct: float = 0.06          # <= 6% of equity at risk at once
+    max_open_risk_pct: float = 0.08          # <= 8% of equity at risk at once
     #: The income sleeve needs a ceiling of its own, and this is the whole
     #: reason the book was capped at a one percent week.
     #:
@@ -76,24 +76,24 @@ class RiskLimits:
     #: is not a deployment problem, it is arithmetic: the account made 1.38%
     #: and had already beaten what the sleeve holding most of its risk can
     #: produce.
-    max_core_open_risk_pct: float = 0.025
+    max_core_open_risk_pct: float = 0.030
     # The convex sleeve gets a real allocation rather than a token one. With
     # implied vol below realized on the whole universe, premium selling is being
     # paid too little for the movement the tape is actually delivering, so the
     # long-gamma side is where the edge is this week.
-    max_convex_open_risk_pct: float = 0.025
+    max_convex_open_risk_pct: float = 0.030
     #: Carry gets the largest sleeve cap because it is the slowest. A 45 day
     #: structure occupies its budget for weeks, so a cap the size of the
     #: tactical sleeves' would let two positions consume the sleeve for the
     #: whole month.
-    max_carry_open_risk_pct: float = 0.030
-    max_risk_per_underlying_pct: float = 0.025
+    max_carry_open_risk_pct: float = 0.040
+    max_risk_per_underlying_pct: float = 0.030
 
-    daily_loss_kill_pct: float = 0.03        # flatten and stand down for the day
-    total_drawdown_kill_pct: float = 0.08    # stand down for the rest of the event
+    daily_loss_kill_pct: float = 0.04        # flatten and stand down for the day
+    total_drawdown_kill_pct: float = 0.10    # stand down for the rest of the event
 
-    max_new_trades_per_day: int = 5
-    max_open_structures: int = 8
+    max_new_trades_per_day: int = 7
+    max_open_structures: int = 10
     max_structures_per_underlying: int = 2
 
     #: Entries that never filled do not spend a trade slot, because they never
@@ -117,7 +117,14 @@ class RiskLimits:
 
 @dataclass(frozen=True)
 class StrategyParams:
-    universe: tuple[str, ...] = ("SPY", "QQQ", "IWM")
+    # Liquid ETF options only. Sector, rates, and gold ETFs add independent
+    # volatility regimes without introducing untracked single-name earnings.
+    universe: tuple[str, ...] = (
+        "SPY", "QQQ", "IWM", "DIA", "XLK", "XLF", "SMH", "GLD", "TLT",
+    )
+    # The carry thesis is specifically the equity risk premium. Rates and
+    # commodity ETFs remain available to tactical sleeves only.
+    carry_universe: tuple[str, ...] = ("SPY", "QQQ", "IWM", "DIA", "XLK")
 
     # Core income sleeve: short vertical spreads, delta-selected.
     core_min_dte: int = 3

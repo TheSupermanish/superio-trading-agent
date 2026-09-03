@@ -211,6 +211,13 @@ def tool_propose_structure(ctx: ToolContext, symbol: str, style: str) -> dict[st
     builder = STYLES.get(style)
     if builder is None:
         return {"error": f"unknown style {style!r}; choose from {sorted(STYLES)}"}
+    if style == "risk_reversal" and symbol not in SETTINGS.strategy.carry_universe:
+        return {
+            "error": (
+                f"risk_reversal is reserved for the equity carry universe "
+                f"{list(SETTINGS.strategy.carry_universe)}; use a tactical spread on {symbol}"
+            )
+        }
 
     try:
         proposal = builder(symbol)
@@ -295,7 +302,10 @@ REGISTRY: dict[str, Callable[..., dict[str, Any]]] = {
 
 def declarations() -> list[dict[str, Any]]:
     """JSON-schema declarations handed to the model."""
-    sym = {"type": "STRING", "description": "Ticker, one of SPY, QQQ, IWM"}
+    sym = {
+        "type": "STRING",
+        "description": f"Ticker, one of {', '.join(SETTINGS.strategy.universe)}",
+    }
     return [
         {
             "name": "get_regime",

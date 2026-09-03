@@ -33,7 +33,8 @@ log = logging.getLogger(__name__)
 MAX_STEPS = 14
 
 SYSTEM = """You are the strategist for an autonomous options trading desk. You
-trade defined-risk option structures on SPY, QQQ and IWM in a paper account.
+trade defined-risk option structures across a configured universe of liquid
+index, sector, rates, and commodity ETFs in a paper account.
 
 Your objective is risk-adjusted return over a short horizon, not activity. Doing
 nothing is a legitimate and frequently correct outcome.
@@ -148,7 +149,11 @@ def _seed_candidates(ctx: tools.ToolContext) -> None:
             style = "put_credit_spread" if bias != "bearish" else "call_credit_spread"
         try:
             tools.tool_propose_structure(ctx, symbol, style)
-            if bias in {"bullish", "neutral"} and SETTINGS.risk.max_carry_open_risk_pct > 0:
+            if (
+                symbol in SETTINGS.strategy.carry_universe
+                and bias in {"bullish", "neutral"}
+                and SETTINGS.risk.max_carry_open_risk_pct > 0
+            ):
                 tools.tool_propose_structure(ctx, symbol, "risk_reversal")
         except Exception as exc:  # noqa: BLE001
             log.debug("seed proposal failed for %s: %s", symbol, exc)

@@ -414,7 +414,12 @@ export default function Page() {
       {snap.open_structures.length > 0 && (
         <section>
           <h2>Macro Shock & What-If Stress Simulator</h2>
-          <ScenarioTester structures={snap.open_structures} marks={marks} equity={p.equity_latest} />
+          <ScenarioTester
+            structures={snap.open_structures}
+            marks={marks}
+            equity={p.equity_latest}
+            drawdownKillPct={snap.budget?.drawdown_kill_pct ?? 0.10}
+          />
         </section>
       )}
 

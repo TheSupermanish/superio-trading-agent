@@ -8,9 +8,10 @@ interface ScenarioTesterProps {
   structures: Structure[];
   marks: LiveMark[];
   equity: number;
+  drawdownKillPct: number;
 }
 
-export default function ScenarioTester({ structures, marks, equity }: ScenarioTesterProps) {
+export default function ScenarioTester({ structures, marks, equity, drawdownKillPct }: ScenarioTesterProps) {
   const [shockPct, setShockPct] = useState<number>(0);
   const markById = useMemo(() => new Map(marks.map((m) => [m.structure_id, m])), [marks]);
 
@@ -38,10 +39,10 @@ export default function ScenarioTester({ structures, marks, equity }: ScenarioTe
 
     const simEquity = equity + simulatedTotalPnl;
     const simReturnPct = equity > 0 ? (simulatedTotalPnl / equity) * 100 : 0;
-    const killSwitchBreached = simReturnPct <= -8.0;
+    const killSwitchBreached = simReturnPct <= -(drawdownKillPct * 100);
 
     return { simulatedTotalPnl, perStructure, simEquity, simReturnPct, killSwitchBreached };
-  }, [structures, markById, equity, shockPct]);
+  }, [structures, markById, equity, shockPct, drawdownKillPct]);
 
   const money = (n: number) => `${n < 0 ? "-" : ""}$${Math.abs(Math.round(n)).toLocaleString()}`;
 
@@ -128,7 +129,7 @@ export default function ScenarioTester({ structures, marks, equity }: ScenarioTe
         </div>
 
         <div style={{ background: "rgba(0,0,0,0.25)", padding: "10px 14px", borderRadius: 4, border: "1px solid var(--line)" }}>
-          <div className="label">8% Kill Switch Safety</div>
+          <div className="label">{(drawdownKillPct * 100).toFixed(0)}% Kill Switch Safety</div>
           <div style={{ fontSize: 20, fontWeight: 700, marginTop: 4, color: shockResults.killSwitchBreached ? "var(--down)" : "var(--up)" }}>
             {shockResults.killSwitchBreached ? "BREACHED" : "DEFENDED (PASS)"}
           </div>

@@ -347,7 +347,7 @@ export default function Fleet() {
             />
             <Kpi label="Win Rate" value={p?.win_rate != null ? pct(p.win_rate, 1) : "--"} note={p ? `${p.wins}W / ${p.losses}L` : undefined} />
             <Kpi label="Profit Factor" value={p?.profit_factor != null ? p.profit_factor.toFixed(2) : "--"} note="gross win / gross loss" />
-            <Kpi label="Max Drawdown" value={p?.max_drawdown_pct != null ? pct(p.max_drawdown_pct) : "--"} note="stands down at 8%" />
+            <Kpi label="Max Drawdown" value={p?.max_drawdown_pct != null ? pct(p.max_drawdown_pct) : "--"} note="stands down at 10%" />
           </div>
 
           {/* Open Structures */}

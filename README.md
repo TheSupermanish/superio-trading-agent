@@ -67,12 +67,12 @@ All of these live in `engine/config.py` and are enforced in `engine/risk.py`.
 
 | Gate | Limit |
 | --- | --- |
-| Max loss on one structure | 0.75% of equity |
-| Max loss across all open structures | 6% of equity |
+| Max loss on one structure | 1% tactical / 1.25% carry |
+| Max loss across all open structures | 8% of equity |
 | Convex sleeve cap | 3% of equity |
-| Max risk per underlying | 2.5% of equity |
-| Daily loss kill switch | -3%, flatten and stand down |
-| Drawdown kill switch | -8%, stand down for the event |
+| Max risk per underlying | 3% of equity |
+| Daily loss kill switch | -4%, flatten and stand down |
+| Drawdown kill switch | -10%, stand down for the event |
 | Naked short options | Structurally impossible |
 | Credit floor | Never sell a spread for less than 18% of its width |
 | Debit cap | Never pay more than 45% of width for convexity |
