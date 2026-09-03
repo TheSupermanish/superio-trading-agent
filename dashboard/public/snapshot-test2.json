@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T20:20:40.522793+00:00",
+  "generated_at": "2026-09-03T20:37:11.690380+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -7,12 +7,12 @@
   "account_id": "bf5d5cb0-a7e3-4625-bdd8-68de8f73d24c",
   "limits": {
     "max_risk_per_trade_pct": 0.006,
-    "max_open_risk_pct": 0.06,
+    "max_open_risk_pct": 0.08,
     "max_convex_open_risk_pct": 0.025,
     "max_carry_open_risk_pct": 0.0,
-    "max_carry_risk_per_trade_pct": 0.01,
-    "daily_loss_kill_pct": 0.03,
-    "total_drawdown_kill_pct": 0.08,
+    "max_carry_risk_per_trade_pct": 0.0125,
+    "daily_loss_kill_pct": 0.04,
+    "total_drawdown_kill_pct": 0.1,
     "min_credit_to_width": 0.18,
     "max_debit_to_width": 0.4
   },
@@ -75,8 +75,14 @@
     "marks": [],
     "spots": {
       "SPY": 771.91,
-      "QQQ": 717.17,
-      "IWM": 295.02
+      "QQQ": 717.29,
+      "IWM": 295.06,
+      "DIA": 536.78,
+      "XLK": 186.01,
+      "XLF": 58.58,
+      "SMH": 552.72,
+      "GLD": 410.7,
+      "TLT": 82.07
     },
     "ok": true
   },
@@ -86,10 +92,10 @@
       {
         "sleeve": "core",
         "used": 740.0,
-        "cap_pct": 0.025,
-        "cap": 2519.65,
+        "cap_pct": 0.03,
+        "cap": 3023.58,
         "used_pct_of_equity": 0.00734,
-        "utilisation": 0.2937
+        "utilisation": 0.2447
       },
       {
         "sleeve": "convex",
@@ -109,13 +115,13 @@
       }
     ],
     "total_used": 1268.0,
-    "total_cap": 6047.15,
-    "total_cap_pct": 0.06,
-    "total_utilisation": 0.2097,
-    "daily_kill_pct": 0.03,
-    "drawdown_kill_pct": 0.08,
-    "max_new_trades_per_day": 5,
-    "max_open_structures": 8,
+    "total_cap": 8062.87,
+    "total_cap_pct": 0.08,
+    "total_utilisation": 0.1573,
+    "daily_kill_pct": 0.04,
+    "drawdown_kill_pct": 0.1,
+    "max_new_trades_per_day": 7,
+    "max_open_structures": 10,
     "trades_today": 3,
     "failed_today": 2
   },
@@ -1841,6 +1847,38 @@
       "buying_power": 403175.36,
       "open_risk": 1268.0,
       "day_pnl": -404.1999999999971
+    },
+    {
+      "ts": "2026-09-03T20:25:44.847146+00:00",
+      "equity": 100785.84,
+      "cash": 100793.84,
+      "buying_power": 403175.36,
+      "open_risk": 1268.0,
+      "day_pnl": -404.1999999999971
+    },
+    {
+      "ts": "2026-09-03T20:28:29.063261+00:00",
+      "equity": 100785.84,
+      "cash": 100793.84,
+      "buying_power": 403175.36,
+      "open_risk": 1268.0,
+      "day_pnl": -404.1999999999971
+    },
+    {
+      "ts": "2026-09-03T20:33:32.405713+00:00",
+      "equity": 100785.84,
+      "cash": 100793.84,
+      "buying_power": 403175.36,
+      "open_risk": 1268.0,
+      "day_pnl": -404.1999999999971
+    },
+    {
+      "ts": "2026-09-03T20:36:20.145734+00:00",
+      "equity": 100785.84,
+      "cash": 100793.84,
+      "buying_power": 403175.36,
+      "open_risk": 1268.0,
+      "day_pnl": -404.1999999999971
     }
   ],
   "recent_decisions": [
@@ -3181,6 +3219,38 @@
   ],
   "recent_events": [
     {
+      "id": 188,
+      "ts": "2026-09-03T20:36:16.927957+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 187,
+      "ts": "2026-09-03T20:36:13.526971+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=test2 variant=convex_tilt mode=LIVE PAPER",
+      "data": null
+    },
+    {
+      "id": 186,
+      "ts": "2026-09-03T20:28:25.790643+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 185,
+      "ts": "2026-09-03T20:28:22.471843+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=test2 variant=convex_tilt mode=LIVE PAPER",
+      "data": null
+    },
+    {
       "id": 184,
       "ts": "2026-09-03T20:05:30.881336+00:00",
       "level": "info",
@@ -3467,38 +3537,6 @@
       "kind": "orphan_position",
       "message": "IWM260903P00293000 is held at the broker but no journal entry claims it",
       "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"e63fcdba-e176-47f3-964f-7007dc8ebdbe\", \"asset_marginable\": true, \"avg_entry_price\": \"1.46\", \"change_today\": \"-0.93443\", \"cost_basis\": \"584\", \"current_price\": \"0.04\", \"exchange\": \"\", \"lastday_price\": \"0.61\", \"market_value\": \"16\", \"qty\": \"4\", \"qty_available\": \"4\", \"side\": \"long\", \"symbol\": \"IWM260903P00293000\", \"unrealized_intraday_pl\": \"-228\", \"unrealized_intraday_plpc\": \"-0.93443\", \"unrealized_pl\": \"-568\", \"unrealized_plpc\": \"-0.9726\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 148,
-      "ts": "2026-09-03T16:04:40.396807+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00286000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"6be73164-2ba4-42c0-ab32-2ec28f315cd0\", \"asset_marginable\": true, \"avg_entry_price\": \"0.38\", \"change_today\": \"-0.5\", \"cost_basis\": \"-152\", \"current_price\": \"0.01\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"-4\", \"qty\": \"-4\", \"qty_available\": \"-4\", \"side\": \"short\", \"symbol\": \"IWM260903P00286000\", \"unrealized_intraday_pl\": \"4\", \"unrealized_intraday_plpc\": \"0.5\", \"unrealized_pl\": \"148\", \"unrealized_plpc\": \"0.97368\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 147,
-      "ts": "2026-09-03T16:04:40.395618+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00285000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"cc225ee0-dda6-4222-acab-d2284affea79\", \"asset_marginable\": true, \"avg_entry_price\": \"0.14\", \"change_today\": \"-0.5\", \"cost_basis\": \"-56\", \"current_price\": \"0.01\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"-4\", \"qty\": \"-4\", \"qty_available\": \"-4\", \"side\": \"short\", \"symbol\": \"IWM260903P00285000\", \"unrealized_intraday_pl\": \"4\", \"unrealized_intraday_plpc\": \"0.5\", \"unrealized_pl\": \"52\", \"unrealized_plpc\": \"0.92857\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 146,
-      "ts": "2026-09-03T16:04:40.394229+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00284000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"06c55358-6533-49c8-8e1e-6f917be5f418\", \"asset_marginable\": true, \"avg_entry_price\": \"0.23\", \"change_today\": \"-1\", \"cost_basis\": \"92\", \"current_price\": \"0\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"0\", \"qty\": \"4\", \"qty_available\": \"4\", \"side\": \"long\", \"symbol\": \"IWM260903P00284000\", \"unrealized_intraday_pl\": \"-8\", \"unrealized_intraday_plpc\": \"-1\", \"unrealized_pl\": \"-92\", \"unrealized_plpc\": \"-1\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 145,
-      "ts": "2026-09-03T15:58:57.212112+00:00",
-      "level": "warning",
-      "kind": "reconciliation",
-      "message": "0 structures confirmed, 0 marked closed, 0 adopted, 4 orphan positions",
-      "data": null
     }
   ],
   "session_plan": {

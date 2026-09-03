@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-09-03T20:20:14.230599+00:00",
+  "generated_at": "2026-09-03T20:37:16.378260+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
   "diary": false,
   "account_id": "d24f31ca-ba6f-4b2c-8a97-bec552efd068",
   "limits": {
-    "max_risk_per_trade_pct": 0.0075,
-    "max_open_risk_pct": 0.06,
+    "max_risk_per_trade_pct": 0.01,
+    "max_open_risk_pct": 0.08,
     "max_convex_open_risk_pct": 0.0,
     "max_carry_open_risk_pct": 0.0,
-    "max_carry_risk_per_trade_pct": 0.01,
-    "daily_loss_kill_pct": 0.03,
-    "total_drawdown_kill_pct": 0.08,
+    "max_carry_risk_per_trade_pct": 0.0125,
+    "daily_loss_kill_pct": 0.04,
+    "total_drawdown_kill_pct": 0.1,
     "min_credit_to_width": 0.22,
     "max_debit_to_width": 0.45
   },
@@ -65,8 +65,14 @@
     "marks": [],
     "spots": {
       "SPY": 771.91,
-      "QQQ": 717.18,
-      "IWM": 295.02
+      "QQQ": 717.29,
+      "IWM": 295.05,
+      "DIA": 536.78,
+      "XLK": 186.01,
+      "XLF": 58.58,
+      "SMH": 552.72,
+      "GLD": 410.7,
+      "TLT": 82.06
     },
     "ok": true
   },
@@ -76,8 +82,8 @@
       {
         "sleeve": "core",
         "used": 0.0,
-        "cap_pct": 0.025,
-        "cap": 2483.97,
+        "cap_pct": 0.03,
+        "cap": 2980.76,
         "used_pct_of_equity": 0.0,
         "utilisation": 0.0
       },
@@ -99,13 +105,13 @@
       }
     ],
     "total_used": 0.0,
-    "total_cap": 5961.53,
-    "total_cap_pct": 0.06,
+    "total_cap": 7948.7,
+    "total_cap_pct": 0.08,
     "total_utilisation": 0.0,
-    "daily_kill_pct": 0.03,
-    "drawdown_kill_pct": 0.08,
-    "max_new_trades_per_day": 5,
-    "max_open_structures": 8,
+    "daily_kill_pct": 0.04,
+    "drawdown_kill_pct": 0.1,
+    "max_new_trades_per_day": 7,
+    "max_open_structures": 10,
     "trades_today": 2,
     "failed_today": 0
   },
@@ -1684,6 +1690,38 @@
       "buying_power": 397435.08,
       "open_risk": 0.0,
       "day_pnl": -792.5500000000029
+    },
+    {
+      "ts": "2026-09-03T20:25:18.067598+00:00",
+      "equity": 99358.77,
+      "cash": 99358.77,
+      "buying_power": 397435.08,
+      "open_risk": 0.0,
+      "day_pnl": -792.5500000000029
+    },
+    {
+      "ts": "2026-09-03T20:28:29.063335+00:00",
+      "equity": 99358.77,
+      "cash": 99358.77,
+      "buying_power": 397435.08,
+      "open_risk": 0.0,
+      "day_pnl": -792.5500000000029
+    },
+    {
+      "ts": "2026-09-03T20:33:32.158444+00:00",
+      "equity": 99358.77,
+      "cash": 99358.77,
+      "buying_power": 397435.08,
+      "open_risk": 0.0,
+      "day_pnl": -792.5500000000029
+    },
+    {
+      "ts": "2026-09-03T20:36:21.427218+00:00",
+      "equity": 99358.77,
+      "cash": 99358.77,
+      "buying_power": 397435.08,
+      "open_risk": 0.0,
+      "day_pnl": -792.5500000000029
     }
   ],
   "recent_decisions": [
@@ -3012,6 +3050,38 @@
   ],
   "recent_events": [
     {
+      "id": 54,
+      "ts": "2026-09-03T20:36:16.900503+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 53,
+      "ts": "2026-09-03T20:36:13.527001+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=test3 variant=income_only mode=LIVE PAPER",
+      "data": null
+    },
+    {
+      "id": 52,
+      "ts": "2026-09-03T20:28:25.842488+00:00",
+      "level": "info",
+      "kind": "preflight",
+      "message": "journal write check",
+      "data": null
+    },
+    {
+      "id": 51,
+      "ts": "2026-09-03T20:28:22.471842+00:00",
+      "level": "info",
+      "kind": "loop_start",
+      "message": "profile=test3 variant=income_only mode=LIVE PAPER",
+      "data": null
+    },
+    {
       "id": 50,
       "ts": "2026-09-03T20:05:06.189488+00:00",
       "level": "info",
@@ -3298,38 +3368,6 @@
       "kind": "market_brief",
       "message": "US equity futures are little changed on Thursday after major indexes snapped a three-day losing streak in the previous session. Yesterday's rebound was led by technology stocks as oil prices and bond yields steadied after a recent run-up. Investors are looking ahead to today's economic data, including jobless claims and ISM Services, as well as remarks from Federal Reserve speakers for further clu",
       "data": "{\"session_tone\": \"quiet\", \"summary\": \"US equity futures are little changed on Thursday after major indexes snapped a three-day losing streak in the previous session. Yesterday's rebound was led by technology stocks as oil prices and bond yields steadied after a recent run-up. Investors are looking ahead to today's economic data, including jobless claims and ISM Services, as well as remarks from Federal Reserve speakers for further clues on the path of monetary policy.\", \"catalysts_today\": [\"8:30 AM ET - Jobless Claims and Trade Balance\", \"10:00 AM ET - ISM Non-Manufacturing Composite (August)\", \"Fed Speakers: Hammack and Goolsbee\"], \"vol_context\": \"Volatility is being sold, as indicated by a slight dip in the Cboe Volatility Index (VIX) in pre-market.\", \"confidence\": 0.7, \"grounded\": true, \"sources\": [\"tradingeconomics.com\", \"commbank.com.au\", \"substack.com\", \"scotiabank.com\", \"schwab.com\"], \"cached\": false}"
-    },
-    {
-      "id": 14,
-      "ts": "2026-09-03T06:09:13.670361+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 13,
-      "ts": "2026-09-03T06:09:09.974720+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=test3 variant=income_only mode=LIVE PAPER",
-      "data": null
-    },
-    {
-      "id": 12,
-      "ts": "2026-08-28T15:40:19.043882+00:00",
-      "level": "info",
-      "kind": "market_brief",
-      "message": "US equity markets are trading in a mixed and cautious fashion as investors digest a hawkish speech from Federal Reserve Chairman Kevin Warsh at the Jackson Hole symposium. [6, 8, 9] Warsh indicated that inflation remains too high and that the Fed may have more \"work to do,\" which has introduced uncertainty about the future path of interest rates. [8, 9, 17] This follows a strong session on Thursda",
-      "data": "{\"session_tone\": \"mixed\", \"summary\": \"US equity markets are trading in a mixed and cautious fashion as investors digest a hawkish speech from Federal Reserve Chairman Kevin Warsh at the Jackson Hole symposium. [6, 8, 9] Warsh indicated that inflation remains too high and that the Fed may have more \\\"work to do,\\\" which has introduced uncertainty about the future path of interest rates. [8, 9, 17] This follows a strong session on Thursday driven by positive earnings from tech companies like Nvidia and Salesforce, but the Fed's stance is now the dominant focus, leading to a flat and indecisive market. [1, 2, 30]\", \"catalysts_today\": [\"Federal Reserve Chairman Kevin Warsh's speech at the Jackson Hole Economic Policy Symposium, signaling a hawkish stance on inflation. [5, 6, 8, 9]\", \"Release of the PCE price index, which showed a 0.2% increase in July and a 3.7% annual rate. [2]\", \"July durable goods orders rose 1.1%, suggesting continued business spending. [2]\", \"The Bureau of Labor Statistics released a preliminary benchmark revision for March 2026 total nonfarm employment, showing a decrease of 79,000. [12]\"], \"vol_context\": \"The CBOE Volatility Index (VIX) is relatively steady after declining yesterday, reflecting the market's wait-and-see approach ahead of and following the Fed chair's comments. [1, 20, 25]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US equity market news today August 28 2026\", \"US stock market tone today\", \"SPY QQQ IWM trading today August 28 2026\", \"economic data releases today August 28 2026\", \"Fed speakers today August 28 2026\", \"market catalysts today August 28 2026\"], \"cached\": false}"
-    },
-    {
-      "id": 11,
-      "ts": "2026-08-28T15:17:32.889456+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
     }
   ],
   "session_plan": {
