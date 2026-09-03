@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T20:15:46.482762+00:00",
+  "generated_at": "2026-09-03T20:20:42.503065+00:00",
   "bars": {
     "SPY": [
       {
@@ -960,7 +960,7 @@
         "high": 774.015,
         "low": 767.47,
         "close": 773.115,
-        "volume": 1423886.0
+        "volume": 1423986.0
       }
     ],
     "QQQ": [
@@ -1922,7 +1922,7 @@
         "high": 718.895,
         "low": 709.73,
         "close": 717.675,
-        "volume": 528081.0
+        "volume": 529121.0
       }
     ],
     "IWM": [
@@ -2884,561 +2884,867 @@
         "high": 296.17,
         "low": 293.44,
         "close": 295.18,
-        "volume": 926127.0
+        "volume": 927627.0
       }
     ]
   },
   "trades": [
     {
-      "id": 12,
-      "opened_at": "2026-09-02T11:05:33.479879+00:00",
-      "closed_at": "2026-09-03T05:44:03.020306+00:00",
-      "sleeve": "core",
-      "underlying": "IWM",
-      "kind": "iron_condor",
+      "id": 1,
+      "opened_at": "2026-08-28T14:07:28.827792+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "kind": "call_debit_spread",
       "legs": [
         {
-          "symbol": "IWM260902C00296000",
-          "side": "sell",
-          "strike": 296.0,
-          "expiry": "2026-09-02",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.02,
-          "delta": null
-        },
-        {
-          "symbol": "IWM260902C00297000",
+          "symbol": "SPY260831C00773000",
           "side": "buy",
-          "strike": 297.0,
-          "expiry": "2026-09-02",
+          "strike": 773.0,
+          "expiry": "2026-08-31",
           "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.01,
-          "delta": null
+          "mid": 1.53,
+          "bid": 1.52,
+          "ask": 1.54,
+          "delta": 0.3799,
+          "ratio_qty": 1
         },
         {
-          "symbol": "IWM260902P00290000",
-          "side": "buy",
-          "strike": 290.0,
-          "expiry": "2026-09-02",
-          "is_call": false,
-          "ratio_qty": 1,
-          "mid": 0.78,
-          "delta": null
-        },
-        {
-          "symbol": "IWM260902P00291000",
+          "symbol": "SPY260831C00781000",
           "side": "sell",
-          "strike": 291.0,
-          "expiry": "2026-09-02",
-          "is_call": false,
-          "ratio_qty": 1,
-          "mid": 1.26,
-          "delta": null
+          "strike": 781.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 0.085,
+          "bid": 0.08,
+          "ask": 0.09,
+          "delta": 0.0386,
+          "ratio_qty": 1
         }
       ],
-      "qty": 11,
-      "net_price": 0.35,
-      "max_loss": 715.0,
-      "max_gain": 385.0,
+      "qty": 4,
+      "net_price": -1.46,
+      "max_loss": 584.0,
+      "max_gain": 2616.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-87243fa3f019",
+      "thesis": "Pay 1.46 for the 773/781 call spread expiring 2026-08-31: 4.5x payoff if the move continues. Regime: up/bullish.",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          781.0
+        ],
+        "long_strikes": [
+          773.0
+        ],
+        "min_strike": 773.0,
+        "max_strike": 781.0,
+        "breakeven": 779.54
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 438.0
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -438.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 2,
+      "opened_at": "2026-08-28T14:07:32.632261+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "QQQ260828C00720000",
+          "side": "buy",
+          "strike": 720.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 1.385,
+          "bid": 1.36,
+          "ask": 1.41,
+          "delta": 0.3916,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260828C00728000",
+          "side": "sell",
+          "strike": 728.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 0.085,
+          "bid": 0.08,
+          "ask": 0.09,
+          "delta": 0.0398,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 4,
+      "net_price": -1.3299999999999998,
+      "max_loss": 531.9999999999999,
+      "max_gain": 2668.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-f611cd6882a4",
+      "thesis": "Pay 1.33 for the 720/728 call spread expiring 2026-08-28: 5.0x payoff if the move continues. Regime: up/bullish.",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          728.0
+        ],
+        "long_strikes": [
+          720.0
+        ],
+        "min_strike": 720.0,
+        "max_strike": 728.0,
+        "breakeven": 726.67
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 399.0
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -399.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 3,
+      "opened_at": "2026-08-28T14:10:54.817307+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260831C00772000",
+          "side": "buy",
+          "strike": 772.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 1.84,
+          "bid": 1.83,
+          "ask": 1.85,
+          "delta": 0.4296,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260831C00780000",
+          "side": "sell",
+          "strike": 780.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 0.115,
+          "bid": 0.11,
+          "ask": 0.12,
+          "delta": 0.0504,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 3,
+      "net_price": -1.74,
+      "max_loss": 522.0,
+      "max_gain": 1878.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-a47bb5d8a292",
+      "thesis": "Pay 1.74 for the 772/780 call spread expiring 2026-08-31: 3.6x payoff if the move continues. Regime: up/bullish. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          780.0
+        ],
+        "long_strikes": [
+          772.0
+        ],
+        "min_strike": 772.0,
+        "max_strike": 780.0,
+        "breakeven": 778.26
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 391.5
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -391.5
+      },
+      "held_hours": null
+    },
+    {
+      "id": 4,
+      "opened_at": "2026-08-28T14:10:58.396831+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "QQQ260828C00720000",
+          "side": "buy",
+          "strike": 720.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 1.275,
+          "bid": 1.27,
+          "ask": 1.28,
+          "delta": 0.3784,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260828C00725000",
+          "side": "sell",
+          "strike": 725.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 0.205,
+          "bid": 0.2,
+          "ask": 0.21,
+          "delta": 0.0911,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": -1.08,
+      "max_loss": 540.0,
+      "max_gain": 1960.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-acc4707dabda",
+      "thesis": "Pay 1.08 for the 720/725 call spread expiring 2026-08-28: 3.6x payoff if the move continues. Regime: up/bullish. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          725.0
+        ],
+        "long_strikes": [
+          720.0
+        ],
+        "min_strike": 720.0,
+        "max_strike": 725.0,
+        "breakeven": 723.92
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 405.0
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -405.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 5,
+      "opened_at": "2026-08-28T14:14:14.259855+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260902C00773000",
+          "side": "buy",
+          "strike": 773.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 2.13,
+          "bid": 2.11,
+          "ask": 2.15,
+          "delta": 0.3767,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260902C00781000",
+          "side": "sell",
+          "strike": 781.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.285,
+          "bid": 0.28,
+          "ask": 0.29,
+          "delta": 0.0828,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 3,
+      "net_price": -1.8699999999999999,
+      "max_loss": 561.0,
+      "max_gain": 1839.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-bc7fac95bbb6",
+      "thesis": "Pay 1.87 for the 773/781 call spread expiring 2026-09-02: 3.3x payoff if the move continues. Regime: up/bullish. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          781.0
+        ],
+        "long_strikes": [
+          773.0
+        ],
+        "min_strike": 773.0,
+        "max_strike": 781.0,
+        "breakeven": 779.13
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 420.75
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -420.75
+      },
+      "held_hours": null
+    },
+    {
+      "id": 6,
+      "opened_at": "2026-08-28T14:17:34.950964+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260901C00773000",
+          "side": "buy",
+          "strike": 773.0,
+          "expiry": "2026-09-01",
+          "is_call": true,
+          "mid": 1.935,
+          "bid": 1.9,
+          "ask": 1.97,
+          "delta": 0.402,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260901C00781000",
+          "side": "sell",
+          "strike": 781.0,
+          "expiry": "2026-09-01",
+          "is_call": true,
+          "mid": 0.17,
+          "bid": 0.16,
+          "ask": 0.18,
+          "delta": 0.0626,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 3,
+      "net_price": -1.81,
+      "max_loss": 543.0,
+      "max_gain": 1857.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-4e147c5877da",
+      "thesis": "Pay 1.81 for the 773/781 call spread expiring 2026-09-01: 3.4x payoff if the move continues. Regime: up/bullish. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          781.0
+        ],
+        "long_strikes": [
+          773.0
+        ],
+        "min_strike": 773.0,
+        "max_strike": 781.0,
+        "breakeven": 779.19
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 407.25
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -407.25
+      },
+      "held_hours": null
+    },
+    {
+      "id": 7,
+      "opened_at": "2026-08-28T14:17:38.419158+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "QQQ260828C00720000",
+          "side": "buy",
+          "strike": 720.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 1.225,
+          "bid": 1.22,
+          "ask": 1.23,
+          "delta": 0.3856,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260828C00725000",
+          "side": "sell",
+          "strike": 725.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 0.165,
+          "bid": 0.16,
+          "ask": 0.17,
+          "delta": 0.0809,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": -1.07,
+      "max_loss": 535.0,
+      "max_gain": 1965.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-cd5a5981cea8",
+      "thesis": "Pay 1.07 for the 720/725 call spread expiring 2026-08-28: 3.7x payoff if the move continues. Regime: up/bullish. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          725.0
+        ],
+        "long_strikes": [
+          720.0
+        ],
+        "min_strike": 720.0,
+        "max_strike": 725.0,
+        "breakeven": 723.93
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 401.25
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -401.25
+      },
+      "held_hours": null
+    },
+    {
+      "id": 8,
+      "opened_at": "2026-08-28T14:20:53.901835+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260828C00773000",
+          "side": "buy",
+          "strike": 773.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 0.755,
+          "bid": 0.75,
+          "ask": 0.76,
+          "delta": 0.3477,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260828C00776000",
+          "side": "sell",
+          "strike": 776.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 0.155,
+          "bid": 0.15,
+          "ask": 0.16,
+          "delta": 0.0992,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 9,
+      "net_price": -0.61,
+      "max_loss": 549.0,
+      "max_gain": 2151.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-ab6cb6f1f07c",
+      "thesis": "Pay 0.61 for the 773/776 call spread expiring 2026-08-28: 3.9x payoff if the move continues. Regime: up/bullish. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          776.0
+        ],
+        "long_strikes": [
+          773.0
+        ],
+        "min_strike": 773.0,
+        "max_strike": 776.0,
+        "breakeven": 775.39
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 411.75
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -411.75
+      },
+      "held_hours": null
+    },
+    {
+      "id": 9,
+      "opened_at": "2026-08-28T15:58:23.803754+00:00",
+      "closed_at": "2026-08-28T16:08:40.960862+00:00",
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "QQQ260828C00719000",
+          "side": "buy",
+          "strike": 719.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 1.08,
+          "bid": 1.07,
+          "ask": 1.09,
+          "delta": 0.3865,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260828C00724000",
+          "side": "sell",
+          "strike": 724.0,
+          "expiry": "2026-08-28",
+          "is_call": true,
+          "mid": 0.085,
+          "bid": 0.08,
+          "ask": 0.09,
+          "delta": 0.0532,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": -1.01,
+      "max_loss": 505.0,
+      "max_gain": 1995.0,
       "status": "closed",
       "realized_pnl": 0.0,
       "close_reason": "reconciled_flat",
+      "client_order_id": "superio-test2-f3ab6073c0c8",
+      "thesis": "Pay 1.01 for the 719/724 call spread expiring 2026-08-28: 4.0x payoff if the move continues. Implied volatility is below realized across the board, making long-premium structures attractive. QQQ and IWM offer the best risk/reward, and their bullish and neutral trends, respectively, support taking a long call stance.",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          724.0
+        ],
+        "long_strikes": [
+          719.0
+        ],
+        "min_strike": 719.0,
+        "max_strike": 724.0,
+        "breakeven": 722.99
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 378.75
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -378.75
+      },
+      "held_hours": 0.17
+    },
+    {
+      "id": 10,
+      "opened_at": "2026-08-28T15:58:24.768633+00:00",
+      "closed_at": "2026-08-28T16:00:06.471607+00:00",
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "IWM260901C00298000",
+          "side": "buy",
+          "strike": 298.0,
+          "expiry": "2026-09-01",
+          "is_call": true,
+          "mid": 0.87,
+          "bid": 0.85,
+          "ask": 0.89,
+          "delta": 0.3603,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260901C00303000",
+          "side": "sell",
+          "strike": 303.0,
+          "expiry": "2026-09-01",
+          "is_call": true,
+          "mid": 0.085,
+          "bid": 0.08,
+          "ask": 0.09,
+          "delta": 0.0528,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 7,
+      "net_price": -0.81,
+      "max_loss": 567.0,
+      "max_gain": 2932.9999999999995,
+      "status": "closed",
+      "realized_pnl": 0.0,
+      "close_reason": "reconciled_flat",
+      "client_order_id": "superio-test2-e36ae3de044b",
+      "thesis": "Pay 0.81 for the 298/303 call spread expiring 2026-09-01: 5.2x payoff if the move continues. Implied volatility is below realized across the board, making long-premium structures attractive. QQQ and IWM offer the best risk/reward, and their bullish and neutral trends, respectively, support taking a long call stance.",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          303.0
+        ],
+        "long_strikes": [
+          298.0
+        ],
+        "min_strike": 298.0,
+        "max_strike": 303.0,
+        "breakeven": 302.19
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 425.25
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -425.25
+      },
+      "held_hours": 0.03
+    },
+    {
+      "id": 11,
+      "opened_at": "2026-09-03T13:54:49.678940+00:00",
+      "closed_at": "2026-09-03T14:01:27.346349+00:00",
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "call_credit_spread",
+      "legs": [
+        {
+          "symbol": "IWM260903C00293000",
+          "side": "sell",
+          "strike": 293.0,
+          "expiry": "2026-09-03",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 2.01,
+          "delta": null
+        },
+        {
+          "symbol": "IWM260903C00295000",
+          "side": "buy",
+          "strike": 295.0,
+          "expiry": "2026-09-03",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 0.49,
+          "delta": null
+        }
+      ],
+      "qty": 4,
+      "net_price": 0.35,
+      "max_loss": 660.0,
+      "max_gain": 140.0,
+      "status": "closed",
+      "realized_pnl": -448.00000000000006,
+      "close_reason": "stop_loss",
       "client_order_id": null,
       "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
       "net_price_mid": 0.35,
       "gates": "",
       "levels": {
         "short_strikes": [
-          291.0,
-          296.0
+          293.0
         ],
         "long_strikes": [
-          290.0,
-          297.0
+          295.0
         ],
-        "min_strike": 290.0,
-        "max_strike": 297.0,
-        "breakeven": null
+        "min_strike": 293.0,
+        "max_strike": 295.0,
+        "breakeven": 293.35
       },
       "take_profit": {
         "basis": "fraction of the credit captured",
         "target_pct": 0.55,
-        "target_value": 211.75
+        "target_value": 77.0
       },
       "stop": {
         "basis": "multiple of the credit received",
         "target_pct": 2.0,
-        "target_value": -385.0
+        "target_value": -140.0
       },
-      "held_hours": 18.64
-    },
-    {
-      "id": 13,
-      "opened_at": "2026-09-02T11:05:33.484540+00:00",
-      "closed_at": "2026-09-03T14:02:15.290444+00:00",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "kind": "call_credit_spread",
-      "legs": [
-        {
-          "symbol": "SPY260903C00768000",
-          "side": "sell",
-          "strike": 768.0,
-          "expiry": "2026-09-03",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.58,
-          "delta": null
-        },
-        {
-          "symbol": "SPY260903C00769000",
-          "side": "buy",
-          "strike": 769.0,
-          "expiry": "2026-09-03",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.39,
-          "delta": null
-        }
-      ],
-      "qty": 15,
-      "net_price": 0.29,
-      "max_loss": 1068.0,
-      "max_gain": 432.0,
-      "status": "closed",
-      "realized_pnl": -540.0000000000001,
-      "close_reason": "stop_loss",
-      "client_order_id": null,
-      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.29,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          768.0
-        ],
-        "long_strikes": [
-          769.0
-        ],
-        "min_strike": 768.0,
-        "max_strike": 769.0,
-        "breakeven": 768.29
-      },
-      "take_profit": {
-        "basis": "fraction of the credit captured",
-        "target_pct": 0.55,
-        "target_value": 239.25
-      },
-      "stop": {
-        "basis": "multiple of the credit received",
-        "target_pct": 2.0,
-        "target_value": -435.0
-      },
-      "held_hours": 26.94
+      "held_hours": 0.11
     },
     {
       "id": 14,
-      "opened_at": "2026-09-02T11:05:33.486922+00:00",
-      "closed_at": "2026-09-02T14:31:21.155636+00:00",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "kind": "put_credit_spread",
+      "opened_at": "2026-09-03T16:18:44.502710+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "kind": "put_debit_spread",
       "legs": [
         {
-          "symbol": "SPY260903P00755000",
-          "side": "buy",
-          "strike": 755.0,
+          "symbol": "IWM260903P00285000",
+          "side": "sell",
+          "strike": 285.0,
           "expiry": "2026-09-03",
           "is_call": false,
           "ratio_qty": 1,
-          "mid": 0.98,
+          "mid": 0.01,
           "delta": null
         },
         {
-          "symbol": "SPY260903P00756000",
-          "side": "sell",
-          "strike": 756.0,
+          "symbol": "IWM260903P00293000",
+          "side": "buy",
+          "strike": 293.0,
           "expiry": "2026-09-03",
           "is_call": false,
           "ratio_qty": 1,
-          "mid": 1.16,
+          "mid": 0.04,
           "delta": null
         }
       ],
-      "qty": 12,
-      "net_price": 0.1,
-      "max_loss": 1080.0,
-      "max_gain": 120.0,
-      "status": "closed",
-      "realized_pnl": 71.99999999999997,
-      "close_reason": "take_profit",
+      "qty": 4,
+      "net_price": -1.32,
+      "max_loss": 528.0,
+      "max_gain": 2672.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
       "client_order_id": null,
       "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.1,
+      "net_price_mid": -1.32,
       "gates": "",
       "levels": {
         "short_strikes": [
-          756.0
+          285.0
         ],
         "long_strikes": [
-          755.0
+          293.0
         ],
-        "min_strike": 755.0,
-        "max_strike": 756.0,
-        "breakeven": 755.9
+        "min_strike": 285.0,
+        "max_strike": 293.0,
+        "breakeven": 286.32
       },
       "take_profit": {
-        "basis": "fraction of the credit captured",
-        "target_pct": 0.55,
-        "target_value": 66.0
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 396.0
       },
       "stop": {
-        "basis": "multiple of the credit received",
-        "target_pct": 2.0,
-        "target_value": -120.0
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -396.0
       },
-      "held_hours": 3.43
+      "held_hours": null
     },
     {
       "id": 15,
-      "opened_at": "2026-09-02T14:37:13.697412+00:00",
-      "closed_at": "2026-09-03T05:44:03.022169+00:00",
+      "opened_at": "2026-09-03T16:18:44.505017+00:00",
+      "closed_at": null,
       "sleeve": "core",
-      "underlying": "SPY",
+      "underlying": "IWM",
       "kind": "put_credit_spread",
       "legs": [
         {
-          "symbol": "SPY260903P00755000",
-          "side": "buy",
-          "strike": 755.0,
+          "symbol": "IWM260903P00286000",
+          "side": "sell",
+          "strike": 286.0,
           "expiry": "2026-09-03",
           "is_call": false,
           "ratio_qty": 1,
-          "mid": 0.21,
+          "mid": 0.01,
           "delta": null
         },
         {
-          "symbol": "SPY260903P00756000",
-          "side": "sell",
-          "strike": 756.0,
+          "symbol": "IWM260903P00284000",
+          "side": "buy",
+          "strike": 284.0,
           "expiry": "2026-09-03",
           "is_call": false,
           "ratio_qty": 1,
-          "mid": 0.27,
+          "mid": 0.0,
           "delta": null
         }
       ],
-      "qty": 12,
-      "net_price": 0.1,
-      "max_loss": 1080.0,
-      "max_gain": 120.0,
-      "status": "closed",
-      "realized_pnl": 0.0,
-      "close_reason": "reconciled_flat",
+      "qty": 4,
+      "net_price": 0.15,
+      "max_loss": 740.0,
+      "max_gain": 60.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
       "client_order_id": null,
       "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.1,
+      "net_price_mid": 0.15,
       "gates": "",
       "levels": {
         "short_strikes": [
-          756.0
+          286.0
         ],
         "long_strikes": [
-          755.0
+          284.0
         ],
-        "min_strike": 755.0,
-        "max_strike": 756.0,
-        "breakeven": 755.9
+        "min_strike": 284.0,
+        "max_strike": 286.0,
+        "breakeven": 285.85
       },
       "take_profit": {
         "basis": "fraction of the credit captured",
         "target_pct": 0.55,
-        "target_value": 66.0
+        "target_value": 33.0
       },
       "stop": {
         "basis": "multiple of the credit received",
         "target_pct": 2.0,
-        "target_value": -120.0
-      },
-      "held_hours": 15.11
-    },
-    {
-      "id": 16,
-      "opened_at": "2026-09-03T13:57:10.321393+00:00",
-      "closed_at": null,
-      "sleeve": "carry",
-      "underlying": "SPY",
-      "kind": "risk_reversal",
-      "legs": [
-        {
-          "symbol": "SPY260930P00756000",
-          "side": "sell",
-          "strike": 756.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 5.855,
-          "bid": 5.82,
-          "ask": 5.89,
-          "delta": -0.2985,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "SPY260930P00753000",
-          "side": "buy",
-          "strike": 753.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 5.19,
-          "bid": 5.18,
-          "ask": 5.2,
-          "delta": -0.2686,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "SPY260930C00782000",
-          "side": "buy",
-          "strike": 782.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 4.105,
-          "bid": 4.07,
-          "ask": 4.14,
-          "delta": 0.3113,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "SPY260930C00802000",
-          "side": "sell",
-          "strike": 802.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 0.595,
-          "bid": 0.59,
-          "ask": 0.6,
-          "delta": 0.0684,
-          "ratio_qty": 1
-        }
-      ],
-      "qty": 1,
-      "net_price": -2.84,
-      "max_loss": 593.0,
-      "max_gain": 1707.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": "superio-main-b163ef63cbb0",
-      "thesis": "Long SPY for 27 days for 2.93 net: sell the 756/753 put spread at 0.30 delta to finance the 782/802 call spread. Risk 593 to make 1,707, 2.9x, and the skew pays for the call. The large spread between implied and realized volatility makes selling premium attractive, but the calendar of high-impact events blocks new credit structures. Risk reversals are approved, are long gamma into the events, and offer an attractive asymmetric payout. I have selected the two with the best payoff ratios.",
-      "net_price_mid": -2.8449999999999998,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          756.0,
-          802.0
-        ],
-        "long_strikes": [
-          753.0,
-          782.0
-        ],
-        "min_strike": 753.0,
-        "max_strike": 802.0,
-        "breakeven": null
-      },
-      "take_profit": {
-        "basis": "fraction of maximum gain",
-        "target_pct": 0.6,
-        "target_value": 1024.2
-      },
-      "stop": {
-        "basis": "multiple of the risk underwritten",
-        "target_pct": 1.2,
-        "target_value": -711.6
-      },
-      "held_hours": null
-    },
-    {
-      "id": 17,
-      "opened_at": "2026-09-03T13:57:11.183858+00:00",
-      "closed_at": null,
-      "sleeve": "carry",
-      "underlying": "IWM",
-      "kind": "risk_reversal",
-      "legs": [
-        {
-          "symbol": "IWM261002P00288000",
-          "side": "sell",
-          "strike": 288.0,
-          "expiry": "2026-10-02",
-          "is_call": false,
-          "mid": 3.32,
-          "bid": 3.31,
-          "ask": 3.33,
-          "delta": -0.3083,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "IWM261002P00285000",
-          "side": "buy",
-          "strike": 285.0,
-          "expiry": "2026-10-02",
-          "is_call": false,
-          "mid": 2.61,
-          "bid": 2.57,
-          "ask": 2.65,
-          "delta": -0.2516,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "IWM261002C00302000",
-          "side": "buy",
-          "strike": 302.0,
-          "expiry": "2026-10-02",
-          "is_call": true,
-          "mid": 2.47,
-          "bid": 2.46,
-          "ask": 2.48,
-          "delta": 0.3144,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "IWM261002C00317000",
-          "side": "sell",
-          "strike": 317.0,
-          "expiry": "2026-10-02",
-          "is_call": true,
-          "mid": 0.21,
-          "bid": 0.2,
-          "ask": 0.22,
-          "delta": 0.0438,
-          "ratio_qty": 1
-        }
-      ],
-      "qty": 2,
-      "net_price": -1.55,
-      "max_loss": 923.9999999999999,
-      "max_gain": 2676.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": "superio-main-5fec1aa15015",
-      "thesis": "Long IWM for 29 days for 1.62 net: sell the 288/285 put spread at 0.31 delta to finance the 302/317 call spread. Risk 462 to make 1,338, 2.9x, and the skew pays for the call. The large spread between implied and realized volatility makes selling premium attractive, but the calendar of high-impact events blocks new credit structures. Risk reversals are approved, are long gamma into the events, and offer an attractive asymmetric payout. I have selected the two with the best payoff ratios.",
-      "net_price_mid": -1.5499999999999994,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          288.0,
-          317.0
-        ],
-        "long_strikes": [
-          285.0,
-          302.0
-        ],
-        "min_strike": 285.0,
-        "max_strike": 317.0,
-        "breakeven": null
-      },
-      "take_profit": {
-        "basis": "fraction of maximum gain",
-        "target_pct": 0.6,
-        "target_value": 1605.6
-      },
-      "stop": {
-        "basis": "multiple of the risk underwritten",
-        "target_pct": 1.2,
-        "target_value": -1108.8
-      },
-      "held_hours": null
-    },
-    {
-      "id": 20,
-      "opened_at": "2026-09-03T16:18:54.624685+00:00",
-      "closed_at": null,
-      "sleeve": "carry",
-      "underlying": "QQQ",
-      "kind": "risk_reversal",
-      "legs": [
-        {
-          "symbol": "QQQ260930P00701000",
-          "side": "sell",
-          "strike": 701.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 7.305,
-          "bid": 7.16,
-          "ask": 7.45,
-          "delta": -0.3011,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "QQQ260930P00698000",
-          "side": "buy",
-          "strike": 698.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 6.63,
-          "bid": 6.52,
-          "ask": 6.74,
-          "delta": -0.2763,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "QQQ260930C00734000",
-          "side": "buy",
-          "strike": 734.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 6.225,
-          "bid": 6.21,
-          "ask": 6.24,
-          "delta": 0.3225,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "QQQ260930C00754000",
-          "side": "sell",
-          "strike": 754.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 1.79,
-          "bid": 1.77,
-          "ask": 1.81,
-          "delta": 0.126,
-          "ratio_qty": 1
-        }
-      ],
-      "qty": 1,
-      "net_price": -3.76,
-      "max_loss": 705.0000000000001,
-      "max_gain": 1595.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": "superio-main-b3309386081d",
-      "thesis": "Long QQQ for 27 days for 4.05 net: sell the 701/698 put spread at 0.30 delta to finance the 734/754 call spread. Risk 705 to make 1,595, 2.3x, and the skew pays for the call. The primary signal is to sell premium, but the upcoming employment report blocks short-term credit structures. The approved risk reversal on QQQ is a good alternative. It is a bullish, defined-risk position with a positive payoff ratio that aligns with my existing positions and is not blocked by the calendar rule.",
-      "net_price_mid": -3.76,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          701.0,
-          754.0
-        ],
-        "long_strikes": [
-          698.0,
-          734.0
-        ],
-        "min_strike": 698.0,
-        "max_strike": 754.0,
-        "breakeven": null
-      },
-      "take_profit": {
-        "basis": "fraction of maximum gain",
-        "target_pct": 0.6,
-        "target_value": 957.0
-      },
-      "stop": {
-        "basis": "multiple of the risk underwritten",
-        "target_pct": 1.2,
-        "target_value": -846.0
+        "target_value": -60.0
       },
       "held_hours": null
     }

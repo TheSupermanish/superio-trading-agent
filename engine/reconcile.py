@@ -63,6 +63,12 @@ def run(auto_close_orphans: bool = False, adopt_orphans: bool = True) -> Reconci
     result.broker_symbols = set(option_positions)
 
     for structure in state.live_structures():
+        symbols = {leg["symbol"] for leg in structure["legs"]}
+        # Pending entries still own their symbols. A fast fill can reach the
+        # position endpoint before the fill walker promotes the journal row;
+        # failing to claim it here makes adoption duplicate our own trade.
+        result.journal_symbols |= symbols
+
         # Only structures confirmed filled can be reconciled flat. A `pending`
         # structure has a working entry order and no position yet, which looks
         # identical to a vanished one from the position book alone. Closing it
@@ -70,8 +76,6 @@ def run(auto_close_orphans: bool = False, adopt_orphans: bool = True) -> Reconci
         # trade that is still trying to happen.
         if structure["status"] not in {"open", "closing"}:
             continue
-        symbols = {leg["symbol"] for leg in structure["legs"]}
-        result.journal_symbols |= symbols
 
         present = symbols & result.broker_symbols
         if not present and structure["status"] == "closing":

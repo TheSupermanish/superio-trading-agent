@@ -10,6 +10,7 @@ export type Perf = {
   max_drawdown_pct: number;
   equity_start: number;
   equity_latest: number;
+  total_pnl?: number | null;
   return_pct: number | null;
   by_sleeve: Record<string, { n: number; pnl: number; wins: number }>;
   by_kind: Record<string, { n: number; pnl: number; wins: number }>;
@@ -75,6 +76,9 @@ export type AgentDetail = AgentSummary & {
     underlying: string | null; verdict: string; reasons: string;
   }[];
   events: { id: number; ts: string; level: string; kind: string; message: string }[];
+  orders?: any[];
+  session_plan?: any;
+  upcoming?: any[];
 };
 
 export const GATE_NAMES: Record<string, string> = {

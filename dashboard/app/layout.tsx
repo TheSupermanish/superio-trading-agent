@@ -2,9 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Superio — autonomous options agent",
+  title: "Alphaca — autonomous options agent on Alpaca",
   description:
-    "Live P&L, open structures, and the full decision trail of an autonomous defined-risk options agent trading on Alpaca.",
+    "Live P&L, defined-risk options structures, and the multi-agent cognitive decision trail of Alphaca on Alpaca paper trading.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

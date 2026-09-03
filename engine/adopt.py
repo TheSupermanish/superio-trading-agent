@@ -25,6 +25,7 @@ import json
 import logging
 from collections import defaultdict
 from datetime import date, datetime, timedelta, timezone
+from itertools import permutations
 from typing import Any
 
 from engine import state
@@ -139,15 +140,28 @@ def _pair(positions: list[dict[str, Any]]) -> list[dict[str, Any]] | None:
             continue
         worst = max(worst, abs(max(l["strike"] for l in side) - min(l["strike"] for l in side)))
 
-    max_loss = (worst - net_price) * CONTRACT_MULTIPLIER * qty
-    max_gain = (net_price if net_price > 0 else worst + net_price) * CONTRACT_MULTIPLIER * qty
-    if max_loss <= 0:
+    kind = _classify(legs)
+    if "credit" in kind or kind == "iron_condor":
+        # A credit-shaped payoff opened for a debit has no profitable terminal
+        # region. That means these legs were paired incorrectly.
+        if net_price <= 0:
+            return None
+        max_loss = (worst - net_price) * CONTRACT_MULTIPLIER * qty
+        max_gain = net_price * CONTRACT_MULTIPLIER * qty
+    elif "debit" in kind:
+        if net_price >= 0:
+            return None
+        max_loss = abs(net_price) * CONTRACT_MULTIPLIER * qty
+        max_gain = (worst - abs(net_price)) * CONTRACT_MULTIPLIER * qty
+    else:
+        return None
+    if max_loss <= 0 or max_gain <= 0:
         return None
 
     underlying = parse_occ(str(positions[0]["symbol"]))[0]
     return {
         "underlying": underlying,
-        "kind": _classify(legs),
+        "kind": kind,
         "legs": [
             {k: v for k, v in leg.items() if k not in {"qty", "entry"}} for leg in legs
         ],
@@ -211,8 +225,35 @@ def _structures_in(positions: list[dict[str, Any]]) -> list[dict[str, Any] | Non
             is is_call
         ]
         if side:
-            out.append(_pair(side))
+            paired = _split_same_type_verticals(side)
+            if paired is None:
+                out.append(_pair(side))
+            else:
+                out.extend(_pair(pair) for pair in paired)
     return out
+
+
+def _split_same_type_verticals(
+    positions: list[dict[str, Any]],
+) -> list[list[dict[str, Any]]] | None:
+    """Pair netted same-type legs into the narrowest plausible verticals."""
+    shorts = [p for p in positions if int(p.get("qty") or 0) < 0]
+    longs = [p for p in positions if int(p.get("qty") or 0) > 0]
+    if len(shorts) < 2 or len(shorts) != len(longs) or len(shorts) > 6:
+        return None
+    if any(abs(int(s["qty"])) != abs(int(l["qty"])) for s in shorts for l in longs):
+        return None
+
+    candidates: list[tuple[float, tuple[dict[str, Any], ...]]] = []
+    for ordered in permutations(longs):
+        pairs = [[short, long] for short, long in zip(shorts, ordered)]
+        built = [_pair(pair) for pair in pairs]
+        if all(item is not None for item in built):
+            candidates.append((sum(float(item["max_loss"]) for item in built if item), ordered))
+    if not candidates:
+        return None
+    _risk, assignment = min(candidates, key=lambda item: item[0])
+    return [[short, long] for short, long in zip(shorts, assignment)]
 
 
 def adopt(orphans: list[dict[str, Any]]) -> list[int]:

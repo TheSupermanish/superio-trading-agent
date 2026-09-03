@@ -112,6 +112,8 @@ export type Snapshot = {
     losses: number;
     win_rate: number | null;
     realized_pnl: number;
+    avg_win?: number | null;
+    avg_loss?: number | null;
     profit_factor: number | null;
     max_drawdown_pct: number;
     equity_start: number;
@@ -124,6 +126,7 @@ export type Snapshot = {
     return_pct: number | null;
     by_sleeve: Record<string, { n: number; pnl: number; wins: number }>;
     by_kind: Record<string, { n: number; pnl: number; wins: number }>;
+    by_underlying?: Record<string, { n: number; pnl: number; wins: number }>;
   };
   gates: {
     considered: number;

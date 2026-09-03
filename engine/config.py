@@ -58,18 +58,10 @@ class RiskLimits:
     #: held for five weeks is one position rather than a scalp, and the
     #: aggregate is still bounded by max_carry_open_risk_pct.
     max_carry_risk_per_trade_pct: float = 0.010
-    #: Raised from 6% deliberately, and only after the payoff shape was fixed.
-    #: At 6% with the income sleeve uncapped the whole week could produce about
-    #: 2% of equity, so more deployment would have bought more of a 0.33x
-    #: payoff: a bigger hole underneath the same tiny number. With core capped
-    #: and the budget reachable by structures paying 2.2 to 2.6x, deployment
-    #: now scales something worth scaling.
-    #:
-    #: The kill switches moved with it. Fully deployed the worst case IS this
-    #: cap, so a cap above the stand-down threshold means one gap through every
-    #: position ends the event while the switch protects nothing. That
-    #: invariant is enforced by a test, and it is the reason this is 10 and not
-    #: the 15 the replay's headline return would argue for.
+    #: Keep total defined risk below the event drawdown switch. Increasing this
+    #: number cannot create edge; it only scales whatever edge (or error) the
+    #: strategy already has. The synthetic replay is explicitly not evidence
+    #: for levering the paper account.
     max_open_risk_pct: float = 0.06          # <= 6% of equity at risk at once
     #: The income sleeve needs a ceiling of its own, and this is the whole
     #: reason the book was capped at a one percent week.
@@ -107,7 +99,7 @@ class RiskLimits:
     #: Entries that never filled do not spend a trade slot, because they never
     #: became a position. They are bounded here instead, so a session priced
     #: where nothing fills gives up rather than churning orders all day.
-    max_failed_entries_per_day: int = 12
+    max_failed_entries_per_day: int = 8
 
     min_credit_to_width: float = 0.18        # never sell a spread for pennies
     max_debit_to_width: float = 0.45         # never overpay for convexity
@@ -146,8 +138,8 @@ class StrategyParams:
     # underperformed others by 4.7 percentage points, and 0DTE DEBIT trades --
     # exactly what the convex sleeve buys -- lost an average of $8.05 per
     # contract, while 0DTE credit trades made $4.55. Buying same-day premium is
-    # the worst-documented trade available to us, so the sleeve starts at one
-    # day out and keeps the convexity without the lottery ticket.
+    # the worst-documented trade available to us, so the sleeve starts at five
+    # days out and keeps useful convexity without the same-day lottery ticket.
     convex_min_dte: int = 5
     convex_max_dte: int = 14
     convex_long_delta: float = 0.45

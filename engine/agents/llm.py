@@ -34,26 +34,23 @@ from engine.config import SETTINGS
 log = logging.getLogger(__name__)
 
 CLAUDE_MODEL = "claude-sonnet-5"
+CLAUDE_FALLBACK_MODEL = "claude-sonnet-4-6"
 
 #: Tried in order. Pro reasons better, so it is tried first everywhere before
 #: falling back to Flash.
-GEMINI_REASONING_MODELS = ("gemini-2.5-pro", "gemini-2.5-flash")
-GEMINI_FAST_MODEL = "gemini-2.5-flash"
+GEMINI_REASONING_MODELS = ("gemini-3.1-pro-preview", "gemini-3.8-flash", "gemini-2.5-pro", "gemini-2.5-flash")
+GEMINI_FAST_MODEL = "gemini-3.8-flash"
 
-#: Gemini 2.5 on Vertex is served from Dynamic Shared Quota: there is no
+#: Gemini on Vertex is served from Dynamic Shared Quota: there is no
 #: per-project limit to raise, and a 429 means the pool shared across all
 #: customers of that model was momentarily saturated. Google's guidance for
 #: pay-as-you-go is to retry, because availability changes second to second.
 #:
 #: Regional pools are independent, so failing over to another region clears a
-#: 429 far more often than waiting does. Every region below was probed and
-#: confirmed to serve gemini-2.5-pro; the ones that returned 404 (europe-west2,
-#: asia-south1, asia-southeast1, australia-southeast1) are deliberately absent.
-#:
-#: Ordered nearest-first for latency, but spread across continents early so the
-#: fallbacks are genuinely independent pools rather than neighbours likely to be
-#: congested at the same moment.
+#: 429 far more often than waiting does. Global is prioritized first for 3.x models,
+#: followed by primary US regions.
 GEMINI_REGIONS = (
+    "global",
     "us-central1",
     "us-east5",
     "us-west1",
@@ -61,13 +58,10 @@ GEMINI_REGIONS = (
     "europe-west4",
     "asia-northeast1",
     "us-south1",
-    "global",
 )
 
-#: Google Search grounding is served from fewer places than plain generation,
-#: and the `global` endpoint answers a grounded request with an empty candidate
-#: instead of an error, so it is excluded here rather than merely deprioritised.
-GROUNDING_REGIONS = ("us-central1", "us-east5", "us-east4", "us-west1")
+#: Google Search grounding regions
+GROUNDING_REGIONS = ("global", "us-central1", "us-east5", "us-east4", "us-west1")
 
 #: A route is one (model, region) pair. Pro in every region before Flash, so we
 #: only trade reasoning quality away once every regional pool has refused.
@@ -249,7 +243,10 @@ def reason(system: str, user: str, max_tokens: int = 1200) -> dict[str, Any] | N
     """One structured call to the best available model. JSON in, JSON out."""
     provider = reasoning_provider()
     if provider == "claude":
-        return _ask_claude(system, user, max_tokens, CLAUDE_MODEL)
+        result = _ask_claude(system, user, max_tokens, CLAUDE_MODEL)
+        if result is not None:
+            return result
+        return _ask_claude(system, user, max_tokens, CLAUDE_FALLBACK_MODEL)
     if provider == "gemini":
         return _ask_gemini(system, user, max_tokens)
     return None

@@ -46,6 +46,9 @@ class Agent:
 
     @property
     def path(self) -> Path:
+        pub = ROOT / "dashboard" / "public" / self.snapshot
+        if pub.exists():
+            return pub
         return STATIC / self.snapshot
 
 
@@ -222,6 +225,9 @@ def static_asset(asset: str):
     directory first therefore 404s exactly the routes it is meant to serve, so
     the sibling .html is tried before anything else.
     """
+    pub = ROOT / "dashboard" / "public" / asset
+    if pub.is_file():
+        return send_from_directory(pub.parent, pub.name)
     for candidate in (asset, f"{asset}.html", f"{asset}/index.html"):
         if (STATIC / candidate).is_file():
             return send_from_directory(STATIC, candidate)

@@ -42,6 +42,7 @@ LADDER = (0.5, 1.0)
 #: no position at all. That silently starves the agent of room to trade, so the
 #: budget is protected by a timeout that does not depend on the ladder working.
 MAX_PENDING_SECONDS = 15 * 60
+CLOSE_MAX_REST_SECONDS = 3 * 60
 
 RESTING = {"new", "accepted", "pending_new", "accepted_for_bidding", "partially_filled"}
 DEAD = {"canceled", "expired", "rejected", "done_for_day", "replaced"}
@@ -94,6 +95,14 @@ def settle_closing_orders() -> list[dict[str, Any]]:
                     (close_price, int(saved["id"])),
                 )
             actions.append({"structure": structure["id"], "action": "closed", "pnl": pnl})
+        elif status in RESTING and _age_seconds(order) > CLOSE_MAX_REST_SECONDS:
+            try:
+                alpaca_cli.cancel_order(str(order.get("id")))
+            except alpaca_cli.AlpacaCliError:
+                continue
+            # Keep the risk reserved until cancellation is visible. The next
+            # pass reopens it and the manager submits a fresh marketable mark.
+            actions.append({"structure": structure["id"], "action": "cancel_stale_close"})
         elif status in DEAD:
             state.set_structure_status(int(structure["id"]), "open")
             actions.append({"structure": structure["id"], "action": "close_failed"})

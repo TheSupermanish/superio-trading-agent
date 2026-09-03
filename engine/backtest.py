@@ -20,7 +20,9 @@ What is modelled: the implied volatility level (realized vol times the swept
 premium), a flat surface with no skew or term structure, and execution cost as
 a fixed per-leg amount.
 
-Read the output as a regime sensitivity study, not a P&L forecast.
+Read the output as a regime sensitivity study, not a P&L forecast or a fair
+cross-sleeve ranking. A synthetic surface can flatter long and short volatility
+in different ways, so modelling error does not magically cancel between them.
 """
 
 from __future__ import annotations
@@ -29,13 +31,13 @@ import argparse
 from dataclasses import dataclass, field
 import math
 from datetime import date, datetime, timedelta
-from statistics import mean
+from statistics import NormalDist, mean
 from typing import Any
 
 import numpy as np
 
 from engine.config import SETTINGS
-from engine.greeks import bs_price, greeks, year_fraction
+from engine.greeks import RISK_FREE_RATE, bs_price, year_fraction
 from engine.marketdata import daily_bars
 
 #: Cost per leg per side. We measured a real round trip on paper: patient limit
@@ -132,18 +134,20 @@ def realized_vol(closes: list[float], window: int = 20) -> float | None:
 def strike_for_delta(
     spot: float, t: float, iv: float, target_delta: float, is_call: bool, step: float = 1.0
 ) -> float:
-    """Nearest whole strike whose delta matches the target."""
-    best, best_gap = spot, 9e9
-    span = int(spot * 0.15 / step)
-    for i in range(-span, span + 1):
-        strike = round(spot + i * step)
-        if strike <= 0:
-            continue
-        d = greeks(spot, strike, t, iv, is_call).delta
-        gap = abs(abs(d) - target_delta)
-        if gap < best_gap:
-            best, best_gap = strike, gap
-    return best
+    """Nearest listed strike whose Black-Scholes delta matches the target.
+
+    Delta can be inverted analytically. The old brute-force scan called scipy
+    for hundreds of strikes per entry and made a two-year variant comparison
+    take minutes without producing output.
+    """
+    if spot <= 0 or t <= 0 or iv <= 0 or not 0 < target_delta < 1:
+        return round(spot / step) * step
+    probability = target_delta if is_call else 1.0 - target_delta
+    d1 = NormalDist().inv_cdf(probability)
+    strike = spot * math.exp(
+        (RISK_FREE_RATE + 0.5 * iv * iv) * t - d1 * iv * math.sqrt(t)
+    )
+    return round(strike / step) * step
 
 
 def _vertical_value(
@@ -292,7 +296,7 @@ def run(
                 if gain >= p.convex_profit_target:
                     trade.pnl = (value - entry_abs - 2 * LEG_COST) * 100 * qty
                     trade.reason = "profit target"
-                elif value <= entry_abs * 0.25:
+                elif value <= entry_abs * (1 - p.convex_stop_loss_fraction):
                     trade.pnl = (value - entry_abs - 2 * LEG_COST) * 100 * qty
                     trade.reason = "stop"
 
@@ -354,7 +358,7 @@ def main() -> None:
         results = compare_variants(symbols, years=args.years)
         print(f"\nVariant comparison over {args.years}y of {', '.join(symbols)}")
         print("Every variant replayed against the same tape, weighted across")
-        print("volatility regimes. Compare them to each other, not to reality.\n")
+        print("volatility regimes. Treat the result as a hypothesis, not an edge.\n")
         print(f"{'variant':<14} {'trades':>7} {'win%':>6} {'weighted P&L':>14} {'PF':>6} {'maxDD':>7}")
         print("-" * 60)
         for name, m in results.items():
@@ -371,8 +375,9 @@ def main() -> None:
             )
             print(f"  {name:<14} {sleeves}")
         print("\nAbsolute P&L is not trustworthy here: entry and exit share a pricing")
-        print("model, so no volatility risk is simulated. The ranking is the finding,")
-        print("because the same modelling error applies to every variant.")
+        print("model, so no volatility risk is simulated. Cross-sleeve rankings are")
+        print("not proof either: that modelling error affects long and short volatility")
+        print("differently. Use this to reject fragile ideas, then compare paper accounts.")
         return
 
     vrps = (0.80, 0.90, 0.95, 1.00, 1.05, 1.15, 1.30)
@@ -593,9 +598,9 @@ def compare_variants(
     """Replay every configured variant over identical price history.
 
     Absolute P&L from this harness is not trustworthy: entry and exit share a
-    pricing model, so no volatility risk is simulated. The RELATIVE ranking is
-    worth more, because every variant is scored against the same tape with the
-    same modelling error, and that error largely cancels when comparing them.
+    pricing model, so no volatility risk is simulated. Relative results can
+    reject obviously fragile parameter sets within a sleeve, but do not fairly
+    rank long-volatility against short-volatility strategies.
 
     This is the evidence behind running three accounts rather than one.
     """

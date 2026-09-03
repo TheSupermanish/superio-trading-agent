@@ -4,6 +4,7 @@ import Nav from "../Nav";
 import { useEffect, useMemo, useState } from "react";
 import PriceChart from "./PriceChart";
 import type { ChartPayload, Trade } from "./types";
+import PayoffChart from "../PayoffChart";
 
 const POLL_MS = 60_000;
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -32,7 +33,7 @@ function parseGates(raw: string): string[] {
   return [raw];
 }
 
-function Why({ trade }: { trade: Trade }) {
+function Why({ trade, spot }: { trade: Trade; spot: number | null }) {
   const gates = parseGates(trade.gates);
   const risked = trade.max_loss;
   const payoff = risked ? trade.max_gain / risked : 0;
@@ -40,20 +41,22 @@ function Why({ trade }: { trade: Trade }) {
   return (
     <div className="why">
       <div className="why-head">
-        <div>
-          <span className="why-sym">{trade.underlying}</span>{" "}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <span className="why-sym" style={{ fontWeight: 700 }}>{trade.underlying}</span>{" "}
           <span className="why-kind">{trade.kind.replace(/_/g, " ")}</span>
-          <span className={`badge ${trade.sleeve === "carry" ? "dry" : "live"}`}>
+          <span className={`badge ${trade.sleeve === "carry" ? "live" : "dry"}`}>
             {trade.sleeve}
           </span>
         </div>
-        <div className="muted">
+        <div className="muted" style={{ fontSize: 11 }}>
           {new Date(trade.opened_at).toLocaleString()}
-          {trade.closed_at ? ` → ${new Date(trade.closed_at).toLocaleString()}` : " · open"}
+          {trade.closed_at ? ` → ${new Date(trade.closed_at).toLocaleString()}` : " · open position"}
         </div>
       </div>
 
-      <div className="why-legs">{legLine(trade)} · {trade.legs[0]?.expiry} · x{trade.qty}</div>
+      <div className="why-legs">
+        <strong>{legLine(trade)}</strong> · {trade.legs[0]?.expiry} · x{trade.qty}
+      </div>
 
       <div className="why-grid">
         <div>
@@ -70,7 +73,7 @@ function Why({ trade }: { trade: Trade }) {
         <div>
           <div className="label">Can win</div>
           <div className="value up">{money(trade.max_gain)}</div>
-          <div className="note">{payoff.toFixed(2)}x</div>
+          <div className="note">{payoff.toFixed(2)}x payoff</div>
         </div>
         <div>
           <div className="label">{trade.closed_at ? "Realized" : "Status"}</div>
@@ -83,7 +86,16 @@ function Why({ trade }: { trade: Trade }) {
         </div>
       </div>
 
-      <div className="exits">
+      {/* Payoff Profile Curve */}
+      <PayoffChart
+        legs={trade.legs as any}
+        netPrice={trade.net_price}
+        qty={trade.qty}
+        spot={spot}
+        height={130}
+      />
+
+      <div className="exits" style={{ marginTop: 14 }}>
         <div className="exit tp">
           <div className="exit-tag">TAKE PROFIT</div>
           <div className="exit-val up">{money(trade.take_profit.target_value)}</div>
@@ -92,7 +104,7 @@ function Why({ trade }: { trade: Trade }) {
           </div>
         </div>
         <div className="exit sl">
-          <div className="exit-tag">STOP</div>
+          <div className="exit-tag">STOP LOSS</div>
           <div className="exit-val down">{money(trade.stop.target_value)}</div>
           <div className="exit-basis">
             {trade.sleeve === "carry"
@@ -104,32 +116,24 @@ function Why({ trade }: { trade: Trade }) {
       </div>
 
       <div className="why-note">
-        An option spread has no take-profit price on the underlying: it is closed
-        on premium, not on where the index prints. The lines on the chart are the
-        levels that do matter, the short strike where the position starts losing
-        and the cover that stops the loss.
+        An option spread is managed on premium and defined risk, not underlying price alone. The horizontal chart lines show the critical inflection points: short strikes where downside begins, protective covers that cap the loss, and the net breakeven.
       </div>
 
       {trade.thesis ? (
         <div className="thesis">
-          <div className="label">Why this trade</div>
-          <p>{trade.thesis}</p>
+          <div className="label">AI Strategist Thesis</div>
+          <p style={{ lineHeight: 1.6 }}>{trade.thesis}</p>
         </div>
       ) : null}
 
       {gates.length ? (
         <div className="thesis">
-          <div className="label">Gates it had to clear</div>
+          <div className="label">Deterministic Risk Gates Cleared</div>
           <ul className="gatelist">
             {gates.map((g, i) => (
               <li key={i}>{g}</li>
             ))}
           </ul>
-          <div className="note">
-            Matched to the nearest approval on this underlying at or before the
-            open, so it is the trail that produced this shape rather than a hard
-            join by id.
-          </div>
         </div>
       ) : null}
     </div>
@@ -140,6 +144,7 @@ export default function ChartPage() {
   const [data, setData] = useState<ChartPayload | null>(null);
   const [symbol, setSymbol] = useState("SPY");
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [tradeFilter, setTradeFilter] = useState<"all" | "open" | "closed">("all");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -166,38 +171,52 @@ export default function ChartPage() {
   }, []);
 
   const symbols = useMemo(() => Object.keys(data?.bars ?? {}), [data]);
-  const trades = useMemo(
+  const allSymbolTrades = useMemo(
     () => (data?.trades ?? []).filter((t) => t.underlying === symbol),
     [data, symbol],
   );
+
+  const trades = useMemo(() => {
+    return allSymbolTrades.filter((t) => {
+      if (tradeFilter === "open") return !t.closed_at;
+      if (tradeFilter === "closed") return !!t.closed_at;
+      return true;
+    });
+  }, [allSymbolTrades, tradeFilter]);
+
   const selected = useMemo(
-    () => trades.find((t) => t.id === selectedId) ?? null,
-    [trades, selectedId],
+    () => allSymbolTrades.find((t) => t.id === selectedId) ?? allSymbolTrades[allSymbolTrades.length - 1] ?? null,
+    [allSymbolTrades, selectedId],
   );
+
+  const bars = data?.bars[symbol] ?? [];
+  const latestBar = bars.length > 0 ? bars[bars.length - 1] : null;
+  const prevBar = bars.length > 1 ? bars[bars.length - 2] : null;
+  const dayChange = latestBar && prevBar ? latestBar.close - prevBar.close : null;
+  const dayChangePct = latestBar && prevBar ? (dayChange! / prevBar.close) * 100 : null;
 
   if (!data) {
     return (
       <div className="wrap">
-      <Nav here="/chart" />
+        <Nav here="/chart" />
         <header className="top">
           <h1>super<span>io</span> chart</h1>
         </header>
-        <div className="empty">{error ? `chart.json unreachable (${error})` : "Loading..."}</div>
+        <div className="empty">{error ? `chart.json unreachable (${error})` : "Loading market tape..."}</div>
       </div>
     );
   }
 
-  const bars = data.bars[symbol] ?? [];
-
   return (
     <div className="wrap">
       <Nav here="/chart" />
-      <header className="top">
+      <header className="top" style={{ alignItems: "center" }}>
         <div>
-          <h1>super<span>io</span> chart</h1>
-          <div className="sub">
-            Every structure on the tape it was placed against. Click a trade, or an
-            arrow on the chart, to draw its strikes and read why it was taken.
+          <h1 style={{ fontSize: 22 }}>
+            Options Tape &amp; Strike Ladder
+          </h1>
+          <div className="sub" style={{ marginTop: 4 }}>
+            Candlestick price action overlaid with options structures, strike ladders, protective boundaries, and expiration payoffs
           </div>
         </div>
         <div className="tabs">
@@ -216,58 +235,124 @@ export default function ChartPage() {
         </div>
       </header>
 
+      {/* Symbol Tape Quote Bar */}
+      {latestBar && (
+        <div
+          className="card"
+          style={{
+            padding: "12px 18px",
+            marginBottom: 16,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 16,
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+            <span style={{ fontSize: 18, fontWeight: 700 }}>{symbol}</span>
+            <span style={{ fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em" }}>
+              ${latestBar.close.toFixed(2)}
+            </span>
+            {dayChange != null && dayChangePct != null && (
+              <span className={dayChange >= 0 ? "up" : "down"} style={{ fontWeight: 600, fontSize: 13 }}>
+                {dayChange >= 0 ? "+" : ""}{dayChange.toFixed(2)} ({dayChange >= 0 ? "+" : ""}{dayChangePct.toFixed(2)}%)
+              </span>
+            )}
+          </div>
+          <div style={{ display: "flex", gap: 16, fontSize: 11, color: "var(--muted)" }}>
+            <div>OPEN: <strong style={{ color: "var(--text)" }}>${latestBar.open.toFixed(2)}</strong></div>
+            <div>HIGH: <strong style={{ color: "var(--text)" }}>${latestBar.high.toFixed(2)}</strong></div>
+            <div>LOW: <strong style={{ color: "var(--text)" }}>${latestBar.low.toFixed(2)}</strong></div>
+            <div>VOLUME: <strong style={{ color: "var(--text)" }}>{latestBar.volume?.toLocaleString() ?? "--"}</strong></div>
+          </div>
+        </div>
+      )}
+
       <section>
         <div className="chart-card">
           <PriceChart
             bars={bars}
-            trades={trades}
+            trades={allSymbolTrades}
             selected={selected}
             onSelect={(t) => setSelectedId(t?.id ?? null)}
           />
         </div>
-        <div className="legend">
-          <span><i className="sw up" /> covered / cover strike</span>
-          <span><i className="sw down" /> short strike, where loss begins</span>
-          <span><i className="sw acc" /> breakeven</span>
-          <span>▲ entry</span>
-          <span>▼ exit</span>
+        <div className="legend" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <span><i className="sw up" /> Protective cover strike</span>
+            <span><i className="sw down" /> Short strike (risk boundary)</span>
+            <span><i className="sw acc" /> Breakeven level</span>
+          </div>
+          <div style={{ display: "flex", gap: 16 }}>
+            <span>▲ Trade entry</span>
+            <span>▼ Trade exit</span>
+          </div>
         </div>
       </section>
 
       <section className="split">
         <div>
-          <h2>{symbol} structures ({trades.length})</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+            <h2 style={{ margin: 0 }}>
+              {symbol} structures ({allSymbolTrades.length})
+            </h2>
+            <div style={{ display: "flex", gap: 4 }}>
+              {(["all", "open", "closed"] as const).map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setTradeFilter(filter)}
+                  style={{
+                    background: tradeFilter === filter ? "var(--panel-2)" : "transparent",
+                    border: `1px solid ${tradeFilter === filter ? "var(--accent)" : "var(--line)"}`,
+                    color: tradeFilter === filter ? "var(--accent)" : "var(--muted)",
+                    fontSize: 10.5,
+                    padding: "2px 8px",
+                    borderRadius: 3,
+                    cursor: "pointer",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="scroll">
             {trades.length === 0 ? (
-              <div className="empty">Nothing traded on {symbol} yet.</div>
+              <div className="empty">No {tradeFilter} structures for {symbol}.</div>
             ) : (
               <table>
                 <thead>
                   <tr>
-                    <th>Opened</th><th>Structure</th><th>Qty</th>
-                    <th>Risked</th><th>P&amp;L</th>
+                    <th>Opened</th>
+                    <th>Structure</th>
+                    <th>Qty</th>
+                    <th>Risked</th>
+                    <th>P&amp;L</th>
                   </tr>
                 </thead>
                 <tbody>
                   {trades.map((t) => (
                     <tr
                       key={t.id}
-                      className={`clickable ${t.id === selectedId ? "on" : ""}`}
+                      className={`clickable ${t.id === selected?.id ? "on" : ""}`}
                       onClick={() => setSelectedId(t.id)}
                     >
-                      <td className="muted">
+                      <td className="muted" style={{ whiteSpace: "nowrap" }}>
                         {new Date(t.opened_at).toLocaleDateString()}
                       </td>
                       <td>
-                        {t.kind.replace(/_/g, " ")}
+                        <strong>{t.kind.replace(/_/g, " ")}</strong>
                         <div className="muted">{legLine(t)}</div>
                       </td>
                       <td>{t.qty}</td>
-                      <td className="down">{money(t.max_loss)}</td>
-                      <td className={tone(t.realized_pnl)}>
+                      <td className="down" style={{ fontWeight: 600 }}>{money(t.max_loss)}</td>
+                      <td className={tone(t.realized_pnl)} style={{ fontWeight: 600 }}>
                         {t.realized_pnl != null
                           ? `${t.realized_pnl >= 0 ? "+" : ""}${money(t.realized_pnl)}`
-                          : "open"}
+                          : "OPEN"}
                       </td>
                     </tr>
                   ))}
@@ -278,9 +363,9 @@ export default function ChartPage() {
         </div>
 
         <div>
-          <h2>Why, and where it exits</h2>
+          <h2>Structure Inspection & Payoff</h2>
           {selected ? (
-            <Why trade={selected} />
+            <Why trade={selected} spot={latestBar ? latestBar.close : null} />
           ) : (
             <div className="empty">Pick a structure to see its levels and its reasoning.</div>
           )}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T20:15:46.482762+00:00",
+  "generated_at": "2026-09-03T20:20:15.548530+00:00",
   "bars": {
     "SPY": [
       {
@@ -960,7 +960,7 @@
         "high": 774.015,
         "low": 767.47,
         "close": 773.115,
-        "volume": 1423886.0
+        "volume": 1423986.0
       }
     ],
     "QQQ": [
@@ -1922,7 +1922,7 @@
         "high": 718.895,
         "low": 709.73,
         "close": 717.675,
-        "volume": 528081.0
+        "volume": 529121.0
       }
     ],
     "IWM": [
@@ -2884,563 +2884,787 @@
         "high": 296.17,
         "low": 293.44,
         "close": 295.18,
-        "volume": 926127.0
+        "volume": 927627.0
       }
     ]
   },
   "trades": [
     {
-      "id": 12,
-      "opened_at": "2026-09-02T11:05:33.479879+00:00",
-      "closed_at": "2026-09-03T05:44:03.020306+00:00",
+      "id": 1,
+      "opened_at": "2026-08-28T14:07:35.487002+00:00",
+      "closed_at": null,
       "sleeve": "core",
       "underlying": "IWM",
       "kind": "iron_condor",
       "legs": [
         {
-          "symbol": "IWM260902C00296000",
+          "symbol": "IWM260831P00295000",
           "side": "sell",
-          "strike": 296.0,
-          "expiry": "2026-09-02",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.02,
-          "delta": null
+          "strike": 295.0,
+          "expiry": "2026-08-31",
+          "is_call": false,
+          "mid": 0.415,
+          "bid": 0.41,
+          "ask": 0.42,
+          "delta": -0.1947,
+          "ratio_qty": 1
         },
         {
-          "symbol": "IWM260902C00297000",
+          "symbol": "IWM260831P00294000",
           "side": "buy",
-          "strike": 297.0,
-          "expiry": "2026-09-02",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.01,
-          "delta": null
+          "strike": 294.0,
+          "expiry": "2026-08-31",
+          "is_call": false,
+          "mid": 0.275,
+          "bid": 0.27,
+          "ask": 0.28,
+          "delta": -0.137,
+          "ratio_qty": 1
         },
         {
-          "symbol": "IWM260902P00290000",
+          "symbol": "IWM260831C00301000",
+          "side": "sell",
+          "strike": 301.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 0.415,
+          "bid": 0.41,
+          "ask": 0.42,
+          "delta": 0.2153,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260831C00302000",
           "side": "buy",
-          "strike": 290.0,
+          "strike": 302.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 0.255,
+          "bid": 0.25,
+          "ask": 0.26,
+          "delta": 0.1444,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 10,
+      "net_price": 0.2799999999999999,
+      "max_loss": 720.0000000000001,
+      "max_gain": 279.99999999999994,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-3b471cd81156",
+      "thesis": "Range-bound IWM into 2026-08-31: sell both wings for 0.28 on 1 wide (28% of width). Regime: chop/neutral.",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          295.0,
+          301.0
+        ],
+        "long_strikes": [
+          294.0,
+          302.0
+        ],
+        "min_strike": 294.0,
+        "max_strike": 302.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 154.0
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -280.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 2,
+      "opened_at": "2026-08-28T14:14:15.507887+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "QQQ",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "QQQ260902P00705000",
+          "side": "sell",
+          "strike": 705.0,
           "expiry": "2026-09-02",
           "is_call": false,
-          "ratio_qty": 1,
-          "mid": 0.78,
-          "delta": null
+          "mid": 1.69,
+          "bid": 1.67,
+          "ask": 1.71,
+          "delta": -0.1988,
+          "ratio_qty": 1
         },
         {
-          "symbol": "IWM260902P00291000",
-          "side": "sell",
-          "strike": 291.0,
+          "symbol": "QQQ260902P00704000",
+          "side": "buy",
+          "strike": 704.0,
           "expiry": "2026-09-02",
           "is_call": false,
-          "ratio_qty": 1,
-          "mid": 1.26,
-          "delta": null
+          "mid": 1.495,
+          "bid": 1.48,
+          "ask": 1.51,
+          "delta": -0.1805,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260902C00727000",
+          "side": "sell",
+          "strike": 727.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 1.35,
+          "bid": 1.33,
+          "ask": 1.37,
+          "delta": 0.2093,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260902C00729000",
+          "side": "buy",
+          "strike": 729.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.92,
+          "bid": 0.9,
+          "ask": 0.94,
+          "delta": 0.1576,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": 0.55,
+      "max_loss": 725.0,
+      "max_gain": 275.00000000000006,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-2ffb836b158d",
+      "thesis": "Range-bound QQQ into 2026-09-02: sell both wings for 0.55 on 2 wide (28% of width). Regime: chop/neutral. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          705.0,
+          727.0
+        ],
+        "long_strikes": [
+          704.0,
+          729.0
+        ],
+        "min_strike": 704.0,
+        "max_strike": 729.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 151.25
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -275.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 3,
+      "opened_at": "2026-08-28T14:14:19.932579+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "IWM260902P00294000",
+          "side": "sell",
+          "strike": 294.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.755,
+          "bid": 0.74,
+          "ask": 0.77,
+          "delta": -0.236,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902P00292000",
+          "side": "buy",
+          "strike": 292.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.415,
+          "bid": 0.4,
+          "ask": 0.43,
+          "delta": -0.1439,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00302000",
+          "side": "sell",
+          "strike": 302.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.445,
+          "bid": 0.44,
+          "ask": 0.45,
+          "delta": 0.1823,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00303000",
+          "side": "buy",
+          "strike": 303.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.295,
+          "bid": 0.29,
+          "ask": 0.3,
+          "delta": 0.1308,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 4,
+      "net_price": 0.45,
+      "max_loss": 620.0,
+      "max_gain": 180.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-2430d993b57f",
+      "thesis": "Range-bound IWM into 2026-09-02: sell both wings for 0.45 on 2 wide (22% of width). Regime: chop/neutral. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          294.0,
+          302.0
+        ],
+        "long_strikes": [
+          292.0,
+          303.0
+        ],
+        "min_strike": 292.0,
+        "max_strike": 303.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 99.0
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -180.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 4,
+      "opened_at": "2026-08-28T14:20:53.868401+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "IWM260902P00294000",
+          "side": "sell",
+          "strike": 294.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.575,
+          "bid": 0.57,
+          "ask": 0.58,
+          "delta": -0.1952,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902P00293000",
+          "side": "buy",
+          "strike": 293.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.405,
+          "bid": 0.4,
+          "ask": 0.41,
+          "delta": -0.1473,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00302000",
+          "side": "sell",
+          "strike": 302.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.485,
+          "bid": 0.48,
+          "ask": 0.49,
+          "delta": 0.2048,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00303000",
+          "side": "buy",
+          "strike": 303.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.275,
+          "bid": 0.27,
+          "ask": 0.28,
+          "delta": 0.1348,
+          "ratio_qty": 1
         }
       ],
       "qty": 11,
+      "net_price": 0.35999999999999993,
+      "max_loss": 704.0000000000001,
+      "max_gain": 395.99999999999994,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-77ce20810b74",
+      "thesis": "Range-bound IWM into 2026-09-02: sell both wings for 0.36 on 1 wide (36% of width). Regime: chop/neutral. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          294.0,
+          302.0
+        ],
+        "long_strikes": [
+          293.0,
+          303.0
+        ],
+        "min_strike": 293.0,
+        "max_strike": 303.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 217.8
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -396.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 5,
+      "opened_at": "2026-08-28T14:24:10.965402+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "IWM260902P00294000",
+          "side": "sell",
+          "strike": 294.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.605,
+          "bid": 0.58,
+          "ask": 0.63,
+          "delta": -0.2086,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902P00292000",
+          "side": "buy",
+          "strike": 292.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.335,
+          "bid": 0.33,
+          "ask": 0.34,
+          "delta": -0.1249,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00301000",
+          "side": "sell",
+          "strike": 301.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.605,
+          "bid": 0.6,
+          "ask": 0.61,
+          "delta": 0.2463,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00303000",
+          "side": "buy",
+          "strike": 303.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.21,
+          "bid": 0.2,
+          "ask": 0.22,
+          "delta": 0.1106,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": 0.6199999999999999,
+      "max_loss": 690.0,
+      "max_gain": 309.99999999999994,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-f7b502f3cd91",
+      "thesis": "Range-bound IWM into 2026-09-02: sell both wings for 0.62 on 2 wide (31% of width). Regime: chop/neutral. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          294.0,
+          301.0
+        ],
+        "long_strikes": [
+          292.0,
+          303.0
+        ],
+        "min_strike": 292.0,
+        "max_strike": 303.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 170.5
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -310.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 6,
+      "opened_at": "2026-08-28T14:30:46.830419+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "IWM260831P00295000",
+          "side": "sell",
+          "strike": 295.0,
+          "expiry": "2026-08-31",
+          "is_call": false,
+          "mid": 0.495,
+          "bid": 0.49,
+          "ask": 0.5,
+          "delta": -0.2306,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260831P00293000",
+          "side": "buy",
+          "strike": 293.0,
+          "expiry": "2026-08-31",
+          "is_call": false,
+          "mid": 0.195,
+          "bid": 0.19,
+          "ask": 0.2,
+          "delta": -0.1065,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260831C00300000",
+          "side": "sell",
+          "strike": 300.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 0.395,
+          "bid": 0.39,
+          "ask": 0.4,
+          "delta": 0.2238,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260831C00301000",
+          "side": "buy",
+          "strike": 301.0,
+          "expiry": "2026-08-31",
+          "is_call": true,
+          "mid": 0.175,
+          "bid": 0.17,
+          "ask": 0.18,
+          "delta": 0.1235,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": 0.5,
+      "max_loss": 750.0,
+      "max_gain": 250.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-ccbccbe69d24",
+      "thesis": "Range-bound IWM into 2026-08-31: sell both wings for 0.50 on 2 wide (25% of width). Regime: chop/neutral. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          295.0,
+          300.0
+        ],
+        "long_strikes": [
+          293.0,
+          301.0
+        ],
+        "min_strike": 293.0,
+        "max_strike": 301.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 137.5
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -250.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 7,
+      "opened_at": "2026-08-28T14:37:19.976409+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "IWM",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "IWM260902P00294000",
+          "side": "sell",
+          "strike": 294.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.515,
+          "bid": 0.51,
+          "ask": 0.52,
+          "delta": -0.1862,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902P00293000",
+          "side": "buy",
+          "strike": 293.0,
+          "expiry": "2026-09-02",
+          "is_call": false,
+          "mid": 0.385,
+          "bid": 0.38,
+          "ask": 0.39,
+          "delta": -0.1441,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00302000",
+          "side": "sell",
+          "strike": 302.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.445,
+          "bid": 0.42,
+          "ask": 0.47,
+          "delta": 0.1948,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260902C00303000",
+          "side": "buy",
+          "strike": 303.0,
+          "expiry": "2026-09-02",
+          "is_call": true,
+          "mid": 0.305,
+          "bid": 0.3,
+          "ask": 0.31,
+          "delta": 0.1416,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 9,
+      "net_price": 0.22999999999999998,
+      "max_loss": 693.0,
+      "max_gain": 207.0,
+      "status": "dry_run",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-8fd0138f7fcb",
+      "thesis": "Range-bound IWM into 2026-09-02: sell both wings for 0.23 on 1 wide (23% of width). Regime: chop/neutral. no model configured; taking the top-ranked structure",
+      "net_price_mid": null,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          294.0,
+          302.0
+        ],
+        "long_strikes": [
+          293.0,
+          303.0
+        ],
+        "min_strike": 293.0,
+        "max_strike": 303.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 113.85
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -207.0
+      },
+      "held_hours": null
+    },
+    {
+      "id": 8,
+      "opened_at": "2026-09-03T13:54:19.775796+00:00",
+      "closed_at": "2026-09-03T14:00:00.128973+00:00",
+      "sleeve": "core",
+      "underlying": "SPY",
+      "kind": "call_credit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260903C00766000",
+          "side": "sell",
+          "strike": 766.0,
+          "expiry": "2026-09-03",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 3.67,
+          "delta": null
+        },
+        {
+          "symbol": "SPY260903C00767000",
+          "side": "buy",
+          "strike": 767.0,
+          "expiry": "2026-09-03",
+          "is_call": true,
+          "ratio_qty": 1,
+          "mid": 2.79,
+          "delta": null
+        }
+      ],
+      "qty": 21,
       "net_price": 0.35,
-      "max_loss": 715.0,
-      "max_gain": 385.0,
+      "max_loss": 1365.0,
+      "max_gain": 735.0,
       "status": "closed",
-      "realized_pnl": 0.0,
-      "close_reason": "reconciled_flat",
+      "realized_pnl": -1113.0,
+      "close_reason": "stop_loss",
       "client_order_id": null,
       "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
       "net_price_mid": 0.35,
       "gates": "",
       "levels": {
         "short_strikes": [
-          291.0,
-          296.0
+          766.0
         ],
         "long_strikes": [
-          290.0,
-          297.0
+          767.0
         ],
-        "min_strike": 290.0,
-        "max_strike": 297.0,
-        "breakeven": null
+        "min_strike": 766.0,
+        "max_strike": 767.0,
+        "breakeven": 766.35
       },
       "take_profit": {
         "basis": "fraction of the credit captured",
         "target_pct": 0.55,
-        "target_value": 211.75
+        "target_value": 404.25
       },
       "stop": {
         "basis": "multiple of the credit received",
         "target_pct": 2.0,
-        "target_value": -385.0
+        "target_value": -735.0
       },
-      "held_hours": 18.64
+      "held_hours": 0.09
     },
     {
-      "id": 13,
-      "opened_at": "2026-09-02T11:05:33.484540+00:00",
-      "closed_at": "2026-09-03T14:02:15.290444+00:00",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "kind": "call_credit_spread",
-      "legs": [
-        {
-          "symbol": "SPY260903C00768000",
-          "side": "sell",
-          "strike": 768.0,
-          "expiry": "2026-09-03",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.58,
-          "delta": null
-        },
-        {
-          "symbol": "SPY260903C00769000",
-          "side": "buy",
-          "strike": 769.0,
-          "expiry": "2026-09-03",
-          "is_call": true,
-          "ratio_qty": 1,
-          "mid": 0.39,
-          "delta": null
-        }
-      ],
-      "qty": 15,
-      "net_price": 0.29,
-      "max_loss": 1068.0,
-      "max_gain": 432.0,
-      "status": "closed",
-      "realized_pnl": -540.0000000000001,
-      "close_reason": "stop_loss",
-      "client_order_id": null,
-      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.29,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          768.0
-        ],
-        "long_strikes": [
-          769.0
-        ],
-        "min_strike": 768.0,
-        "max_strike": 769.0,
-        "breakeven": 768.29
-      },
-      "take_profit": {
-        "basis": "fraction of the credit captured",
-        "target_pct": 0.55,
-        "target_value": 239.25
-      },
-      "stop": {
-        "basis": "multiple of the credit received",
-        "target_pct": 2.0,
-        "target_value": -435.0
-      },
-      "held_hours": 26.94
-    },
-    {
-      "id": 14,
-      "opened_at": "2026-09-02T11:05:33.486922+00:00",
-      "closed_at": "2026-09-02T14:31:21.155636+00:00",
+      "id": 9,
+      "opened_at": "2026-09-03T13:54:19.779412+00:00",
+      "closed_at": "2026-09-03T16:19:12.442074+00:00",
       "sleeve": "core",
       "underlying": "SPY",
       "kind": "put_credit_spread",
       "legs": [
         {
-          "symbol": "SPY260903P00755000",
+          "symbol": "SPY260903P00759000",
           "side": "buy",
-          "strike": 755.0,
+          "strike": 759.0,
           "expiry": "2026-09-03",
           "is_call": false,
           "ratio_qty": 1,
-          "mid": 0.98,
+          "mid": 0.03,
           "delta": null
         },
         {
-          "symbol": "SPY260903P00756000",
+          "symbol": "SPY260903P00760000",
           "side": "sell",
-          "strike": 756.0,
+          "strike": 760.0,
           "expiry": "2026-09-03",
           "is_call": false,
           "ratio_qty": 1,
-          "mid": 1.16,
+          "mid": 0.05,
           "delta": null
         }
       ],
-      "qty": 12,
-      "net_price": 0.1,
-      "max_loss": 1080.0,
-      "max_gain": 120.0,
+      "qty": 10,
+      "net_price": 0.28,
+      "max_loss": 720.0,
+      "max_gain": 280.0,
       "status": "closed",
-      "realized_pnl": 71.99999999999997,
+      "realized_pnl": 270.0,
       "close_reason": "take_profit",
       "client_order_id": null,
       "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.1,
+      "net_price_mid": 0.28,
       "gates": "",
       "levels": {
         "short_strikes": [
-          756.0
+          760.0
         ],
         "long_strikes": [
-          755.0
+          759.0
         ],
-        "min_strike": 755.0,
-        "max_strike": 756.0,
-        "breakeven": 755.9
+        "min_strike": 759.0,
+        "max_strike": 760.0,
+        "breakeven": 759.72
       },
       "take_profit": {
         "basis": "fraction of the credit captured",
         "target_pct": 0.55,
-        "target_value": 66.0
+        "target_value": 154.0
       },
       "stop": {
         "basis": "multiple of the credit received",
         "target_pct": 2.0,
-        "target_value": -120.0
+        "target_value": -280.0
       },
-      "held_hours": 3.43
-    },
-    {
-      "id": 15,
-      "opened_at": "2026-09-02T14:37:13.697412+00:00",
-      "closed_at": "2026-09-03T05:44:03.022169+00:00",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "kind": "put_credit_spread",
-      "legs": [
-        {
-          "symbol": "SPY260903P00755000",
-          "side": "buy",
-          "strike": 755.0,
-          "expiry": "2026-09-03",
-          "is_call": false,
-          "ratio_qty": 1,
-          "mid": 0.21,
-          "delta": null
-        },
-        {
-          "symbol": "SPY260903P00756000",
-          "side": "sell",
-          "strike": 756.0,
-          "expiry": "2026-09-03",
-          "is_call": false,
-          "ratio_qty": 1,
-          "mid": 0.27,
-          "delta": null
-        }
-      ],
-      "qty": 12,
-      "net_price": 0.1,
-      "max_loss": 1080.0,
-      "max_gain": 120.0,
-      "status": "closed",
-      "realized_pnl": 0.0,
-      "close_reason": "reconciled_flat",
-      "client_order_id": null,
-      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.1,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          756.0
-        ],
-        "long_strikes": [
-          755.0
-        ],
-        "min_strike": 755.0,
-        "max_strike": 756.0,
-        "breakeven": 755.9
-      },
-      "take_profit": {
-        "basis": "fraction of the credit captured",
-        "target_pct": 0.55,
-        "target_value": 66.0
-      },
-      "stop": {
-        "basis": "multiple of the credit received",
-        "target_pct": 2.0,
-        "target_value": -120.0
-      },
-      "held_hours": 15.11
-    },
-    {
-      "id": 16,
-      "opened_at": "2026-09-03T13:57:10.321393+00:00",
-      "closed_at": null,
-      "sleeve": "carry",
-      "underlying": "SPY",
-      "kind": "risk_reversal",
-      "legs": [
-        {
-          "symbol": "SPY260930P00756000",
-          "side": "sell",
-          "strike": 756.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 5.855,
-          "bid": 5.82,
-          "ask": 5.89,
-          "delta": -0.2985,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "SPY260930P00753000",
-          "side": "buy",
-          "strike": 753.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 5.19,
-          "bid": 5.18,
-          "ask": 5.2,
-          "delta": -0.2686,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "SPY260930C00782000",
-          "side": "buy",
-          "strike": 782.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 4.105,
-          "bid": 4.07,
-          "ask": 4.14,
-          "delta": 0.3113,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "SPY260930C00802000",
-          "side": "sell",
-          "strike": 802.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 0.595,
-          "bid": 0.59,
-          "ask": 0.6,
-          "delta": 0.0684,
-          "ratio_qty": 1
-        }
-      ],
-      "qty": 1,
-      "net_price": -2.84,
-      "max_loss": 593.0,
-      "max_gain": 1707.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": "superio-main-b163ef63cbb0",
-      "thesis": "Long SPY for 27 days for 2.93 net: sell the 756/753 put spread at 0.30 delta to finance the 782/802 call spread. Risk 593 to make 1,707, 2.9x, and the skew pays for the call. The large spread between implied and realized volatility makes selling premium attractive, but the calendar of high-impact events blocks new credit structures. Risk reversals are approved, are long gamma into the events, and offer an attractive asymmetric payout. I have selected the two with the best payoff ratios.",
-      "net_price_mid": -2.8449999999999998,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          756.0,
-          802.0
-        ],
-        "long_strikes": [
-          753.0,
-          782.0
-        ],
-        "min_strike": 753.0,
-        "max_strike": 802.0,
-        "breakeven": null
-      },
-      "take_profit": {
-        "basis": "fraction of maximum gain",
-        "target_pct": 0.6,
-        "target_value": 1024.2
-      },
-      "stop": {
-        "basis": "multiple of the risk underwritten",
-        "target_pct": 1.2,
-        "target_value": -711.6
-      },
-      "held_hours": null
-    },
-    {
-      "id": 17,
-      "opened_at": "2026-09-03T13:57:11.183858+00:00",
-      "closed_at": null,
-      "sleeve": "carry",
-      "underlying": "IWM",
-      "kind": "risk_reversal",
-      "legs": [
-        {
-          "symbol": "IWM261002P00288000",
-          "side": "sell",
-          "strike": 288.0,
-          "expiry": "2026-10-02",
-          "is_call": false,
-          "mid": 3.32,
-          "bid": 3.31,
-          "ask": 3.33,
-          "delta": -0.3083,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "IWM261002P00285000",
-          "side": "buy",
-          "strike": 285.0,
-          "expiry": "2026-10-02",
-          "is_call": false,
-          "mid": 2.61,
-          "bid": 2.57,
-          "ask": 2.65,
-          "delta": -0.2516,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "IWM261002C00302000",
-          "side": "buy",
-          "strike": 302.0,
-          "expiry": "2026-10-02",
-          "is_call": true,
-          "mid": 2.47,
-          "bid": 2.46,
-          "ask": 2.48,
-          "delta": 0.3144,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "IWM261002C00317000",
-          "side": "sell",
-          "strike": 317.0,
-          "expiry": "2026-10-02",
-          "is_call": true,
-          "mid": 0.21,
-          "bid": 0.2,
-          "ask": 0.22,
-          "delta": 0.0438,
-          "ratio_qty": 1
-        }
-      ],
-      "qty": 2,
-      "net_price": -1.55,
-      "max_loss": 923.9999999999999,
-      "max_gain": 2676.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": "superio-main-5fec1aa15015",
-      "thesis": "Long IWM for 29 days for 1.62 net: sell the 288/285 put spread at 0.31 delta to finance the 302/317 call spread. Risk 462 to make 1,338, 2.9x, and the skew pays for the call. The large spread between implied and realized volatility makes selling premium attractive, but the calendar of high-impact events blocks new credit structures. Risk reversals are approved, are long gamma into the events, and offer an attractive asymmetric payout. I have selected the two with the best payoff ratios.",
-      "net_price_mid": -1.5499999999999994,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          288.0,
-          317.0
-        ],
-        "long_strikes": [
-          285.0,
-          302.0
-        ],
-        "min_strike": 285.0,
-        "max_strike": 317.0,
-        "breakeven": null
-      },
-      "take_profit": {
-        "basis": "fraction of maximum gain",
-        "target_pct": 0.6,
-        "target_value": 1605.6
-      },
-      "stop": {
-        "basis": "multiple of the risk underwritten",
-        "target_pct": 1.2,
-        "target_value": -1108.8
-      },
-      "held_hours": null
-    },
-    {
-      "id": 20,
-      "opened_at": "2026-09-03T16:18:54.624685+00:00",
-      "closed_at": null,
-      "sleeve": "carry",
-      "underlying": "QQQ",
-      "kind": "risk_reversal",
-      "legs": [
-        {
-          "symbol": "QQQ260930P00701000",
-          "side": "sell",
-          "strike": 701.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 7.305,
-          "bid": 7.16,
-          "ask": 7.45,
-          "delta": -0.3011,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "QQQ260930P00698000",
-          "side": "buy",
-          "strike": 698.0,
-          "expiry": "2026-09-30",
-          "is_call": false,
-          "mid": 6.63,
-          "bid": 6.52,
-          "ask": 6.74,
-          "delta": -0.2763,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "QQQ260930C00734000",
-          "side": "buy",
-          "strike": 734.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 6.225,
-          "bid": 6.21,
-          "ask": 6.24,
-          "delta": 0.3225,
-          "ratio_qty": 1
-        },
-        {
-          "symbol": "QQQ260930C00754000",
-          "side": "sell",
-          "strike": 754.0,
-          "expiry": "2026-09-30",
-          "is_call": true,
-          "mid": 1.79,
-          "bid": 1.77,
-          "ask": 1.81,
-          "delta": 0.126,
-          "ratio_qty": 1
-        }
-      ],
-      "qty": 1,
-      "net_price": -3.76,
-      "max_loss": 705.0000000000001,
-      "max_gain": 1595.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": "superio-main-b3309386081d",
-      "thesis": "Long QQQ for 27 days for 4.05 net: sell the 701/698 put spread at 0.30 delta to finance the 734/754 call spread. Risk 705 to make 1,595, 2.3x, and the skew pays for the call. The primary signal is to sell premium, but the upcoming employment report blocks short-term credit structures. The approved risk reversal on QQQ is a good alternative. It is a bullish, defined-risk position with a positive payoff ratio that aligns with my existing positions and is not blocked by the calendar rule.",
-      "net_price_mid": -3.76,
-      "gates": "",
-      "levels": {
-        "short_strikes": [
-          701.0,
-          754.0
-        ],
-        "long_strikes": [
-          698.0,
-          734.0
-        ],
-        "min_strike": 698.0,
-        "max_strike": 754.0,
-        "breakeven": null
-      },
-      "take_profit": {
-        "basis": "fraction of maximum gain",
-        "target_pct": 0.6,
-        "target_value": 957.0
-      },
-      "stop": {
-        "basis": "multiple of the risk underwritten",
-        "target_pct": 1.2,
-        "target_value": -846.0
-      },
-      "held_hours": null
+      "held_hours": 2.41
     }
   ],
   "exit_rules": {

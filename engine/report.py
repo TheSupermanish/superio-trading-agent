@@ -589,7 +589,10 @@ def chart_data(sessions: int = 120) -> dict[str, Any]:
 def write_chart(path: Path | None = None) -> Path:
     """Publish the chart payload beside the snapshot."""
     target = path or (
-        Path(__file__).resolve().parent.parent / "dashboard" / "public" / "chart.json"
+        Path(__file__).resolve().parent.parent
+        / "dashboard"
+        / "public"
+        / ("chart.json" if SETTINGS.profile == "main" else f"chart-{SETTINGS.profile}.json")
     )
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(chart_data(), indent=2, default=str))
@@ -598,7 +601,16 @@ def write_chart(path: Path | None = None) -> Path:
 
 def write(path: Path | None = None) -> Path:
     """Write the snapshot the dashboard reads."""
-    target = path or (Path(__file__).resolve().parent.parent / "dashboard" / "public" / "snapshot.json")
+    target = path or (
+        Path(__file__).resolve().parent.parent
+        / "dashboard"
+        / "public"
+        / (
+            "snapshot.json"
+            if SETTINGS.profile == "main"
+            else f"snapshot-{SETTINGS.profile}.json"
+        )
+    )
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(build(), indent=2, default=str))
     return target

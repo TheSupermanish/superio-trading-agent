@@ -181,6 +181,19 @@ def test_two_structures_netted_into_one_expiry_are_both_adopted():
     assert [r["qty"] for r in rows] == [12, 15], [r["qty"] for r in rows]
 
 
+def test_two_same_type_verticals_netted_together_are_adopted():
+    """Two put spreads must not become one invisible four-leg orphan."""
+    _fresh_db()
+    created = adopt.adopt([
+        _pos(_occ("IWM", 1, "P", 284), 4, 0.23),
+        _pos(_occ("IWM", 1, "P", 285), -4, 0.14),
+        _pos(_occ("IWM", 1, "P", 286), -4, 0.38),
+        _pos(_occ("IWM", 1, "P", 293), 4, 1.46),
+    ])
+    assert len(created) == 2, created
+    assert len(state.live_structures()) == 2
+
+
 def test_a_butterfly_is_left_alone_rather_than_mispriced():
     """Three strikes on one side is not a vertical and its loss is not the width.
 

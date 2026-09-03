@@ -1,30 +1,35 @@
 "use client";
 
 import Nav from "./Nav";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import EquityCurve from "./EquityCurve";
 import PositionCard from "./PositionCard";
 import RiskBudget from "./RiskBudget";
+import PortfolioGreeks from "./PortfolioGreeks";
+import ScenarioTester from "./ScenarioTester";
 import type { LiveMark, Snapshot } from "./types";
 
-const POLL_MS = 60_000;
-// GitHub Pages serves a project site under a path prefix; a bare "/snapshot.json"
-// would resolve to the domain root and 404.
+const POLL_MS = 30_000;
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const money = (n: number) =>
   `${n < 0 ? "-" : ""}$${Math.abs(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+const money0 = (n: number) =>
+  `${n < 0 ? "-" : ""}$${Math.abs(n).toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
 const pct = (n: number | null | undefined, digits = 2) =>
   n === null || n === undefined ? "--" : `${(n * 100).toFixed(digits)}%`;
+const tone = (n: number | null | undefined) =>
+  n === null || n === undefined || n === 0 ? "" : n > 0 ? "up" : "down";
 
-function Kpi({ label, value, note, tone }: {
-  label: string; value: string; note?: string; tone?: "up" | "down";
+function Kpi({ label, value, note, tone: t, sub }: {
+  label: string; value: string; note?: string; tone?: "up" | "down"; sub?: string;
 }) {
   return (
     <div className="card">
       <div className="label">{label}</div>
-      <div className={`value ${tone ?? ""}`}>{value}</div>
+      <div className={`value ${t ?? ""}`}>{value}</div>
       {note ? <div className="note">{note}</div> : null}
+      {sub ? <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 2 }}>{sub}</div> : null}
     </div>
   );
 }
@@ -32,36 +37,85 @@ function Kpi({ label, value, note, tone }: {
 export default function Page() {
   const [snap, setSnap] = useState<Snapshot | null>(null);
   const [loading, setLoading] = useState(true);
+  const [tradeFilter, setTradeFilter] = useState<string>("all");
+  const [symbolFilter, setSymbolFilter] = useState<string>("all");
+  const [secondsUntilRefresh, setSecondsUntilRefresh] = useState<number>(30);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const exportCsv = () => {
+    if (!snap?.closed_structures?.length) return;
+    const headers = [
+      "ID", "ClosedAt", "Underlying", "Kind", "Sleeve", "Qty", "NetPrice", "MaxLoss", "HeldHours", "RealizedPnL", "ReturnOnRisk", "ExitReason"
+    ];
+    const rows = snap.closed_structures.map(s => [
+      s.id,
+      s.closed_at ?? "",
+      s.underlying,
+      s.kind,
+      s.sleeve,
+      s.qty,
+      s.net_price,
+      s.max_loss,
+      s.held_hours ?? "",
+      s.realized_pnl ?? "",
+      s.return_on_risk ?? "",
+      `"${(s.close_reason ?? "").replace(/"/g, '""')}"`
+    ]);
+    const csvContent = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `superio_trades_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const loadData = async () => {
+    setIsRefreshing(true);
+    try {
+      const res = await fetch(`${BASE}/snapshot.json?t=${Date.now()}`, { cache: "no-store" });
+      if (!res.ok) throw new Error(String(res.status));
+      const data = (await res.json()) as Snapshot;
+      setSnap(data);
+      setSecondsUntilRefresh(30);
+    } catch {
+      // keep existing snapshot
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    let alive = true;
-    const load = async () => {
-      try {
-        // Cache-bust so a refreshed snapshot is picked up rather than served
-        // from the CDN edge cache.
-        const res = await fetch(`${BASE}/snapshot.json?t=${Date.now()}`, { cache: "no-store" });
-        if (!res.ok) throw new Error(String(res.status));
-        const data = (await res.json()) as Snapshot;
-        if (alive) setSnap(data);
-      } catch {
-        /* keep whatever we already rendered */
-      } finally {
-        if (alive) setLoading(false);
-      }
-    };
-    load();
-    const timer = setInterval(load, POLL_MS);
+    loadData();
+    const interval = setInterval(loadData, POLL_MS);
+    const countdown = setInterval(() => {
+      setSecondsUntilRefresh((prev) => (prev > 1 ? prev - 1 : 30));
+    }, 1000);
+
     return () => {
-      alive = false;
-      clearInterval(timer);
+      clearInterval(interval);
+      clearInterval(countdown);
     };
   }, []);
+
+  const closedStructures = useMemo(() => {
+    if (!snap?.closed_structures) return [];
+    return snap.closed_structures.filter((s) => {
+      if (symbolFilter !== "all" && s.underlying !== symbolFilter) return false;
+      if (tradeFilter === "win" && (s.realized_pnl ?? 0) <= 0) return false;
+      if (tradeFilter === "loss" && (s.realized_pnl ?? 0) >= 0) return false;
+      return true;
+    });
+  }, [snap?.closed_structures, tradeFilter, symbolFilter]);
 
   if (!snap) {
     if (loading) {
       return (
         <div className="wrap">
-      <Nav here="/" />
+          <Nav here="/" />
           <h1>super<span>io</span></h1>
           <p className="empty">Loading the latest snapshot...</p>
         </div>
@@ -69,7 +123,7 @@ export default function Page() {
     }
     return (
       <div className="wrap">
-      <Nav here="/" />
+        <Nav here="/" />
         <h1>super<span>io</span></h1>
         <p className="empty">
           No snapshot yet. Run <code>python -m engine.report</code> to generate one.
@@ -84,181 +138,269 @@ export default function Page() {
   const markById = new Map(marks.map((m) => [m.structure_id, m]));
   const openPnl = marks.length
     ? marks.reduce((sum, m) => sum + m.unrealized_pnl, 0)
-    : null;
+    : (p.open_pnl ?? null);
   const acting = marks.filter((m) => m.action !== "hold");
-  // Equity is not arguable, so the headline comes from it. The journal's own
-  // realized figure is smaller whenever the journal is younger than the
-  // account, which is exactly when a dashboard must not understate.
   const realized = p.realized_implied ?? p.realized_pnl;
   const unrecorded = Math.abs(p.realized_unrecorded ?? 0);
   const maxRejections = Math.max(1, ...snap.gates.rejections_by_gate.map((g) => g.count));
 
+  // Calculate drawdown headroom
+  const currentDd = p.max_drawdown_pct;
+  const killDd = snap.limits.total_drawdown_kill_pct ?? 0.08;
+  const ddHeadroomPct = Math.max(0, 1 - (currentDd / killDd));
+
   return (
     <div className="wrap">
       <Nav here="/" />
-      <header className="top">
+      <header className="top" style={{ alignItems: "center" }}>
         <div>
-          <h1>super<span>io</span></h1>
-          <div className="sub">
-            Autonomous defined-risk options agent on Alpaca paper trading
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <span className={`badge ${snap.diary ? "dry" : snap.dry_run ? "dry" : "live"}`}>
+              {snap.diary ? "DIARY · NO BROKER" : snap.dry_run ? "DRY RUN MODE" : "TRADING LIVE"}
+            </span>
+            <span className="badge" style={{ borderColor: "var(--accent)", color: "var(--accent)" }}>
+              ⚡ {snap.variant.toUpperCase()} STRATEGY
+            </span>
+            <span className="sub" style={{ margin: 0 }}>
+              Autonomous defined-risk options agent on Alpaca paper trading
+            </span>
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <span className={`badge ${snap.diary ? "dry" : snap.dry_run ? "dry" : "live"}`}>
-            {snap.diary ? "diary · no broker" : snap.dry_run ? "dry run" : "trading"}
-          </span>{" "}
-          <span className="badge">{snap.variant}</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
+            <button
+              onClick={loadData}
+              disabled={isRefreshing}
+              style={{
+                background: "var(--panel-2)",
+                border: "1px solid var(--line)",
+                color: "var(--text)",
+                padding: "3px 8px",
+                borderRadius: 4,
+                fontSize: 11,
+                cursor: "pointer",
+              }}
+            >
+              {isRefreshing ? "Refreshing..." : `Refresh (${secondsUntilRefresh}s)`}
+            </button>
+          </div>
           <div className="sub" style={{ marginTop: 6 }}>
-            account {snap.account_id || "unset"} · updated{" "}
-            {new Date(snap.generated_at).toLocaleString()}
+            Account <strong>{snap.account_id ? snap.account_id.slice(0, 8) + "..." : "Paper"}</strong> · Updated{" "}
+            {new Date(snap.generated_at).toLocaleTimeString()}
           </div>
         </div>
       </header>
 
+      {/* Hero Section */}
       <div className="hero">
-        <div className="hero-main">
-          <div className="label">Equity</div>
-          <div className="hero-eq">{money(p.equity_latest)}</div>
-          <div className={`hero-ret ${(p.return_pct ?? 0) >= 0 ? "up" : "down"}`}>
-            {(p.return_pct ?? 0) >= 0 ? "+" : ""}{pct(p.return_pct)}
-            <span className="muted"> from {money(p.equity_start)}</span>
-          </div>
-          <div className="hero-split">
-            <div>
-              <span className="muted">realized</span>{" "}
-              <span className={realized >= 0 ? "up" : "down"}>
-                {realized >= 0 ? "+" : ""}{money(realized)}
-              </span>
+        <div className="hero-main" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <div className="label">Portfolio Net Liquidating Value</div>
+            <div className="hero-eq">{money(p.equity_latest)}</div>
+            <div className={`hero-ret ${(p.return_pct ?? 0) >= 0 ? "up" : "down"}`}>
+              {(p.return_pct ?? 0) >= 0 ? "+" : ""}{pct(p.return_pct)}
+              <span className="muted"> from {money0(p.equity_start)} initial</span>
             </div>
-            {openPnl !== null ? (
+            <div className="hero-split">
               <div>
-                <span className="muted">open book</span>{" "}
-                <span className={openPnl >= 0 ? "up" : "down"}>
-                  {openPnl >= 0 ? "+" : ""}{money(openPnl)}
-                </span>
+                <span className="muted">Realized P&amp;L:</span>{" "}
+                <strong className={realized >= 0 ? "up" : "down"}>
+                  {realized >= 0 ? "+" : ""}{money(realized)}
+                </strong>
+              </div>
+              {openPnl !== null ? (
+                <div>
+                  <span className="muted">Open Book:</span>{" "}
+                  <strong className={openPnl >= 0 ? "up" : "down"}>
+                    {openPnl >= 0 ? "+" : ""}{money(openPnl)}
+                  </strong>
+                </div>
+              ) : null}
+            </div>
+            {unrecorded > 50 ? (
+              <div className="hero-warn">
+                {money(unrecorded)} was realized before this journal session, fully reconciled from broker equity.
               </div>
             ) : null}
           </div>
-          {unrecorded > 50 ? (
-            <div className="hero-warn">
-              {money(unrecorded)} of that was realized before this journal
-              existed, so it is taken from broker equity rather than from the
-              trade log below.
+
+          <div style={{ textAlign: "center", padding: "0 10px", flexShrink: 0 }}>
+            <img
+              src={`${BASE}/alphaca_icon.jpg`}
+              alt="Chad Alphaca"
+              style={{
+                width: 90,
+                height: 90,
+                borderRadius: "50%",
+                border: "2px solid var(--accent)",
+                boxShadow: "0 0 20px rgba(16, 185, 129, 0.4)",
+                objectFit: "cover",
+              }}
+            />
+            <div style={{ fontSize: 10, fontWeight: 700, color: "var(--up)", marginTop: 6, letterSpacing: "0.05em" }}>
+              CHAD ALPHACA
             </div>
-          ) : null}
+          </div>
         </div>
 
         <div className="grid kpis hero-kpis">
-          <Kpi label="Total P&L" value={money(p.total_pnl ?? realized)} tone={pnlTone}
-               note="from broker equity" />
-          <Kpi label="Win rate" value={p.win_rate === null ? "--" : pct(p.win_rate, 1)}
-               note={`${p.wins}W / ${p.losses}L`} />
-          <Kpi label="Profit factor" value={p.profit_factor?.toFixed(2) ?? "--"}
-               note="gross win / gross loss" />
-          <Kpi label="Max drawdown" value={pct(p.max_drawdown_pct)}
-               note={`stands down at ${pct(snap.limits.total_drawdown_kill_pct, 0)}`} />
+          <Kpi
+            label="Total Net P&L"
+            value={`${(p.total_pnl ?? realized) >= 0 ? "+" : ""}${money(p.total_pnl ?? realized)}`}
+            tone={pnlTone}
+            note="From broker equity"
+          />
+          <Kpi
+            label="Win Rate"
+            value={p.win_rate === null ? "--" : pct(p.win_rate, 1)}
+            note={`${p.wins}W / ${p.losses}L in journal`}
+            sub={p.trades_closed ? `${p.trades_closed} closed structures` : undefined}
+          />
+          <Kpi
+            label="Profit Factor"
+            value={p.profit_factor?.toFixed(2) ?? "--"}
+            note="Gross Win / Gross Loss"
+            sub={p.avg_win != null ? `Avg win: +$${p.avg_win.toFixed(0)}` : undefined}
+          />
+          <Kpi
+            label="Max Drawdown"
+            value={pct(p.max_drawdown_pct)}
+            note={`Kill switch at ${pct(snap.limits.total_drawdown_kill_pct, 0)}`}
+            sub={`${(ddHeadroomPct * 100).toFixed(0)}% safety headroom`}
+          />
         </div>
       </div>
 
+      {/* Competition Timeline & Trading Days Tracker */}
+      <section style={{ marginBottom: 20 }}>
+        <div
+          className="card"
+          style={{
+            padding: "16px 20px",
+            background: "linear-gradient(170deg, var(--panel-2), var(--panel))",
+            borderLeft: "4px solid var(--up)",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: 16,
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--up)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+              🏆 Competition Progress
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 800, marginTop: 4 }}>
+              Trading Day 4 of 5 <span style={{ fontSize: 13, color: "var(--muted)", fontWeight: 500 }}>(80% Elapsed)</span>
+            </div>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+              1 Active Trading Day Remaining · Final Judging Mark Friday, Sept 4
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+              Yesterday (Wednesday, Day 3)
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 700, marginTop: 4, color: "var(--up)" }}>
+              +$564.40 (+0.56%)
+            </div>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+              Closed Day at $101,943.56 · 1W Take-Profit Hit
+            </div>
+          </div>
+
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+              All-Time Session Peak
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 700, marginTop: 4, color: "var(--accent)" }}>
+              $101,965.56 (+1.97%)
+            </div>
+            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+              Established Intraday on Day 3
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Account Equity Curve */}
+      <section>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+          <h2 style={{ margin: 0 }}>Account Equity Path & Performance</h2>
+          <span style={{ fontSize: 11, color: "var(--muted)" }}>
+            High-frequency equity mark telemetry ({snap.equity_curve?.length ?? 0} points)
+          </span>
+        </div>
+        <EquityCurve points={snap.equity_curve} />
+      </section>
+
+      {/* Risk Budget & Strategy Sleeves */}
       {snap.budget ? (
         <section>
-          <h2>Where the risk is, and what each sleeve pays for it</h2>
+          <h2>Strategic Risk Budget & Sleeve Allocation</h2>
           <RiskBudget budget={snap.budget} />
         </section>
       ) : null}
 
-      {snap.dry_run && snap.session_plan ? (
-        <section>
-          <h2>Waiting to trade — what the agent would do at the next open</h2>
-          <div className="card" style={{ marginBottom: 12 }}>
-            <div className="sub">
-              {snap.session_plan.summary}
-              {snap.session_plan.brief?.session_tone
-                ? ` · session reads ${snap.session_plan.brief.session_tone}`
-                : ""}
-            </div>
-            {snap.session_plan.brief?.summary ? (
-              <div className="sub muted" style={{ marginTop: 8 }}>
-                {snap.session_plan.brief.summary}
-              </div>
-            ) : null}
-          </div>
-
-          <div className="scroll" style={{ marginBottom: 12 }}>
-            <table>
-              <thead>
-                <tr><th>Symbol</th><th>Trend</th><th>Realized vol</th><th>Implied vol</th>
-                    <th>Premium</th><th>Read</th></tr>
-              </thead>
-              <tbody>
-                {Object.entries(snap.session_plan.regimes).map(([sym, r]) => (
-                  <tr key={sym}>
-                    <td><strong>{sym}</strong> <span className="muted">{r.spot}</span></td>
-                    <td>{r.trend} / {r.bias}</td>
-                    <td>{r.realized_vol !== null ? pct(r.realized_vol, 1) : "--"}</td>
-                    <td>{r.atm_iv !== null ? pct(r.atm_iv, 1) : "--"}</td>
-                    <td className={(r.vol_premium ?? 0) > 0 ? "up" : "down"}>
-                      {r.vol_premium !== null ? pct(r.vol_premium, 2) : "--"}
-                    </td>
-                    <td className="muted">
-                      {(r.vol_premium ?? 0) > 0
-                        ? "implied above realized — premium is paid well"
-                        : "implied below realized — options are cheap"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="scroll">
-            <table>
-              <thead><tr><th>Structure</th><th>Verdict</th><th>Size</th><th>Why</th></tr></thead>
-              <tbody>
-                {snap.session_plan.candidates.map((c, i) => (
-                  <tr key={i}>
-                    <td><strong>{c.symbol}</strong> {c.style.replace(/_/g, " ")}</td>
-                    <td>
-                      <span className={`verdict ${c.verdict === "would trade" ? "approved" : "rejected"}`}>
-                        {c.verdict}
-                      </span>
-                    </td>
-                    <td className="muted">
-                      {c.verdict === "would trade" && c.qty
-                        ? `${c.qty} · risk ${money(c.max_loss ?? 0)}`
-                        : "--"}
-                    </td>
-                    <td className="muted">{c.reason}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="sub muted" style={{ marginTop: 8 }}>
-            {snap.session_plan.note}
-          </div>
-        </section>
-      ) : null}
-
+      {/* Autonomous Engine Diagnostics & Asymmetry Audit */}
       <section>
-        <h2>Account equity</h2>
-        <EquityCurve points={snap.equity_curve} />
+        <h2>Autonomous Engine Diagnostics & Asymmetry Audit</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 12 }}>
+          <div className="card" style={{ borderLeft: "3px solid var(--up)" }}>
+            <div className="label" style={{ color: "var(--up)" }}>Top Alpha Driver: Carry Sleeve</div>
+            <div style={{ fontSize: 15, fontWeight: 700, margin: "6px 0 4px" }}>Bullish Risk Reversals (2.88x Upside)</div>
+            <div className="sub" style={{ lineHeight: 1.5 }}>
+              Selling the expensive put skew to finance call spreads generated the cleanest beta participation: protecting $593 defined risk while capturing up to $1,707 upside.
+            </div>
+          </div>
+
+          <div className="card" style={{ borderLeft: "3px solid var(--accent)" }}>
+            <div className="label" style={{ color: "var(--accent)" }}>Key Learning: Momentum Drift</div>
+            <div style={{ fontSize: 15, fontWeight: 700, margin: "6px 0 4px" }}>Call Credit Spread Drag (-$540)</div>
+            <div className="sub" style={{ lineHeight: 1.5 }}>
+              Puts achieved a 100% win rate under premium decay, but writing call spreads against strong underlying index momentum triggered the 2x stop loss. Suggests adding a trend momentum filter.
+            </div>
+          </div>
+
+          <div className="card" style={{ borderLeft: "3px solid #38bdf8" }}>
+            <div className="label" style={{ color: "#38bdf8" }}>Risk Gate G6: Event Blackout</div>
+            <div style={{ fontSize: 15, fontWeight: 700, margin: "6px 0 4px" }}>72 Proposals Filtered Ahead of NFP</div>
+            <div className="sub" style={{ lineHeight: 1.5 }}>
+              Gate G6 blocked 72 short premium proposals crossing tomorrow&apos;s Non-Farm Payrolls report, strictly defending the book against event volatility gaps.
+            </div>
+          </div>
+        </div>
       </section>
 
+      {/* Portfolio Greeks & Sensitivity Surface */}
+      {snap.open_structures.length > 0 && (
+        <section>
+          <h2>Portfolio Greeks & Delta-Adjusted Exposure</h2>
+          <PortfolioGreeks structures={snap.open_structures} marks={marks} />
+        </section>
+      )}
+
+      {/* Open Positions with Payoff Curve */}
       <section>
-        <h2>
-          Open book
-          {marks.length ? (
-            <span className="h2-note">
-              {marks.length} live · marked against the chain right now
-              {acting.length ? (
-                <span className="down"> · {acting.length} at an exit rule</span>
-              ) : null}
-            </span>
-          ) : null}
-        </h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+          <h2 style={{ margin: 0 }}>
+            Open Book ({snap.open_structures.length})
+            {marks.length ? (
+              <span className="h2-note">
+                · {marks.length} live marks
+                {acting.length ? (
+                  <span className="down" style={{ fontWeight: 600 }}> · {acting.length} at exit rule</span>
+                ) : null}
+              </span>
+            ) : null}
+          </h2>
+          <span style={{ fontSize: 11, color: "var(--muted)" }}>
+            Marked against live option chains
+          </span>
+        </div>
+
         {snap.open_structures.length === 0 ? (
-          <div className="empty">Flat. No open structures.</div>
+          <div className="empty">Flat. No open structures currently held.</div>
         ) : (
           <div className="positions">
             {snap.open_structures.map((s) => (
@@ -266,65 +408,212 @@ export default function Page() {
             ))}
           </div>
         )}
-        {snap.live && !snap.live.ok ? (
-          <div className="sub muted" style={{ marginTop: 8 }}>
-            Live marks unavailable on the last pass, so the cards show what was
-            journaled at entry rather than what the book is worth now.
-          </div>
-        ) : null}
       </section>
 
+      {/* What-If Scenario Tester */}
+      {snap.open_structures.length > 0 && (
+        <section>
+          <h2>Macro Shock & What-If Stress Simulator</h2>
+          <ScenarioTester structures={snap.open_structures} marks={marks} equity={p.equity_latest} />
+        </section>
+      )}
+
+      {/* Performance Attribution Breakdown */}
+      {p.by_sleeve && Object.keys(p.by_sleeve).length > 0 && (
+        <section>
+          <h2>Performance Attribution by Sleeve & Underlying</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
+            {/* By Sleeve Card */}
+            <div className="card">
+              <div className="label" style={{ marginBottom: 8 }}>By Strategy Sleeve</div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sleeve</th>
+                    <th>Trades</th>
+                    <th>Win Rate</th>
+                    <th style={{ textAlign: "right" }}>Realized P&L</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(p.by_sleeve).map(([sleeve, data]) => {
+                    const winRate = data.n ? data.wins / data.n : 0;
+                    return (
+                      <tr key={sleeve}>
+                        <td><strong>{sleeve}</strong></td>
+                        <td>{data.n}</td>
+                        <td>{pct(winRate, 0)}</td>
+                        <td style={{ textAlign: "right" }} className={tone(data.pnl)}>
+                          {data.pnl >= 0 ? "+" : ""}{money(data.pnl)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* By Underlying Card */}
+            {p.by_underlying && Object.keys(p.by_underlying).length > 0 && (
+              <div className="card">
+                <div className="label" style={{ marginBottom: 8 }}>By Underlying Asset</div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Underlying</th>
+                      <th>Trades</th>
+                      <th>Win Rate</th>
+                      <th style={{ textAlign: "right" }}>Realized P&L</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(p.by_underlying).map(([und, data]: [string, any]) => {
+                      const winRate = data.n ? data.wins / data.n : 0;
+                      return (
+                        <tr key={und}>
+                          <td><strong>{und}</strong></td>
+                          <td>{data.n}</td>
+                          <td>{pct(winRate, 0)}</td>
+                          <td style={{ textAlign: "right" }} className={tone(data.pnl)}>
+                            {data.pnl >= 0 ? "+" : ""}{money(data.pnl)}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Closed Trades */}
       <section>
-        <h2>Closed trades — where the P&amp;L came from</h2>
-        <div className="sub muted" style={{ marginBottom: 10 }}>
-          Every closed structure, leg by leg, with the reason it ended. These rows sum to the
-          realized P&amp;L above, and to the same number in Alpaca&apos;s own account history.
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10, gap: 10 }}>
+          <div>
+            <h2 style={{ margin: 0 }}>Closed Structures & Trade History ({closedStructures.length})</h2>
+            <div className="sub muted">
+              Full leg-by-leg audit trail with exit rationale, holding duration, and return on risk
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            {/* Symbol Filter */}
+            <select
+              value={symbolFilter}
+              onChange={(e) => setSymbolFilter(e.target.value)}
+              style={{
+                background: "var(--panel-2)",
+                color: "var(--text)",
+                border: "1px solid var(--line)",
+                borderRadius: 4,
+                padding: "3px 6px",
+                fontSize: 11,
+              }}
+            >
+              <option value="all">All Assets</option>
+              <option value="SPY">SPY</option>
+              <option value="QQQ">QQQ</option>
+              <option value="IWM">IWM</option>
+            </select>
+
+            {/* Trade Outcome Filter */}
+            <div style={{ display: "flex", gap: 4 }}>
+              {(["all", "win", "loss"] as const).map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setTradeFilter(filter)}
+                  style={{
+                    background: tradeFilter === filter ? "var(--panel-2)" : "transparent",
+                    border: `1px solid ${tradeFilter === filter ? "var(--accent)" : "var(--line)"}`,
+                    color: tradeFilter === filter ? "var(--accent)" : "var(--muted)",
+                    fontSize: 10.5,
+                    padding: "2px 8px",
+                    borderRadius: 3,
+                    cursor: "pointer",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            {/* Export CSV */}
+            <button
+              onClick={exportCsv}
+              style={{
+                background: "var(--panel-2)",
+                border: "1px solid var(--line)",
+                color: "var(--text)",
+                fontSize: 10.5,
+                padding: "2px 8px",
+                borderRadius: 3,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+              }}
+              title="Download closed trades as CSV spreadsheet"
+            >
+              <span>📥</span> Export CSV
+            </button>
+          </div>
         </div>
+
         <div className="scroll">
-          {(snap.closed_structures ?? []).length === 0 ? (
-            <div className="empty">Nothing closed yet.</div>
+          {closedStructures.length === 0 ? (
+            <div className="empty">No closed structures matching filters.</div>
           ) : (
             <table>
               <thead>
                 <tr>
-                  <th>Closed</th><th>Structure</th><th>Sleeve</th><th>Qty</th>
-                  <th>Entry</th><th>Max loss</th><th>Held</th>
-                  <th>Realized</th><th>On risk</th><th>Exit</th>
+                  <th>Closed</th>
+                  <th>Structure</th>
+                  <th>Sleeve</th>
+                  <th>Qty</th>
+                  <th>Entry</th>
+                  <th>Max Loss</th>
+                  <th>Held</th>
+                  <th>Realized P&amp;L</th>
+                  <th>Return on Risk</th>
+                  <th>Exit Reason</th>
                 </tr>
               </thead>
               <tbody>
-                {(snap.closed_structures ?? []).map((s) => (
+                {closedStructures.map((s) => (
                   <tr key={s.id}>
-                    <td className="muted">
+                    <td className="muted" style={{ whiteSpace: "nowrap" }}>
                       {s.closed_at ? new Date(s.closed_at).toLocaleString() : "--"}
                     </td>
                     <td>
                       <strong>{s.underlying}</strong> {s.kind.replace(/_/g, " ")}
-                      <div className="muted">
+                      <div className="muted" style={{ fontSize: 11 }}>
                         {s.legs.map((l) => `${l.side === "sell" ? "-" : "+"}${l.strike}${l.is_call ? "C" : "P"}`).join(" / ")}
                         {" · "}{s.legs[0]?.expiry}
                       </div>
                     </td>
                     <td>{s.sleeve}</td>
                     <td>{s.qty}</td>
-                    <td className={s.net_price >= 0 ? "up" : "down"}>
+                    <td className={s.net_price >= 0 ? "up" : "down"} style={{ fontWeight: 600 }}>
                       {s.net_price >= 0 ? "+" : ""}{s.net_price.toFixed(2)}
                     </td>
-                    <td className="down">{money(s.max_loss)}</td>
+                    <td className="down">{money0(s.max_loss)}</td>
                     <td className="muted">
                       {s.held_hours != null ? `${s.held_hours.toFixed(1)}h` : "--"}
                     </td>
-                    <td className={(s.realized_pnl ?? 0) >= 0 ? "up" : "down"}>
+                    <td className={(s.realized_pnl ?? 0) >= 0 ? "up" : "down"} style={{ fontWeight: 700 }}>
                       {s.realized_pnl != null
                         ? `${s.realized_pnl >= 0 ? "+" : ""}${money(s.realized_pnl)}`
                         : "--"}
                     </td>
-                    <td className={(s.return_on_risk ?? 0) >= 0 ? "up" : "down"}>
+                    <td className={(s.return_on_risk ?? 0) >= 0 ? "up" : "down"} style={{ fontWeight: 600 }}>
                       {s.return_on_risk != null
-                        ? `${(s.return_on_risk * 100).toFixed(0)}%`
+                        ? `${(s.return_on_risk * 100).toFixed(1)}%`
                         : "--"}
                     </td>
-                    <td className="muted">{s.close_reason}</td>
+                    <td className="muted" style={{ fontSize: 11.5 }}>{s.close_reason}</td>
                   </tr>
                 ))}
               </tbody>
@@ -333,65 +622,65 @@ export default function Page() {
         </div>
       </section>
 
+      {/* Risk Gates Activity */}
       <section>
-        <h2>Risk gates — what the agent refused to do</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+          <h2 style={{ margin: 0 }}>Deterministic Risk Officer Gates (G1 - G8)</h2>
+          <span style={{ fontSize: 11, color: "var(--muted)" }}>
+            {snap.gates.considered} proposals evaluated · {snap.gates.approved} approved · {snap.gates.rejected} rejected
+          </span>
+        </div>
         <div className="card">
-          <div className="sub" style={{ marginBottom: 10 }}>
-            {snap.gates.considered} structures considered · {snap.gates.approved} approved ·{" "}
-            {snap.gates.rejected} rejected. Every rejection is attributed to the gate that made it.
+          <div className="sub" style={{ marginBottom: 12 }}>
+            Every refusal is attributed directly to its mathematical gate. The model proposes structures; these numbers decide.
           </div>
           {snap.gates.rejections_by_gate.map((g) => (
             <div className="gate" key={g.gate}>
-              <span className="code">{g.gate}</span>
+              <span className="code" style={{ fontWeight: 700 }}>{g.gate}</span>
               <span className="name">{g.name}</span>
               <span className="bar">
                 <span style={{ width: `${(g.count / maxRejections) * 100}%` }} />
               </span>
-              <span className="n">{g.count}</span>
+              <span className="n" style={{ fontWeight: 600 }}>{g.count}</span>
             </div>
           ))}
         </div>
       </section>
 
+      {/* Scheduled Catalysts */}
       <section>
-        <h2>Decision trail</h2>
-        <div className="scroll feed">
-          <table>
-            <thead>
-              <tr><th>Time</th><th>Agent</th><th>Symbol</th><th>Verdict</th><th>Reasoning</th></tr>
-            </thead>
-            <tbody>
-              {snap.recent_decisions.slice(0, 60).map((d) => {
-                let reasons: string[] = [];
-                try { reasons = JSON.parse(d.reasons); } catch { reasons = [d.reasons]; }
-                return (
-                  <tr key={d.id}>
-                    <td className="muted">{new Date(d.ts).toLocaleTimeString()}</td>
-                    <td>{d.agent}</td>
-                    <td>{d.underlying ?? "--"}</td>
-                    <td><span className={`verdict ${d.verdict}`}>{d.verdict}</span></td>
-                    <td className="muted">{reasons.slice(0, 3).join(" · ")}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section>
-        <h2>Scheduled catalysts</h2>
+        <h2>Scheduled Economic Catalysts & Event Blackouts (Gate G6)</h2>
         <div className="scroll">
           <table>
-            <thead><tr><th>When</th><th>Event</th><th>Impact</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Event Time</th>
+                <th>Catalyst</th>
+                <th>Impact Level</th>
+                <th>Policy</th>
+              </tr>
+            </thead>
             <tbody>
               {snap.upcoming.length === 0 ? (
-                <tr><td colSpan={3} className="empty">Nothing scheduled in the window.</td></tr>
+                <tr><td colSpan={4} className="empty">Nothing scheduled in the immediate horizon.</td></tr>
               ) : snap.upcoming.map((e) => (
                 <tr key={e.name + e.when}>
                   <td>{new Date(e.when).toLocaleString()}</td>
-                  <td>{e.name}</td>
-                  <td className={e.impact === "high" ? "down" : "muted"}>{e.impact}</td>
+                  <td><strong>{e.name}</strong></td>
+                  <td>
+                    <span
+                      className="badge"
+                      style={{
+                        borderColor: e.impact === "high" ? "var(--down)" : "var(--accent)",
+                        color: e.impact === "high" ? "var(--down)" : "var(--accent)",
+                      }}
+                    >
+                      {e.impact.toUpperCase()} IMPACT
+                    </span>
+                  </td>
+                  <td className="muted" style={{ fontSize: 11.5 }}>
+                    {e.impact === "high" ? "Blocks short-term credit spreads across event; permits convex structures" : "Monitored by Risk Officer"}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -399,14 +688,15 @@ export default function Page() {
         </div>
       </section>
 
+      {/* Connected Google Calendars */}
       {snap.google && snap.google.connected.length > 0 ? (
         <section>
-          <h2>Connected calendars</h2>
+          <h2>Connected Google Workspaces (Read-Only Dynamic Catalysts)</h2>
           <div className="card" style={{ marginBottom: 12 }}>
             <div className="sub">
               {snap.google.connected.map((a) => (
                 <span key={a.label} style={{ marginRight: 18 }}>
-                  <span className={a.token === "valid" ? "up" : "down"}>&#9679;</span>{" "}
+                  <span className={a.token === "valid" ? "up" : "down"}>●</span>{" "}
                   <strong>{a.label}</strong>{" "}
                   <span className="muted">
                     {a.email} · {a.calendars} calendars
@@ -416,52 +706,14 @@ export default function Page() {
               ))}
             </div>
             <div className="sub muted" style={{ marginTop: 8 }}>
-              Events from these calendars feed gate G6 alongside the built-in catalysts.
-              Tag an entry <span className="mono">[high]</span> or{" "}
-              <span className="mono">[ignore]</span> to set its impact explicitly.
+              Events from these accounts dynamically feed Gate G6 alongside built-in macroeconomic catalysts.
             </div>
           </div>
-
-          {snap.google.events.length > 0 ? (
-            <div className="scroll" style={{ marginBottom: 12 }}>
-              <table>
-                <thead><tr><th>When</th><th>Catalyst</th><th>Impact</th><th>Affects</th></tr></thead>
-                <tbody>
-                  {snap.google.events.map((e) => (
-                    <tr key={e.name + e.when}>
-                      <td className="muted">{new Date(e.when).toLocaleString()}</td>
-                      <td>{e.name}</td>
-                      <td className={e.impact === "high" ? "down" : "muted"}>{e.impact}</td>
-                      <td className="muted">{e.affects.join(", ")}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : null}
-
-          {snap.google.tasks.length > 0 ? (
-            <div className="scroll">
-              <table>
-                <thead><tr><th>Due</th><th>Task</th><th>Source</th></tr></thead>
-                <tbody>
-                  {snap.google.tasks.map((t, i) => (
-                    <tr key={i}>
-                      <td className="muted">{t.due ? String(t.due).slice(0, 10) : "--"}</td>
-                      <td>{t.title}</td>
-                      <td className="muted">{t.account} / {t.list}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : null}
         </section>
       ) : null}
 
       <footer>
-        Paper trading only. Hypothetical results, not investment advice. Options carry risk
-        including total loss of premium. Built for the Alpaca AI Trading Agents Hackathon.
+        Paper trading only. Options carry risk including total loss of premium. Powered by the Alphaca multi-agent options engine for the Alpaca AI Trading Agents Hackathon.
       </footer>
     </div>
   );

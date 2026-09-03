@@ -94,6 +94,12 @@ def test_credit_loss_never_exceeds_the_width():
     assert m.unrealized_pnl >= worst - 1e-6, (m.unrealized_pnl, worst)
 
 
+def test_crossed_credit_quotes_never_request_a_closing_credit():
+    s = credit_structure(1.00)
+    m = manager.mark_structure(s, mids(short=0.05, long_=0.10))
+    assert m.current_price == 0.0, m.current_price
+
+
 # --- debit structures ------------------------------------------------------
 
 def test_debit_take_profit_at_the_target():

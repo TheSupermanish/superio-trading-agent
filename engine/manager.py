@@ -142,6 +142,14 @@ def mark_structure(structure: dict[str, Any], mids: dict[str, float]) -> Mark | 
     if current is None:
         return None
 
+    # Indicative quotes can momentarily cross. A vertical cannot have the
+    # opposite sign to its payoff; allowing that bad mark through submits an
+    # exit asking for a credit when the position actually costs money to close.
+    if structure["sleeve"] == "core":
+        current = max(current, 0.0)
+    elif structure["sleeve"] == "convex":
+        current = min(current, 0.0)
+
     expiry = min(date.fromisoformat(leg["expiry"]) for leg in legs)
     dte = (expiry - datetime.now(timezone.utc).date()).days
 
