@@ -1,15 +1,7 @@
 {
-  "generated_at": "2026-09-02T12:02:51.155436+00:00",
+  "generated_at": "2026-09-03T05:25:52.345122+00:00",
   "bars": {
     "SPY": [
-      {
-        "ts": "2026-03-12T04:00:00+00:00",
-        "open": 671.115,
-        "high": 671.63,
-        "low": 665.91,
-        "close": 666.05,
-        "volume": 1851720.0
-      },
       {
         "ts": "2026-03-13T04:00:00+00:00",
         "open": 669.24,
@@ -961,17 +953,17 @@
         "low": 759.49,
         "close": 761.63,
         "volume": 1487135.0
+      },
+      {
+        "ts": "2026-09-02T04:00:00+00:00",
+        "open": 762.39,
+        "high": 766.43,
+        "low": 761.74,
+        "close": 765.13,
+        "volume": 900232.0
       }
     ],
     "QQQ": [
-      {
-        "ts": "2026-03-12T04:00:00+00:00",
-        "open": 602.75,
-        "high": 604.1,
-        "low": 597.065,
-        "close": 597.31,
-        "volume": 1017676.0
-      },
       {
         "ts": "2026-03-13T04:00:00+00:00",
         "open": 599.58,
@@ -1923,17 +1915,17 @@
         "low": 704.68,
         "close": 707.65,
         "volume": 603144.0
+      },
+      {
+        "ts": "2026-09-02T04:00:00+00:00",
+        "open": 706.82,
+        "high": 709.77,
+        "low": 705.185,
+        "close": 709.32,
+        "volume": 375937.0
       }
     ],
     "IWM": [
-      {
-        "ts": "2026-03-12T04:00:00+00:00",
-        "open": 248.925,
-        "high": 249.77,
-        "low": 246.58,
-        "close": 247.43,
-        "volume": 1840359.0
-      },
       {
         "ts": "2026-03-13T04:00:00+00:00",
         "open": 249.23,
@@ -2885,6 +2877,14 @@
         "low": 289.99,
         "close": 290.59,
         "volume": 1186849.0
+      },
+      {
+        "ts": "2026-09-02T04:00:00+00:00",
+        "open": 291.55,
+        "high": 294.345,
+        "low": 291.205,
+        "close": 294.01,
+        "volume": 1202684.0
       }
     ]
   },
@@ -3040,7 +3040,7 @@
     {
       "id": 14,
       "opened_at": "2026-09-02T11:05:33.486922+00:00",
-      "closed_at": null,
+      "closed_at": "2026-09-02T14:31:21.155636+00:00",
       "sleeve": "core",
       "underlying": "SPY",
       "kind": "put_credit_spread",
@@ -3063,6 +3063,69 @@
           "is_call": false,
           "ratio_qty": 1,
           "mid": 1.16,
+          "delta": null
+        }
+      ],
+      "qty": 12,
+      "net_price": 0.1,
+      "max_loss": 1080.0,
+      "max_gain": 120.0,
+      "status": "closed",
+      "realized_pnl": 71.99999999999997,
+      "close_reason": "take_profit",
+      "client_order_id": null,
+      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
+      "net_price_mid": 0.1,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          756.0
+        ],
+        "long_strikes": [
+          755.0
+        ],
+        "min_strike": 755.0,
+        "max_strike": 756.0,
+        "breakeven": 755.9
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 66.0
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -120.0
+      },
+      "held_hours": 3.43
+    },
+    {
+      "id": 15,
+      "opened_at": "2026-09-02T14:37:13.697412+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "SPY",
+      "kind": "put_credit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260903P00755000",
+          "side": "buy",
+          "strike": 755.0,
+          "expiry": "2026-09-03",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 0.21,
+          "delta": null
+        },
+        {
+          "symbol": "SPY260903P00756000",
+          "side": "sell",
+          "strike": 756.0,
+          "expiry": "2026-09-03",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 0.27,
           "delta": null
         }
       ],

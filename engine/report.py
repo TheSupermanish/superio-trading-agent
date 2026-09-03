@@ -61,6 +61,19 @@ def performance() -> dict[str, Any]:
     start = equity_values[0] if equity_values else 0.0
     latest = equity_values[-1] if equity_values else 0.0
 
+    # What the account has actually made, from the broker's own equity rather
+    # than from this journal's arithmetic. The two differ whenever the journal
+    # is younger than the account: the host holding it died mid-week, the agent
+    # came up elsewhere and adopted the open book, and the closed trades from
+    # before that were simply not in the new journal. Realized P&L then reads
+    # zero on an account that is up over a percent, which is the dashboard
+    # calling a winning week a losing one.
+    #
+    # Equity is not arguable, so it anchors the headline. Whatever equity has
+    # gained that is not sitting in the open book has been realized, whether or
+    # not this journal recorded the trade that did it.
+    total_pnl = latest - start
+
     return {
         "trades_closed": len(pnls),
         "wins": len(wins),
@@ -73,6 +86,8 @@ def performance() -> dict[str, Any]:
         "max_drawdown_pct": round(max_dd, 4),
         "equity_start": round(start, 2),
         "equity_latest": round(latest, 2),
+        "total_pnl": round(total_pnl, 2),
+        "realized_in_journal": round(sum(pnls), 2),
         "return_pct": round((latest / start - 1), 4) if start else None,
         "by_sleeve": _group(closed, "sleeve"),
         "by_kind": _group(closed, "kind"),
@@ -200,6 +215,7 @@ def _google_section() -> dict[str, Any]:
 def build() -> dict[str, Any]:
     now = datetime.now(timezone.utc)
     open_structures = state.live_structures()
+    live = live_marks()
 
     return {
         "generated_at": now.isoformat(),
@@ -219,8 +235,8 @@ def build() -> dict[str, Any]:
             "min_credit_to_width": SETTINGS.risk.min_credit_to_width,
             "max_debit_to_width": SETTINGS.risk.max_debit_to_width,
         },
-        "performance": performance(),
-        "live": live_marks(),
+        "performance": _with_broker_truth(performance(), live),
+        "live": live,
         "budget": risk_budget(),
         "gates": gate_activity(),
         "open_structures": open_structures,
@@ -246,6 +262,29 @@ def build() -> dict[str, Any]:
             for e in upcoming(horizon_hours=168)
         ],
     }
+
+
+def _with_broker_truth(perf: dict[str, Any], live: dict[str, Any]) -> dict[str, Any]:
+    """Reconcile the journal's realized P&L against the broker's equity.
+
+    Equity is not arguable. Whatever it has gained that is not sitting in the
+    open book has been realized, whether or not this journal holds the trade
+    that did it. When the two agree this changes nothing; when they do not, the
+    gap is named rather than quietly showing the smaller number.
+    """
+    marks = live.get("marks") or []
+    open_pnl = sum(float(m.get("unrealized_pnl") or 0.0) for m in marks)
+    perf["open_pnl"] = round(open_pnl, 2)
+
+    if not live.get("ok"):
+        perf["realized_unrecorded"] = 0.0
+        return perf
+
+    implied = float(perf.get("total_pnl") or 0.0) - open_pnl
+    recorded = float(perf.get("realized_in_journal") or 0.0)
+    perf["realized_implied"] = round(implied, 2)
+    perf["realized_unrecorded"] = round(implied - recorded, 2)
+    return perf
 
 
 def live_marks() -> dict[str, Any]:

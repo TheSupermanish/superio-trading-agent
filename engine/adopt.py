@@ -24,7 +24,7 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
 from typing import Any
 
 from engine import state
@@ -158,6 +158,31 @@ def _pair(positions: list[dict[str, Any]]) -> list[dict[str, Any]] | None:
     }
 
 
+#: How long a closed structure keeps its claim on the legs it was holding. Long
+#: enough for a close to settle, short enough that a genuinely orphaned leg is
+#: picked up on the next pass rather than the next session.
+SETTLE_WINDOW = timedelta(minutes=45)
+
+
+def _recently_closed_symbols() -> set[str]:
+    """Legs belonging to a structure closed inside the settle window."""
+    cutoff = (datetime.now(timezone.utc) - SETTLE_WINDOW).isoformat()
+    with state.db() as conn:
+        rows = conn.execute(
+            "SELECT legs FROM structures WHERE status = 'closed' AND closed_at >= ?",
+            (cutoff,),
+        ).fetchall()
+
+    out: set[str] = set()
+    for row in rows:
+        try:
+            for leg in json.loads(row["legs"] or "[]"):
+                out.add(str(leg.get("symbol")))
+        except (TypeError, ValueError):
+            continue
+    return out
+
+
 def _structures_in(positions: list[dict[str, Any]]) -> list[dict[str, Any] | None]:
     """Split one underlying-and-expiry group into the structures it contains.
 
@@ -197,11 +222,34 @@ def adopt(orphans: list[dict[str, Any]]) -> list[int]:
     being reported, which is the honest outcome: the agent is holding something
     it cannot describe, and a person should look at it.
     """
+    claimed = _recently_closed_symbols()
+
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for position in orphans:
-        parsed = parse_occ(str(position.get("symbol", "")))
+        symbol = str(position.get("symbol", ""))
+        parsed = parse_occ(symbol)
         if parsed is None:
             continue
+
+        # A leg whose quantity is committed to a working order is already being
+        # acted on by something. Adopting it means two journal entries fighting
+        # over one position, and the second one can never close because the
+        # first one holds the quantity.
+        qty = position.get("qty")
+        available = position.get("qty_available")
+        if available is not None and str(available) != str(qty):
+            log.info("not adopting %s: quantity committed to a working order", symbol)
+            continue
+
+        # A structure closed moments ago still has legs at the broker until the
+        # close settles, and it no longer claims them because it is closed.
+        # Adopting them recreates the position that was just exited. This is
+        # exactly how a take-profit on a SPY put spread came back as a second
+        # structure that then spent the afternoon failing to close.
+        if symbol in claimed:
+            log.info("not adopting %s: a structure closed recently held it", symbol)
+            continue
+
         root, expiry, _is_call, _strike = parsed
         groups[(root, expiry.isoformat())].append(position)
 

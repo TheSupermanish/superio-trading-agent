@@ -375,6 +375,50 @@ def test_the_close_payload_flips_all_four_legs():
         assert leg["position_intent"].endswith("_to_close"), leg
 
 
+def test_every_builder_is_reachable_from_the_agent():
+    """A strategy the model cannot name is a strategy that never trades.
+
+    The carry sleeve was built, gated, sized, backtested, documented and
+    published to the dashboard, and placed zero trades on its first live
+    session. The tool the agent actually calls kept its own list of styles, and
+    risk_reversal was not on it, so the sleeve was unreachable from the only
+    path that reaches the broker. The word risk_reversal appears zero times in
+    a hundred and seventy-seven decisions.
+
+    The premarket rehearsal did not catch it because that was fixed the day
+    before to call candidates_for, which does know about carry. So the plan
+    said the agent would open three carry positions and the agent could not.
+
+    This pins every builder in the strategies package to the tool's style map,
+    and the style map to the schema the model is shown, so a sleeve cannot be
+    half-wired again.
+    """
+    from engine import strategies
+    from engine.agents import tools
+
+    exported = {
+        name for name in strategies.__all__ if name.startswith("build_")
+    }
+    # Each builder must be reachable under at least one style name.
+    for builder_name in sorted(exported):
+        builder = getattr(strategies, builder_name)
+        wired = any(
+            fn is builder or getattr(fn, "__wrapped__", None) is builder
+            or builder_name.replace("build_", "") in style
+            for style, fn in tools.STYLES.items()
+        )
+        assert wired, f"{builder_name} is not reachable from tools.STYLES"
+
+    # And every style the tool accepts must be named in the schema the model
+    # sees, or the model has no way to know it exists.
+    schema = next(
+        t for t in tools.declarations() if t["name"] == "propose_structure"
+    )
+    described = schema["parameters"]["properties"]["style"]["description"]
+    for style in tools.STYLES:
+        assert style in described, f"style {style!r} is not offered to the model"
+
+
 if __name__ == "__main__":
     mod = sys.modules[__name__]
     failed = 0

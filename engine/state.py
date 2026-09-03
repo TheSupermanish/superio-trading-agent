@@ -243,7 +243,29 @@ def _live_statuses() -> tuple[str, ...]:
     arms, which also means yesterday's rehearsal cannot charge risk against
     today's real book.
     """
-    return ("pending", "open", "dry_run") if SETTINGS.dry_run else ("pending", "open")
+    # `closing` remains live until the broker confirms the exit fill.  Treating
+    # an accepted close as flat releases risk early and lets reconciliation
+    # adopt the still-present legs as a brand-new position.
+    return (
+        ("pending", "open", "closing", "dry_run")
+        if SETTINGS.dry_run
+        else ("pending", "open", "closing")
+    )
+
+
+def update_entry_fill(structure_id: int, net_price: float, fill_price: float) -> None:
+    """Replace the conservative entry estimate with the broker's actual fill."""
+    with db() as conn:
+        conn.execute(
+            "UPDATE structures SET net_price = ? WHERE id = ?",
+            (net_price, structure_id),
+        )
+        conn.execute(
+            "UPDATE orders SET fill_price = ?, status = 'filled' "
+            "WHERE id = (SELECT id FROM orders WHERE structure_id = ? "
+            "AND intent LIKE 'open%' ORDER BY id DESC LIMIT 1)",
+            (fill_price, structure_id),
+        )
 
 
 def live_structures() -> list[dict[str, Any]]:

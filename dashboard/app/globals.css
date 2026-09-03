@@ -317,3 +317,9 @@ h2 .h2-note {
 }
 .nav a:hover { border-color: var(--muted); color: var(--text); }
 .nav a.on { border-color: var(--accent); color: var(--accent); background: var(--panel-2); }
+
+.hero-split { display: flex; gap: 20px; font-size: 12px; margin-top: 10px; }
+.hero-warn {
+  font-size: 10.5px; color: var(--muted); line-height: 1.55; margin-top: 10px;
+  border-top: 1px solid var(--line); padding-top: 9px;
+}

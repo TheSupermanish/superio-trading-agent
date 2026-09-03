@@ -104,16 +104,30 @@ def score(proposal: Proposal) -> float:
     automatically outrank a solid premium sale.
     """
     payoff = proposal.max_gain_per_unit / proposal.max_loss_per_unit
+    slippage = proposal.slippage_budget / max(proposal.pricing_width, 0.01)
+    net_delta = abs(sum(
+        (leg.delta or 0.0) * (1 if leg.side == "buy" else -1)
+        for leg in proposal.legs
+    ))
     if proposal.sleeve == "carry":
         # Carry is scored on payoff like a debit structure, but not discounted
         # like one. A convex spread is discounted because it is a short-dated
         # bet that usually expires worthless; a risk reversal is a financed
         # multi-week position that is long delta, so its payoff is not the same
         # kind of number and should not be marked down as if it were.
-        return payoff * 0.30
+        return net_delta + min(payoff, 4.0) * 0.05 - slippage
     if proposal.is_credit:
-        return proposal.net_price / proposal.width
-    return payoff * 0.10
+        short_delta = max(
+            (abs(leg.delta or 0.0) for leg in proposal.legs if leg.side == "sell"),
+            default=0.5,
+        )
+        win_prob = 1.0 - short_delta
+        expected = (
+            win_prob * proposal.max_gain_per_unit
+            - (1.0 - win_prob) * proposal.max_loss_per_unit
+        ) / max(proposal.max_loss_per_unit, 1.0)
+        return expected - slippage
+    return net_delta + min(payoff, 4.0) * 0.05 - slippage
 
 
 def candidates_for(regime: Regime) -> list[Proposal]:
@@ -313,6 +327,10 @@ def run_once(ignore_market_hours: bool = False) -> dict[str, Any]:
             "clock": clock,
             "plan": plan,
         }
+
+    # Settle exits first. Otherwise reconciliation can see legs disappear and
+    # close the journal at zero before the actual fill price is recorded.
+    fills.settle_closing_orders()
 
     # What the broker holds is the truth; correct the journal before sizing
     # anything against it.

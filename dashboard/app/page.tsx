@@ -79,13 +79,18 @@ export default function Page() {
   }
 
   const p = snap.performance;
-  const pnlTone = p.realized_pnl >= 0 ? "up" : "down";
+  const pnlTone = (p.total_pnl ?? p.realized_pnl) >= 0 ? "up" : "down";
   const marks: LiveMark[] = snap.live?.marks ?? [];
   const markById = new Map(marks.map((m) => [m.structure_id, m]));
   const openPnl = marks.length
     ? marks.reduce((sum, m) => sum + m.unrealized_pnl, 0)
     : null;
   const acting = marks.filter((m) => m.action !== "hold");
+  // Equity is not arguable, so the headline comes from it. The journal's own
+  // realized figure is smaller whenever the journal is younger than the
+  // account, which is exactly when a dashboard must not understate.
+  const realized = p.realized_implied ?? p.realized_pnl;
+  const unrecorded = Math.abs(p.realized_unrecorded ?? 0);
   const maxRejections = Math.max(1, ...snap.gates.rejections_by_gate.map((g) => g.count));
 
   return (
@@ -118,19 +123,34 @@ export default function Page() {
             {(p.return_pct ?? 0) >= 0 ? "+" : ""}{pct(p.return_pct)}
             <span className="muted"> from {money(p.equity_start)}</span>
           </div>
-          {openPnl !== null ? (
-            <div className="hero-open">
-              <span className="muted">open positions marked at</span>{" "}
-              <span className={openPnl >= 0 ? "up" : "down"}>
-                {openPnl >= 0 ? "+" : ""}{money(openPnl)}
+          <div className="hero-split">
+            <div>
+              <span className="muted">realized</span>{" "}
+              <span className={realized >= 0 ? "up" : "down"}>
+                {realized >= 0 ? "+" : ""}{money(realized)}
               </span>
+            </div>
+            {openPnl !== null ? (
+              <div>
+                <span className="muted">open book</span>{" "}
+                <span className={openPnl >= 0 ? "up" : "down"}>
+                  {openPnl >= 0 ? "+" : ""}{money(openPnl)}
+                </span>
+              </div>
+            ) : null}
+          </div>
+          {unrecorded > 50 ? (
+            <div className="hero-warn">
+              {money(unrecorded)} of that was realized before this journal
+              existed, so it is taken from broker equity rather than from the
+              trade log below.
             </div>
           ) : null}
         </div>
 
         <div className="grid kpis hero-kpis">
-          <Kpi label="Realized P&L" value={money(p.realized_pnl)} tone={pnlTone}
-               note={`${p.trades_closed} closed`} />
+          <Kpi label="Total P&L" value={money(p.total_pnl ?? realized)} tone={pnlTone}
+               note="from broker equity" />
           <Kpi label="Win rate" value={p.win_rate === null ? "--" : pct(p.win_rate, 1)}
                note={`${p.wins}W / ${p.losses}L`} />
           <Kpi label="Profit factor" value={p.profit_factor?.toFixed(2) ?? "--"}

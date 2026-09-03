@@ -239,7 +239,9 @@ def _calendar_ok(proposal: Proposal) -> tuple[bool, str]:
     )
 
 
-def _budget_ok(snap: PortfolioSnapshot) -> tuple[bool, str]:
+def _budget_ok(
+    snap: PortfolioSnapshot, proposal: Proposal | None = None
+) -> tuple[bool, str]:
     r = SETTINGS.risk
     if snap.trades_today >= r.max_new_trades_per_day:
         return False, f"already opened {snap.trades_today} structures today"
@@ -250,6 +252,17 @@ def _budget_ok(snap: PortfolioSnapshot) -> tuple[bool, str]:
             f"{snap.failed_today} entries failed to fill today; "
             "the book is not being priced where it can trade"
         )
+    if proposal is not None:
+        same_underlying = [
+            s for s in state.live_structures() if s["underlying"] == proposal.underlying
+        ]
+        if len(same_underlying) >= r.max_structures_per_underlying:
+            return False, (
+                f"{proposal.underlying} already has {len(same_underlying)} structures; "
+                f"cap is {r.max_structures_per_underlying}"
+            )
+        if any(s["kind"] == proposal.kind for s in same_underlying):
+            return False, f"an open {proposal.underlying} {proposal.kind} already exists"
     return True, (
         f"{snap.trades_today}/{r.max_new_trades_per_day} trades today, "
         f"{snap.open_structures}/{r.max_open_structures} open, "
@@ -280,7 +293,7 @@ def evaluate(proposal: Proposal, snap: PortfolioSnapshot) -> Verdict:
         return Verdict.reject(f"G1 kill switch: {halt_reason}")
     reasons.append("G1 kill switches clear")
 
-    ok, why = _budget_ok(snap)
+    ok, why = _budget_ok(snap, proposal)
     if not ok:
         return Verdict.reject(f"G2 budget: {why}")
     reasons.append(f"G2 {why}")

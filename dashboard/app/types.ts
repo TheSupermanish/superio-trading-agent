@@ -116,6 +116,11 @@ export type Snapshot = {
     max_drawdown_pct: number;
     equity_start: number;
     equity_latest: number;
+    total_pnl?: number;
+    realized_in_journal?: number;
+    realized_implied?: number;
+    realized_unrecorded?: number;
+    open_pnl?: number;
     return_pct: number | null;
     by_sleeve: Record<string, { n: number; pnl: number; wins: number }>;
     by_kind: Record<string, { n: number; pnl: number; wins: number }>;

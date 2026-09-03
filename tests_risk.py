@@ -1,9 +1,10 @@
 """Risk officer unit tests: the gates that must never regress."""
 
+from contextlib import contextmanager
 from dataclasses import replace
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
-from engine import risk
+from engine import calendar_gate, risk
 from engine.config import SETTINGS
 from engine.risk import PortfolioSnapshot, _is_defined_risk, evaluate, size_position
 from engine.types import Leg, Proposal
@@ -136,9 +137,12 @@ def test_convex_into_an_event_is_allowed():
 
 
 def _near(symbol, side, strike, is_call, mid):
-    """A liquid leg expiring tomorrow, clear of the week's catalysts."""
+    """A liquid leg isolated from future calendar-gate fixtures."""
     l = leg(symbol, side, strike, is_call, mid)
-    object.__setattr__(l, "expiry", date.today() + timedelta(days=1))
+    # These tests target G7, not the hard-coded competition calendar. Using
+    # "tomorrow" made them start failing the day before payrolls even though
+    # the volatility behavior had not changed.
+    object.__setattr__(l, "expiry", date.today())
     return l
 
 
@@ -167,12 +171,37 @@ def test_will_buy_convexity_when_premium_is_cheap():
     assert v.approved, v.reasons
 
 
+@contextmanager
+def only_this_gate():
+    """Run a proposal past the gates with the event calendar emptied.
+
+    These tests are about G7, the volatility router. They were passing only
+    because "today plus three days" happened not to span a hard-coded catalyst,
+    and started failing the morning the payrolls print came inside that window:
+    G6 refused the structure before G7 was ever consulted, so a test about the
+    volatility signal was reporting on the event blackout.
+
+    A test whose result depends on today's date relative to a fixed calendar is
+    not testing what it says. G6 has its own tests, with their own fixed dates.
+    """
+    saved = calendar_gate.EVENTS
+    calendar_gate.EVENTS = ()
+    calendar_gate._external_cache["at"] = datetime.now(calendar_gate.ET)
+    calendar_gate._external_cache["events"] = ()
+    try:
+        yield
+    finally:
+        calendar_gate.EVENTS = saved
+        calendar_gate._external_cache["at"] = None
+
+
 def test_will_not_sell_premium_when_it_is_underpriced():
     a = _near("A", "sell", 500, False, 2.00)
     b = _near("B", "buy", 495, False, 0.90)
     p = prop("put_credit_spread", [a, b], net=1.10, width=5, max_loss=390, max_gain=110)
     p.vol_premium = -0.05
-    v = evaluate(p, snap())
+    with only_this_gate():
+        v = evaluate(p, snap())
     assert not v.approved and "below realized" in v.reasons[0], v.reasons
 
 
@@ -182,7 +211,8 @@ def test_no_volatility_reading_does_not_block():
     b = _near("B", "buy", 495, False, 0.90)
     p = prop("put_credit_spread", [a, b], net=1.10, width=5, max_loss=390, max_gain=110)
     p.vol_premium = None
-    v = evaluate(p, snap())
+    with only_this_gate():
+        v = evaluate(p, snap())
     assert v.approved, v.reasons
 
 

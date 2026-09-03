@@ -68,12 +68,17 @@ def run(auto_close_orphans: bool = False, adopt_orphans: bool = True) -> Reconci
         # identical to a vanished one from the position book alone. Closing it
         # here would abandon a live order and leave the journal claiming a
         # trade that is still trying to happen.
-        if structure["status"] != "open":
+        if structure["status"] not in {"open", "closing"}:
             continue
         symbols = {leg["symbol"] for leg in structure["legs"]}
         result.journal_symbols |= symbols
 
         present = symbols & result.broker_symbols
+        if not present and structure["status"] == "closing":
+            # The fill walker owns completion and has the order price needed
+            # for real P&L. Never close this at zero or adopt it again.
+            result.journal_symbols |= symbols
+            continue
         if not present:
             # Confirmed filled earlier, no legs now: it really is gone.
             # The journal thinks this is open and the broker has none of it.

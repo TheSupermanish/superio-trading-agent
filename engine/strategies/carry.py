@@ -117,6 +117,13 @@ def _build(
             return None
 
     payoff_ratio = max_gain / max_loss
+    net_delta = (
+        abs(short_put.delta or 0.0)
+        - abs(long_put.delta or 0.0)
+        + abs(long_call.delta or 0.0)
+        - abs(short_call.delta or 0.0)
+    )
+    quality = net_delta / max(max_loss_points, 0.01) + min(payoff_ratio, 4.0) * 0.01
     legs = [
         to_leg(short_put, "sell"),
         to_leg(long_put, "buy"),
@@ -156,7 +163,7 @@ def _build(
             f"call_width:{actual_call_width:g}",
         ],
     )
-    return proposal, payoff_ratio
+    return proposal, quality
 
 
 def build_risk_reversal(underlying: str) -> Proposal | None:

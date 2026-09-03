@@ -89,14 +89,34 @@ class AgentRun:
         return self.action == "trade" and bool(self.chosen)
 
 
+def _quality(proposal: Proposal) -> float:
+    """Rank attainable exposure instead of the rosiest terminal payoff."""
+    slippage = proposal.slippage_budget / max(proposal.pricing_width, 0.01)
+    if proposal.is_credit and proposal.sleeve != "carry":
+        short_delta = max(
+            (abs(leg.delta or 0.0) for leg in proposal.legs if leg.side == "sell"),
+            default=0.5,
+        )
+        win_prob = max(0.0, min(1.0, 1.0 - short_delta))
+        gain, loss = proposal.max_gain_per_unit, proposal.max_loss_per_unit
+        expected = (win_prob * gain - (1 - win_prob) * loss) / max(loss, 1.0)
+        return expected - slippage
+
+    net_delta = sum(
+        (leg.delta or 0.0) * (1 if leg.side == "buy" else -1)
+        for leg in proposal.legs
+    )
+    payoff = proposal.max_gain_per_unit / max(proposal.max_loss_per_unit, 1.0)
+    return abs(net_delta) + min(payoff, 4.0) * 0.05 - slippage
+
+
 def _fallback(ctx: tools.ToolContext, reason: str) -> AgentRun:
     """No model, or the model failed. Take the single best approved structure."""
     if not ctx.approved:
         return AgentRun(action="stand_aside", reasoning=reason, source="deterministic")
     best = max(
         ctx.approved.values(),
-        key=lambda p: (p.net_price / p.width) if p.is_credit
-        else (p.max_gain_per_unit / max(p.max_loss_per_unit, 1)) * 0.1,
+        key=_quality,
     )
     return AgentRun(
         action="trade",
@@ -128,6 +148,8 @@ def _seed_candidates(ctx: tools.ToolContext) -> None:
             style = "put_credit_spread" if bias != "bearish" else "call_credit_spread"
         try:
             tools.tool_propose_structure(ctx, symbol, style)
+            if bias in {"bullish", "neutral"} and SETTINGS.risk.max_carry_open_risk_pct > 0:
+                tools.tool_propose_structure(ctx, symbol, "risk_reversal")
         except Exception as exc:  # noqa: BLE001
             log.debug("seed proposal failed for %s: %s", symbol, exc)
 

@@ -41,6 +41,12 @@ def _build(
     max_loss = vertical_max_loss(actual_width, -debit)
     max_gain = vertical_max_gain(actual_width, -debit)
     payoff_ratio = max_gain / max_loss if max_loss else 0.0
+    # A huge terminal payoff is often just a remote short strike. Prefer the
+    # spread that buys the most live delta per dollar rather than the prettiest
+    # best-case screenshot.
+    short_delta = abs(short.delta or 0.0)
+    net_delta = max(abs(long.delta) - short_delta, 0.0)
+    quality = net_delta / debit - (debit / actual_width) * 0.10
 
     kind = "call_debit_spread" if is_call else "put_debit_spread"
     proposal = Proposal(
@@ -60,15 +66,21 @@ def _build(
         ),
         tags=[f"dte:{long.dte}", f"payoff:{payoff_ratio:.1f}x", f"iv:{long.iv:.2f}"],
     )
-    return proposal, payoff_ratio
+    return proposal, quality
 
 
 def build_debit_spread(underlying: str, is_call: bool) -> Proposal | None:
-    """Best convex vertical across eligible expiries and widths, scored on payoff ratio.
+    """Best convex vertical across eligible expiries and widths.
+
+    Scored on live delta bought per dollar spent, not on the terminal payoff
+    ratio. Ranking by payoff picks whichever spread has the most remote short
+    strike, because a strike that will almost certainly expire worthless costs
+    almost nothing and flatters the best case. What is actually wanted is the
+    structure that moves most for the money if the trend continues.
 
     A wider spread costs more but pays more; the risk officer caps the debit as
-    a fraction of width, so the search naturally settles on the widest
-    structure that is still cheap enough to be worth owning.
+    a fraction of width, so the search still settles on the widest structure
+    that is cheap enough to be worth owning.
     """
     p = SETTINGS.strategy
     chain = get_chain(

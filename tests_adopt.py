@@ -12,6 +12,8 @@ import tempfile
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+import json
+
 from engine import adopt, state
 
 
@@ -193,6 +195,72 @@ def test_a_butterfly_is_left_alone_rather_than_mispriced():
     ])
     assert created == [], created
     assert state.live_structures() == []
+
+
+def test_a_position_being_closed_is_not_adopted_back():
+    """The bug that spent an afternoon failing to close the same spread.
+
+    A structure closes at its profit target, the order is sent, and the legs
+    are still at the broker until it settles. The structure is now marked
+    closed, so it no longer claims them. Reconciliation sees unclaimed legs and
+    adopts them, recreating the position that was just exited. The new entry
+    then tries to close, and cannot, because the original close order holds the
+    quantity: every pass logs an error and nothing resolves.
+    """
+    _fresh_db()
+    short, long = _occ("SPY", 1, "P", 756), _occ("SPY", 1, "P", 755)
+
+    # A structure closed a minute ago, still holding those legs.
+    with state.db() as conn:
+        conn.execute(
+            "INSERT INTO structures (opened_at, closed_at, sleeve, underlying, kind,"
+            " legs, qty, net_price, max_loss, max_gain, status, realized_pnl,"
+            " close_reason) VALUES (?, ?, 'core', 'SPY', 'put_credit_spread', ?, 12,"
+            " 0.10, 1080, 120, 'closed', 72.0, 'take_profit')",
+            (
+                state.utcnow(),
+                state.utcnow(),
+                json.dumps([
+                    {"symbol": short, "side": "sell", "strike": 756, "expiry": "x", "is_call": False},
+                    {"symbol": long, "side": "buy", "strike": 755, "expiry": "x", "is_call": True},
+                ]),
+            ),
+        )
+
+    created = adopt.adopt([_pos(short, -12, 1.10), _pos(long, 12, 1.00)])
+    assert created == [], "the legs of a just-closed structure must not be adopted"
+
+
+def test_a_leg_committed_to_a_working_order_is_not_adopted():
+    """Quantity held by an order means something is already acting on it.
+
+    Adopting it puts two journal entries on one position, and the second can
+    never close because the first holds the quantity.
+    """
+    _fresh_db()
+    short, long = _occ("SPY", 4, "C", 770), _occ("SPY", 4, "C", 775)
+    legs = [_pos(short, -3, 1.20), _pos(long, 3, 0.40)]
+    legs[0]["qty_available"] = "0"
+
+    created = adopt.adopt(legs)
+    assert created == [], created
+    assert state.live_structures() == []
+
+
+def test_a_settled_orphan_is_still_adopted():
+    """The guards must not stop adoption doing its job.
+
+    A leg with its full quantity available and no recent close behind it is
+    exactly what adoption exists for.
+    """
+    _fresh_db()
+    short, long = _occ("SPY", 4, "C", 770), _occ("SPY", 4, "C", 775)
+    legs = [_pos(short, -3, 1.20), _pos(long, 3, 0.40)]
+    for leg in legs:
+        leg["qty_available"] = leg["qty"]
+
+    created = adopt.adopt(legs)
+    assert len(created) == 1, created
 
 
 if __name__ == "__main__":

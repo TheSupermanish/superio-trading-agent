@@ -265,8 +265,15 @@ def close_structure(
     if ok:
         return {"path": "package", "ok": True, "detail": detail, "legs": []}
 
+    # Quantity-reserved, buying-power and transient rejects do not mean mleg is
+    # unsupported. Falling back on every rejection can submit a second exit
+    # against a working first exit and can dismantle the spread leg by leg.
+    if not is_uncovered_short_reject(detail):
+        return {"path": "package", "ok": False, "detail": detail, "legs": []}
+
     log.warning(
-        "package close refused for #%s (%s), falling back to legs", structure["id"], detail
+        "package close unsupported for #%s (%s), falling back to legs",
+        structure["id"], detail,
     )
     leg_results = close_leg_by_leg(structure, mids, reason)
     failed = [r for r in leg_results if r.get("status") == "failed"]

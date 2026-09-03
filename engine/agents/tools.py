@@ -23,7 +23,12 @@ from engine import calendar_gate, mcp_research, risk, state
 from engine.config import SETTINGS
 from engine.marketdata import get_chain
 from engine.regime import read as read_regime
-from engine.strategies import build_credit_spread, build_debit_spread, build_iron_condor
+from engine.strategies import (
+    build_credit_spread,
+    build_debit_spread,
+    build_iron_condor,
+    build_risk_reversal,
+)
 from engine.types import Proposal
 
 log = logging.getLogger(__name__)
@@ -34,6 +39,7 @@ STYLES = {
     "iron_condor": build_iron_condor,
     "call_debit_spread": lambda sym: build_debit_spread(sym, is_call=True),
     "put_debit_spread": lambda sym: build_debit_spread(sym, is_call=False),
+    "risk_reversal": build_risk_reversal,
 }
 
 
@@ -355,7 +361,11 @@ def declarations() -> list[dict[str, Any]]:
                         "type": "STRING",
                         "description": (
                             "One of: put_credit_spread, call_credit_spread, iron_condor, "
-                            "call_debit_spread, put_debit_spread"
+                            "call_debit_spread, put_debit_spread, risk_reversal. "
+                            "risk_reversal is the carry sleeve: a financed bullish "
+                            "position five to nine weeks out, long delta, defined risk "
+                            "on both sides, and the only shape here whose upside is a "
+                            "multiple of what it risks rather than a fraction of it."
                         ),
                     },
                 },

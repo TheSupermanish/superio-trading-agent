@@ -179,7 +179,7 @@ def mark_structure(structure: dict[str, Any], mids: dict[str, float]) -> Mark | 
                 f"up {gain_ratio:.0%} on the debit paid, target is "
                 f"{p.convex_profit_target:.0%}"
             )
-        elif value <= debit * 0.25:
+        elif value <= debit * (1 - p.convex_stop_loss_fraction):
             action, why = "stop_loss", (
                 f"structure has lost {1 - value / debit:.0%} of its value"
             )
@@ -257,7 +257,7 @@ def manage(force_flatten: bool = False) -> list[Mark]:
                 data=outcome,
             )
             continue
-        if True:
+        if SETTINGS.dry_run:
             state.close_structure(mark.structure_id, mark.unrealized_pnl, action)
             log.info(
                 "closed #%s (%s): %s -> P&L %.2f",
@@ -266,4 +266,9 @@ def manage(force_flatten: bool = False) -> list[Mark]:
                 mark.rationale,
                 mark.unrealized_pnl,
             )
+        else:
+            # Accepted is not filled. Keep the risk reserved and let the fill
+            # walker finalize P&L from Alpaca's actual execution price.
+            state.set_structure_status(mark.structure_id, "closing")
+            log.info("close submitted for #%s (%s); awaiting fill", mark.structure_id, action)
     return marks

@@ -170,6 +170,56 @@ def test_filled_order_promotes_the_structure():
     assert row["status"] == "open", row["status"]
 
 
+def test_an_accepted_close_is_not_flat_until_it_fills():
+    """A broker acknowledgement is not an execution or realized P&L."""
+    _reset(); sid = _seed(1.00, 1.05, status="closing")
+    payload = {"limit_price": "0.42", "client_order_id": "close-1"}
+    with state.db(TMP) as conn:
+        conn.execute(
+            "INSERT INTO orders (ts, structure_id, client_order_id, intent, payload, status) "
+            "VALUES (?,?,?,?,?,?)",
+            (state.utcnow(), sid, "close-1", "close_package:take_profit",
+             json.dumps(payload), "accepted"),
+        )
+
+    broker = FakeBroker({
+        **_order("accepted", age_seconds=10),
+        "filled_avg_price": None,
+    })
+    _install(broker, dry_run=False)
+    assert fills.settle_closing_orders() == []
+    with state.db(TMP) as conn:
+        row = conn.execute("SELECT status FROM structures WHERE id=?", (sid,)).fetchone()
+    assert row["status"] == "closing", row["status"]
+
+
+def test_a_close_fill_records_actual_realized_pnl():
+    _reset(); sid = _seed(1.00, 1.05, status="closing")
+    payload = {"limit_price": "0.42", "client_order_id": "close-1"}
+    with state.db(TMP) as conn:
+        conn.execute(
+            "INSERT INTO orders (ts, structure_id, client_order_id, intent, payload, status) "
+            "VALUES (?,?,?,?,?,?)",
+            (state.utcnow(), sid, "close-1", "close_package:take_profit",
+             json.dumps(payload), "accepted"),
+        )
+
+    broker = FakeBroker({
+        **_order("filled", age_seconds=10),
+        "filled_avg_price": "0.40",
+    })
+    _install(broker, dry_run=False)
+    actions = fills.settle_closing_orders()
+    assert actions == [{"structure": sid, "action": "closed", "pnl": 180.0}], actions
+    with state.db(TMP) as conn:
+        row = conn.execute(
+            "SELECT status, realized_pnl, close_reason FROM structures WHERE id=?", (sid,)
+        ).fetchone()
+    assert row["status"] == "closed", row["status"]
+    assert row["realized_pnl"] == 180.0, row["realized_pnl"]
+    assert row["close_reason"] == "take_profit", row["close_reason"]
+
+
 def test_dead_order_marks_the_structure_rejected():
     _reset(); sid = _seed(-1.01, -0.99)
     broker = FakeBroker(_order("canceled", age_seconds=200)); _install(broker, dry_run=False)

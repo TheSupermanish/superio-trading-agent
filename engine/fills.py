@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 from datetime import datetime, timezone
 from typing import Any
 
@@ -44,6 +45,59 @@ MAX_PENDING_SECONDS = 15 * 60
 
 RESTING = {"new", "accepted", "pending_new", "accepted_for_bidding", "partially_filled"}
 DEAD = {"canceled", "expired", "rejected", "done_for_day", "replaced"}
+
+
+def _signed_fill(order: dict[str, Any], payload: dict[str, Any]) -> float | None:
+    """Broker fill signed using the limit's cash-flow convention."""
+    raw = order.get("filled_avg_price")
+    if raw in (None, ""):
+        return None
+    limit = float(payload.get("limit_price") or 0.0)
+    return math.copysign(abs(float(raw)), limit or 1.0)
+
+
+def settle_closing_orders() -> list[dict[str, Any]]:
+    """Finalize exits only after Alpaca reports the close order filled."""
+    actions: list[dict[str, Any]] = []
+    for structure in state.live_structures():
+        if structure["status"] != "closing":
+            continue
+        with state.db() as conn:
+            row = conn.execute(
+                "SELECT * FROM orders WHERE structure_id = ? "
+                "AND intent LIKE 'close_package:%' ORDER BY id DESC LIMIT 1",
+                (int(structure["id"]),),
+            ).fetchone()
+        if row is None:
+            state.set_structure_status(int(structure["id"]), "open")
+            actions.append({"structure": structure["id"], "action": "close_missing"})
+            continue
+        saved = dict(row)
+        try:
+            payload = json.loads(saved["payload"])
+            order = alpaca_cli.order_by_client_id(saved["client_order_id"])
+        except (json.JSONDecodeError, alpaca_cli.AlpacaCliError):
+            continue
+        if not order:
+            continue
+        status = str(order.get("status", ""))
+        if status == "filled":
+            close_price = _signed_fill(order, payload)
+            if close_price is None:
+                close_price = float(payload["limit_price"])
+            pnl = (float(structure["net_price"]) - close_price) * 100 * int(structure["qty"])
+            reason = str(saved["intent"]).split(":", 1)[-1]
+            state.close_structure(int(structure["id"]), pnl, reason)
+            with state.db() as conn:
+                conn.execute(
+                    "UPDATE orders SET status='filled', fill_price=? WHERE id=?",
+                    (close_price, int(saved["id"])),
+                )
+            actions.append({"structure": structure["id"], "action": "closed", "pnl": pnl})
+        elif status in DEAD:
+            state.set_structure_status(int(structure["id"]), "open")
+            actions.append({"structure": structure["id"], "action": "close_failed"})
+    return actions
 
 
 def _age_seconds(order: dict[str, Any]) -> float:
@@ -78,7 +132,7 @@ def _ladder_price(structure: dict[str, Any], rung: float) -> float:
 
 def walk() -> list[dict[str, Any]]:
     """Reprice or cancel every resting order this agent owns."""
-    actions: list[dict[str, Any]] = []
+    actions: list[dict[str, Any]] = settle_closing_orders()
 
     for structure in state.live_structures():
         client_order_id = structure.get("client_order_id")
@@ -92,6 +146,17 @@ def walk() -> list[dict[str, Any]]:
 
         if status == "filled":
             if structure["status"] != "open":
+                with state.db() as conn:
+                    row = conn.execute(
+                        "SELECT payload FROM orders WHERE structure_id=? "
+                        "AND intent LIKE 'open%' ORDER BY id DESC LIMIT 1",
+                        (int(structure["id"]),),
+                    ).fetchone()
+                payload = json.loads(row["payload"]) if row else {}
+                signed = _signed_fill(order, payload)
+                if signed is not None:
+                    # Alpaca: opening credits are negative and debits positive.
+                    state.update_entry_fill(int(structure["id"]), -signed, signed)
                 state.set_structure_status(int(structure["id"]), "open")
                 actions.append({"structure": structure["id"], "action": "filled"})
             continue
