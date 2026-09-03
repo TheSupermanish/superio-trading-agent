@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T21:03:46.396562+00:00",
+  "generated_at": "2026-09-03T21:09:03.747939+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -1762,6 +1762,14 @@
       "buying_power": 397435.08,
       "open_risk": 0.0,
       "day_pnl": -792.5500000000029
+    },
+    {
+      "ts": "2026-09-03T21:06:52.403987+00:00",
+      "equity": 99358.77,
+      "cash": 99358.77,
+      "buying_power": 397435.08,
+      "open_risk": 0.0,
+      "day_pnl": -792.5500000000029
     }
   ],
   "recent_decisions": [
@@ -3090,6 +3098,22 @@
   ],
   "recent_events": [
     {
+      "id": 56,
+      "ts": "2026-09-03T21:07:33.716444+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "0 of 15 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-03T21:06:52.404805+00:00\", \"equity\": 99358.77, \"regimes\": {\"SPY\": {\"spot\": 771.91, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0829, \"atm_iv\": 0.1305, \"vol_premium\": 0.0476}, \"QQQ\": {\"spot\": 717.16, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1349, \"atm_iv\": 0.1766, \"vol_premium\": 0.0417}, \"IWM\": {\"spot\": 294.97, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1277, \"atm_iv\": 0.1996, \"vol_premium\": 0.0719}, \"DIA\": {\"spot\": 536.78, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0882, \"atm_iv\": 0.1255, \"vol_premium\": 0.0373}, \"XLK\": {\"spot\": 186.01, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2129, \"atm_iv\": 0.2924, \"vol_premium\": 0.0794}, \"XLF\": {\"spot\": 58.58, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1164, \"atm_iv\": 0.1704, \"vol_premium\": 0.0539}, \"SMH\": {\"spot\": 552.72, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.3075, \"atm_iv\": 0.33, \"vol_premium\": 0.0225}, \"GLD\": {\"spot\": 410.7, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2793, \"atm_iv\": 0.3322, \"vol_premium\": 0.0529}, \"TLT\": {\"spot\": 82.07, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.1067, \"atm_iv\": 0.1527, \"vol_premium\": 0.046}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.32, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 168.0, \"reason\": \"G5 pricing: credit 16.0% of width is below the 22% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.67, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 133.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.29, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 71.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.38, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 162.0, \"reason\": \"G5 pricing: credit 19.0% of width is below the 22% floor\"}, {\"symbol\": \"IWM\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.54, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 146.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.26, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 74.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.28, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 172.0, \"reason\": \"G5 pricing: credit 14.0% of width is below the 22% floor\"}, {\"symbol\": \"DIA\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLK\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLF\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"SMH\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"GLD\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.79, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 221.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"GLD\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.59, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 241.0, \"reason\": \"G5 pricing: credit 19.7% of width is below the 22% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.2, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 80.0, \"reason\": \"G5 pricing: credit 20.0% of width is below the 22% floor\"}, {\"symbol\": \"TLT\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}], \"brief\": {\"session_tone\": \"risk_on\", \"summary\": \"US equity markets are rallying today, driven by a pullback in Treasury yields following dovish remarks from Federal Reserve Governor Christopher Waller. Waller indicated he would support holding rates steady at the September meeting if inflation data continues to show progress, easing fears of an imminent hike. This has sparked a broad advance across major indices like SPY, QQQ, and IWM, while gold (GLD) is also catching a bid on the softer rate outlook. Investors are largely looking past rising oil prices and overnight geopolitical tensions in the Middle East to focus on the favorable monetary policy signals.\", \"catalysts_today\": [\"Fed Governor Christopher Waller speech\", \"Initial Jobless Claims\", \"ISM Services Index\", \"Middle East geopolitical developments\"], \"vol_context\": \"Volatility is being actively sold as equities rally and rate hike fears subside, with the VIX moving lower.\", \"confidence\": 0.95, \"grounded\": true, \"sources\": [\"thestreet.com\", \"eurasiabusinessnews.com\", \"coinpaper.com\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"0 of 15 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 55,
+      "ts": "2026-09-03T21:07:33.715344+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equity markets are rallying today, driven by a pullback in Treasury yields following dovish remarks from Federal Reserve Governor Christopher Waller. Waller indicated he would support holding rates steady at the September meeting if inflation data continues to show progress, easing fears of an imminent hike. This has sparked a broad advance across major indices like SPY, QQQ, and IWM, while gol",
+      "data": "{\"session_tone\": \"risk_on\", \"summary\": \"US equity markets are rallying today, driven by a pullback in Treasury yields following dovish remarks from Federal Reserve Governor Christopher Waller. Waller indicated he would support holding rates steady at the September meeting if inflation data continues to show progress, easing fears of an imminent hike. This has sparked a broad advance across major indices like SPY, QQQ, and IWM, while gold (GLD) is also catching a bid on the softer rate outlook. Investors are largely looking past rising oil prices and overnight geopolitical tensions in the Middle East to focus on the favorable monetary policy signals.\", \"catalysts_today\": [\"Fed Governor Christopher Waller speech\", \"Initial Jobless Claims\", \"ISM Services Index\", \"Middle East geopolitical developments\"], \"vol_context\": \"Volatility is being actively sold as equities rally and rate hike fears subside, with the VIX moving lower.\", \"confidence\": 0.95, \"grounded\": true, \"sources\": [\"thestreet.com\", \"eurasiabusinessnews.com\", \"coinpaper.com\"], \"cached\": false}"
+    },
+    {
       "id": 54,
       "ts": "2026-09-03T20:36:16.900503+00:00",
       "level": "info",
@@ -3392,51 +3416,83 @@
       "kind": "market_brief",
       "message": "US equity markets are looking at a mixed to slightly positive start after a strong rebound in the previous session snapped a three-day losing streak. Easing Treasury yields and a steadier oil price are providing some support, however, escalating US-Iran military clashes are keeping gains in check and oil prices elevated near $95 a barrel. [2, 5, 7] Investors are now looking ahead to key economic d",
       "data": "{\"session_tone\": \"mixed\", \"summary\": \"US equity markets are looking at a mixed to slightly positive start after a strong rebound in the previous session snapped a three-day losing streak. Easing Treasury yields and a steadier oil price are providing some support, however, escalating US-Iran military clashes are keeping gains in check and oil prices elevated near $95 a barrel. [2, 5, 7] Investors are now looking ahead to key economic data for further direction, particularly Friday's employment report. [7, 10]\", \"catalysts_today\": [\"8:30 AM ET: Jobless Claims\", \"8:30 AM ET: Trade Balance (July)\", \"8:30 AM ET: Productivity (Q2 Final)\", \"8:30 AM ET: Speech - Governor Christopher J. Waller on Economic Outlook\", \"9:00 AM ET: ISM Services (Business Activity, Employment)\", \"Ongoing: US-Iran geopolitical developments\"], \"vol_context\": \"Volatility, as measured by the VIX, is seeing some selling after a recent spike, with the VIX futures curve returning to a more normal upward slope (contango). [20, 21]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity market news September 3 2026\", \"US stock market today September 3 2026\", \"SPY QQQ IWM trading September 3 2026\", \"economic data calendar September 3 2026\", \"Federal Reserve speakers today September 3 2026\", \"VIX index today September 3 2026\"], \"cached\": false}"
-    },
-    {
-      "id": 16,
-      "ts": "2026-09-03T06:09:41.748588+00:00",
-      "level": "info",
-      "kind": "session_plan",
-      "message": "0 of 9 structures would clear the gates at the next open",
-      "data": "{\"generated_at\": \"2026-09-03T06:09:16.955342+00:00\", \"equity\": 100154.32, \"regimes\": {\"SPY\": {\"spot\": 765.13, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.0739, \"atm_iv\": 0.1755, \"vol_premium\": 0.1016}, \"QQQ\": {\"spot\": 709.43, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1283, \"atm_iv\": 0.2469, \"vol_premium\": 0.1186}, \"IWM\": {\"spot\": 294.05, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1275, \"atm_iv\": 0.2508, \"vol_premium\": 0.1233}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 1.01, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 99.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"SPY\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.63, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 137.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.38, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 162.0, \"reason\": \"G5 pricing: credit 19.0% of width is below the 22% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 1.11, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 189.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.51, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 149.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.6, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 240.0, \"reason\": \"G5 pricing: credit 20.0% of width is below the 22% floor\"}, {\"symbol\": \"IWM\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.52, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 148.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.21, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 79.0, \"reason\": \"G5 pricing: credit 21.0% of width is below the 22% floor\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.31, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 169.0, \"reason\": \"G5 pricing: credit 15.5% of width is below the 22% floor\"}], \"brief\": {\"session_tone\": \"quiet\", \"summary\": \"US equity futures are little changed on Thursday after major indexes snapped a three-day losing streak in the previous session. Yesterday's rebound was led by technology stocks as oil prices and bond yields steadied after a recent run-up. Investors are looking ahead to today's economic data, including jobless claims and ISM Services, as well as remarks from Federal Reserve speakers for further clues on the path of monetary policy.\", \"catalysts_today\": [\"8:30 AM ET - Jobless Claims and Trade Balance\", \"10:00 AM ET - ISM Non-Manufacturing Composite (August)\", \"Fed Speakers: Hammack and Goolsbee\"], \"vol_context\": \"Volatility is being sold, as indicated by a slight dip in the Cboe Volatility Index (VIX) in pre-market.\", \"confidence\": 0.7, \"grounded\": true, \"sources\": [\"tradingeconomics.com\", \"commbank.com.au\", \"substack.com\", \"scotiabank.com\", \"schwab.com\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"0 of 9 structures would clear the gates at the next open\"}"
-    },
-    {
-      "id": 15,
-      "ts": "2026-09-03T06:09:41.745724+00:00",
-      "level": "info",
-      "kind": "market_brief",
-      "message": "US equity futures are little changed on Thursday after major indexes snapped a three-day losing streak in the previous session. Yesterday's rebound was led by technology stocks as oil prices and bond yields steadied after a recent run-up. Investors are looking ahead to today's economic data, including jobless claims and ISM Services, as well as remarks from Federal Reserve speakers for further clu",
-      "data": "{\"session_tone\": \"quiet\", \"summary\": \"US equity futures are little changed on Thursday after major indexes snapped a three-day losing streak in the previous session. Yesterday's rebound was led by technology stocks as oil prices and bond yields steadied after a recent run-up. Investors are looking ahead to today's economic data, including jobless claims and ISM Services, as well as remarks from Federal Reserve speakers for further clues on the path of monetary policy.\", \"catalysts_today\": [\"8:30 AM ET - Jobless Claims and Trade Balance\", \"10:00 AM ET - ISM Non-Manufacturing Composite (August)\", \"Fed Speakers: Hammack and Goolsbee\"], \"vol_context\": \"Volatility is being sold, as indicated by a slight dip in the Cboe Volatility Index (VIX) in pre-market.\", \"confidence\": 0.7, \"grounded\": true, \"sources\": [\"tradingeconomics.com\", \"commbank.com.au\", \"substack.com\", \"scotiabank.com\", \"schwab.com\"], \"cached\": false}"
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-03T20:04:55.610099+00:00",
+    "generated_at": "2026-09-03T21:06:52.404805+00:00",
     "equity": 99358.77,
     "regimes": {
       "SPY": {
-        "spot": 772.76,
+        "spot": 771.91,
         "trend": "up",
         "bias": "bullish",
         "realized_vol": 0.0829,
-        "atm_iv": 0.1232,
-        "vol_premium": 0.0403
+        "atm_iv": 0.1305,
+        "vol_premium": 0.0476
       },
       "QQQ": {
-        "spot": 717.2,
+        "spot": 717.16,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1349,
-        "atm_iv": 0.1767,
-        "vol_premium": 0.0418
+        "atm_iv": 0.1766,
+        "vol_premium": 0.0417
       },
       "IWM": {
-        "spot": 295.06,
+        "spot": 294.97,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1277,
-        "atm_iv": 0.1907,
-        "vol_premium": 0.0631
+        "atm_iv": 0.1996,
+        "vol_premium": 0.0719
+      },
+      "DIA": {
+        "spot": 536.78,
+        "trend": "up",
+        "bias": "bullish",
+        "realized_vol": 0.0882,
+        "atm_iv": 0.1255,
+        "vol_premium": 0.0373
+      },
+      "XLK": {
+        "spot": 186.01,
+        "trend": "up",
+        "bias": "neutral",
+        "realized_vol": 0.2129,
+        "atm_iv": 0.2924,
+        "vol_premium": 0.0794
+      },
+      "XLF": {
+        "spot": 58.58,
+        "trend": "up",
+        "bias": "bullish",
+        "realized_vol": 0.1164,
+        "atm_iv": 0.1704,
+        "vol_premium": 0.0539
+      },
+      "SMH": {
+        "spot": 552.72,
+        "trend": "down",
+        "bias": "bearish",
+        "realized_vol": 0.3075,
+        "atm_iv": 0.33,
+        "vol_premium": 0.0225
+      },
+      "GLD": {
+        "spot": 410.7,
+        "trend": "up",
+        "bias": "neutral",
+        "realized_vol": 0.2793,
+        "atm_iv": 0.3322,
+        "vol_premium": 0.0529
+      },
+      "TLT": {
+        "spot": 82.07,
+        "trend": "down",
+        "bias": "bearish",
+        "realized_vol": 0.1067,
+        "atm_iv": 0.1527,
+        "vol_premium": 0.046
       }
     },
     "candidates": [
@@ -3457,11 +3513,11 @@
         "style": "iron_condor",
         "sleeve": "core",
         "expiry": "2026-09-08",
-        "net_price": 1.14,
-        "width": 3.0,
+        "net_price": 0.67,
+        "width": 2.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 186.0,
+        "max_loss": 133.0,
         "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
       },
       {
@@ -3469,11 +3525,11 @@
         "style": "call_credit_spread",
         "sleeve": "core",
         "expiry": "2026-09-08",
-        "net_price": 0.76,
-        "width": 3.0,
+        "net_price": 0.29,
+        "width": 1.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 224.0,
+        "max_loss": 71.0,
         "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
       },
       {
@@ -3523,34 +3579,96 @@
         "qty": 0,
         "max_loss": 172.0,
         "reason": "G5 pricing: credit 14.0% of width is below the 22% floor"
+      },
+      {
+        "symbol": "DIA",
+        "style": "any",
+        "verdict": "unavailable",
+        "reason": "nothing built from last known quotes in this regime"
+      },
+      {
+        "symbol": "XLK",
+        "style": "any",
+        "verdict": "unavailable",
+        "reason": "nothing built from last known quotes in this regime"
+      },
+      {
+        "symbol": "XLF",
+        "style": "any",
+        "verdict": "unavailable",
+        "reason": "nothing built from last known quotes in this regime"
+      },
+      {
+        "symbol": "SMH",
+        "style": "any",
+        "verdict": "unavailable",
+        "reason": "nothing built from last known quotes in this regime"
+      },
+      {
+        "symbol": "GLD",
+        "style": "iron_condor",
+        "sleeve": "core",
+        "expiry": "2026-09-08",
+        "net_price": 0.79,
+        "width": 3.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 221.0,
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+      },
+      {
+        "symbol": "GLD",
+        "style": "call_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-08",
+        "net_price": 0.59,
+        "width": 3.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 241.0,
+        "reason": "G5 pricing: credit 19.7% of width is below the 22% floor"
+      },
+      {
+        "symbol": "GLD",
+        "style": "put_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-08",
+        "net_price": 0.2,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 80.0,
+        "reason": "G5 pricing: credit 20.0% of width is below the 22% floor"
+      },
+      {
+        "symbol": "TLT",
+        "style": "any",
+        "verdict": "unavailable",
+        "reason": "nothing built from last known quotes in this regime"
       }
     ],
     "brief": {
       "session_tone": "risk_on",
-      "summary": "US equity markets are rallying, with the S&P 500, Dow, and Nasdaq all posting significant gains. [36, 40, 42] The positive sentiment is primarily driven by a drop in Treasury yields following comments from Federal Reserve Governor Christopher Waller, who indicated he would support holding interest rates steady if inflation data continues to show improvement. [37, 44] This has overshadowed concerns about rising oil prices stemming from escalating U.S.-Iran tensions and has led to a rotation into growth-oriented stocks. [36, 40]",
+      "summary": "US equity markets are rallying today, driven by a pullback in Treasury yields following dovish remarks from Federal Reserve Governor Christopher Waller. Waller indicated he would support holding rates steady at the September meeting if inflation data continues to show progress, easing fears of an imminent hike. This has sparked a broad advance across major indices like SPY, QQQ, and IWM, while gold (GLD) is also catching a bid on the softer rate outlook. Investors are largely looking past rising oil prices and overnight geopolitical tensions in the Middle East to focus on the favorable monetary policy signals.",
       "catalysts_today": [
-        "Speech by Federal Reserve Governor Christopher Waller suggesting a potential pause in rate hikes. [37, 50]",
-        "U.S. weekly jobless claims reported at 206,000, remaining low and indicating a stable labor market. [43]",
-        "Release of the U.S. trade balance for July and revised Q2 productivity data. [51, 53]",
-        "Ongoing geopolitical tensions in the Middle East, with Iran targeting U.S. allies. [37, 40]",
-        "Corporate news, including Nvidia's agreement to acquire Hugging Face for $13 billion and strong earnings from Snowflake. [36, 40, 44]"
+        "Fed Governor Christopher Waller speech",
+        "Initial Jobless Claims",
+        "ISM Services Index",
+        "Middle East geopolitical developments"
       ],
-      "vol_context": "Volatility is being sold, with the VIX index trading near 15, down from the previous day's close as equity markets rally. [39, 43, 47]",
-      "confidence": 0.9,
+      "vol_context": "Volatility is being actively sold as equities rally and rate hike fears subside, with the VIX moving lower.",
+      "confidence": 0.95,
       "grounded": true,
       "sources": [
-        "US equity markets news today September 3 2026",
-        "US stock market today",
-        "SPY QQQ IWM trading today September 3 2026",
-        "market tone today September 3 2026 risk-on risk-off",
-        "economic data releases today September 3 2026",
-        "Federal Reserve speakers today September 3 2026"
+        "thestreet.com",
+        "eurasiabusinessnews.com",
+        "coinpaper.com"
       ],
-      "cached": true
+      "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
-    "summary": "0 of 7 structures would clear the gates at the next open",
-    "ts": "2026-09-03T20:05:06.189488+00:00"
+    "summary": "0 of 15 structures would clear the gates at the next open",
+    "ts": "2026-09-03T21:07:33.716444+00:00"
   },
   "google": {
     "connected": [],
