@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T22:07:14.306231+00:00",
+  "generated_at": "2026-09-03T22:12:32.030719+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -2015,6 +2015,14 @@
       "buying_power": 403175.36,
       "open_risk": 1268.0,
       "day_pnl": -404.1999999999971
+    },
+    {
+      "ts": "2026-09-03T22:08:58.950653+00:00",
+      "equity": 100785.84,
+      "cash": 100793.84,
+      "buying_power": 403175.36,
+      "open_risk": 1268.0,
+      "day_pnl": -404.1999999999971
     }
   ],
   "recent_decisions": [
@@ -3355,6 +3363,22 @@
   ],
   "recent_events": [
     {
+      "id": 192,
+      "ts": "2026-09-03T22:09:49.594847+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "0 of 19 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-03T22:08:58.953119+00:00\", \"equity\": 100785.84, \"regimes\": {\"SPY\": {\"spot\": 771.91, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0829, \"atm_iv\": 0.1309, \"vol_premium\": 0.0481}, \"QQQ\": {\"spot\": 717.16, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1349, \"atm_iv\": 0.1762, \"vol_premium\": 0.0413}, \"IWM\": {\"spot\": 294.97, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1277, \"atm_iv\": 0.1996, \"vol_premium\": 0.072}, \"DIA\": {\"spot\": 536.78, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0882, \"atm_iv\": 0.1254, \"vol_premium\": 0.0372}, \"XLK\": {\"spot\": 186.01, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2129, \"atm_iv\": 0.2942, \"vol_premium\": 0.0812}, \"XLF\": {\"spot\": 58.58, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1164, \"atm_iv\": 0.1704, \"vol_premium\": 0.0539}, \"SMH\": {\"spot\": 552.72, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.3075, \"atm_iv\": 0.3289, \"vol_premium\": 0.0214}, \"GLD\": {\"spot\": 410.7, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2793, \"atm_iv\": 0.3323, \"vol_premium\": 0.0529}, \"TLT\": {\"spot\": 82.07, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.1067, \"atm_iv\": 0.1556, \"vol_premium\": 0.0488}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -1.94, \"width\": 10.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 194.0, \"reason\": \"G7 volatility side: buying premium on SPY while implied sits +4.8% above realized; convexity is expensive here\"}, {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.11, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 89.0, \"reason\": \"G5 pricing: credit 11.0% of width is below the 18% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -2.03, \"width\": 10.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 203.0, \"reason\": \"G7 volatility side: buying premium on QQQ while implied sits +4.1% above realized; convexity is expensive here\"}, {\"symbol\": \"QQQ\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -2.57, \"width\": 10.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 257.0, \"reason\": \"G7 volatility side: buying premium on QQQ while implied sits +4.1% above realized; convexity is expensive here\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.2, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 80.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.25, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 175.0, \"reason\": \"G5 pricing: credit 12.5% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -0.95, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 95.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -0.9, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 90.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.18, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 82.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.1, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 90.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"DIA\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.08, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 92.0, \"reason\": \"G5 pricing: credit 8.0% of width is below the 18% floor\"}, {\"symbol\": \"XLK\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLF\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"SMH\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"GLD\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -2.13, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 213.0, \"reason\": \"G7 volatility side: buying premium on GLD while implied sits +5.3% above realized; convexity is expensive here\"}, {\"symbol\": \"GLD\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-08\", \"net_price\": -1.66, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 166.0, \"reason\": \"G7 volatility side: buying premium on GLD while implied sits +5.3% above realized; convexity is expensive here\"}, {\"symbol\": \"GLD\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.48, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 452.0, \"reason\": \"G5 pricing: credit 9.6% of width is below the 18% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.35, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 265.0, \"reason\": \"G5 pricing: credit 11.7% of width is below the 18% floor\"}, {\"symbol\": \"TLT\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}], \"brief\": {\"session_tone\": \"risk_on\", \"summary\": \"US equities are trading higher today, rebounding from recent losses as Treasury yields pull back from multi-year highs. The rally was catalyzed by comments from Federal Reserve Governor Christopher Waller, who signaled support for holding interest rates steady if upcoming inflation data continues to show improvement. However, escalating geopolitical tensions and military strikes between the US and Iran have pushed crude oil prices higher, keeping some inflationary concerns in the background.\", \"catalysts_today\": [\"Federal Reserve Governor Christopher Waller speech\", \"Escalating US-Iran military strikes in the Middle East\", \"Jobless claims and ISM Services Index data\"], \"vol_context\": \"Volatility is being aggressively sold, with the VIX dropping roughly 7% to the low 15s as equities catch a bid.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"financialcontent.com\", \"federalreserve.gov\", \"thestreet.com\", \"fox61.com\", \"edwardjones.com\", \"arcpublishing.com\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"0 of 19 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 191,
+      "ts": "2026-09-03T22:09:49.592250+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equities are trading higher today, rebounding from recent losses as Treasury yields pull back from multi-year highs. The rally was catalyzed by comments from Federal Reserve Governor Christopher Waller, who signaled support for holding interest rates steady if upcoming inflation data continues to show improvement. However, escalating geopolitical tensions and military strikes between the US and",
+      "data": "{\"session_tone\": \"risk_on\", \"summary\": \"US equities are trading higher today, rebounding from recent losses as Treasury yields pull back from multi-year highs. The rally was catalyzed by comments from Federal Reserve Governor Christopher Waller, who signaled support for holding interest rates steady if upcoming inflation data continues to show improvement. However, escalating geopolitical tensions and military strikes between the US and Iran have pushed crude oil prices higher, keeping some inflationary concerns in the background.\", \"catalysts_today\": [\"Federal Reserve Governor Christopher Waller speech\", \"Escalating US-Iran military strikes in the Middle East\", \"Jobless claims and ISM Services Index data\"], \"vol_context\": \"Volatility is being aggressively sold, with the VIX dropping roughly 7% to the low 15s as equities catch a bid.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"financialcontent.com\", \"federalreserve.gov\", \"thestreet.com\", \"fox61.com\", \"edwardjones.com\", \"arcpublishing.com\"], \"cached\": false}"
+    },
+    {
       "id": 190,
       "ts": "2026-09-03T21:07:46.985652+00:00",
       "level": "info",
@@ -3657,26 +3681,10 @@
       "kind": "orphan_position",
       "message": "IWM260903P00286000 is held at the broker but no journal entry claims it",
       "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"6be73164-2ba4-42c0-ab32-2ec28f315cd0\", \"asset_marginable\": true, \"avg_entry_price\": \"0.38\", \"change_today\": \"-0.5\", \"cost_basis\": \"-152\", \"current_price\": \"0.01\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"-4\", \"qty\": \"-4\", \"qty_available\": \"-4\", \"side\": \"short\", \"symbol\": \"IWM260903P00286000\", \"unrealized_intraday_pl\": \"4\", \"unrealized_intraday_plpc\": \"0.5\", \"unrealized_pl\": \"148\", \"unrealized_plpc\": \"0.97368\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 152,
-      "ts": "2026-09-03T16:10:21.042218+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00285000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"cc225ee0-dda6-4222-acab-d2284affea79\", \"asset_marginable\": true, \"avg_entry_price\": \"0.14\", \"change_today\": \"-0.5\", \"cost_basis\": \"-56\", \"current_price\": \"0.01\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"-4\", \"qty\": \"-4\", \"qty_available\": \"-4\", \"side\": \"short\", \"symbol\": \"IWM260903P00285000\", \"unrealized_intraday_pl\": \"4\", \"unrealized_intraday_plpc\": \"0.5\", \"unrealized_pl\": \"52\", \"unrealized_plpc\": \"0.92857\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 151,
-      "ts": "2026-09-03T16:10:21.040339+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00284000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"06c55358-6533-49c8-8e1e-6f917be5f418\", \"asset_marginable\": true, \"avg_entry_price\": \"0.23\", \"change_today\": \"-1\", \"cost_basis\": \"92\", \"current_price\": \"0\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"0\", \"qty\": \"4\", \"qty_available\": \"4\", \"side\": \"long\", \"symbol\": \"IWM260903P00284000\", \"unrealized_intraday_pl\": \"-8\", \"unrealized_intraday_plpc\": \"-1\", \"unrealized_pl\": \"-92\", \"unrealized_plpc\": \"-1\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-03T21:06:55.068875+00:00",
+    "generated_at": "2026-09-03T22:08:58.953119+00:00",
     "equity": 100785.84,
     "regimes": {
       "SPY": {
@@ -3684,16 +3692,16 @@
         "trend": "up",
         "bias": "bullish",
         "realized_vol": 0.0829,
-        "atm_iv": 0.1305,
-        "vol_premium": 0.0476
+        "atm_iv": 0.1309,
+        "vol_premium": 0.0481
       },
       "QQQ": {
         "spot": 717.16,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1349,
-        "atm_iv": 0.1766,
-        "vol_premium": 0.0417
+        "atm_iv": 0.1762,
+        "vol_premium": 0.0413
       },
       "IWM": {
         "spot": 294.97,
@@ -3701,23 +3709,23 @@
         "bias": "neutral",
         "realized_vol": 0.1277,
         "atm_iv": 0.1996,
-        "vol_premium": 0.0719
+        "vol_premium": 0.072
       },
       "DIA": {
         "spot": 536.78,
         "trend": "up",
         "bias": "bullish",
         "realized_vol": 0.0882,
-        "atm_iv": 0.1255,
-        "vol_premium": 0.0373
+        "atm_iv": 0.1254,
+        "vol_premium": 0.0372
       },
       "XLK": {
         "spot": 186.01,
         "trend": "up",
         "bias": "neutral",
         "realized_vol": 0.2129,
-        "atm_iv": 0.2924,
-        "vol_premium": 0.0794
+        "atm_iv": 0.2942,
+        "vol_premium": 0.0812
       },
       "XLF": {
         "spot": 58.58,
@@ -3732,15 +3740,15 @@
         "trend": "down",
         "bias": "bearish",
         "realized_vol": 0.3075,
-        "atm_iv": 0.33,
-        "vol_premium": 0.0225
+        "atm_iv": 0.3289,
+        "vol_premium": 0.0214
       },
       "GLD": {
         "spot": 410.7,
         "trend": "up",
         "bias": "neutral",
         "realized_vol": 0.2793,
-        "atm_iv": 0.3322,
+        "atm_iv": 0.3323,
         "vol_premium": 0.0529
       },
       "TLT": {
@@ -3748,8 +3756,8 @@
         "trend": "down",
         "bias": "bearish",
         "realized_vol": 0.1067,
-        "atm_iv": 0.1527,
-        "vol_premium": 0.046
+        "atm_iv": 0.1556,
+        "vol_premium": 0.0488
       }
     },
     "candidates": [
@@ -3779,18 +3787,6 @@
       },
       {
         "symbol": "QQQ",
-        "style": "call_debit_spread",
-        "sleeve": "convex",
-        "expiry": "2026-09-08",
-        "net_price": -2.57,
-        "width": 10.0,
-        "verdict": "would refuse",
-        "qty": 0,
-        "max_loss": 257.0,
-        "reason": "G7 volatility side: buying premium on QQQ while implied sits +4.2% above realized; convexity is expensive here"
-      },
-      {
-        "symbol": "QQQ",
         "style": "put_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-08",
@@ -3799,7 +3795,19 @@
         "verdict": "would refuse",
         "qty": 0,
         "max_loss": 203.0,
-        "reason": "G7 volatility side: buying premium on QQQ while implied sits +4.2% above realized; convexity is expensive here"
+        "reason": "G7 volatility side: buying premium on QQQ while implied sits +4.1% above realized; convexity is expensive here"
+      },
+      {
+        "symbol": "QQQ",
+        "style": "call_debit_spread",
+        "sleeve": "convex",
+        "expiry": "2026-09-08",
+        "net_price": -2.57,
+        "width": 10.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 257.0,
+        "reason": "G7 volatility side: buying premium on QQQ while implied sits +4.1% above realized; convexity is expensive here"
       },
       {
         "symbol": "QQQ",
@@ -3960,25 +3968,28 @@
     ],
     "brief": {
       "session_tone": "risk_on",
-      "summary": "US equities are rallying today as Treasury yields pull back following dovish remarks from Fed Governor Christopher Waller, who advocated for holding rates steady in September if inflation continues to cool. Markets are largely shrugging off geopolitical headwinds and rising oil prices stemming from escalating US-Iran tensions. Tech and small-cap stocks are leading the advance, supported by solid corporate earnings and in-line labor data that reinforced a soft-landing narrative.",
+      "summary": "US equities are trading higher today, rebounding from recent losses as Treasury yields pull back from multi-year highs. The rally was catalyzed by comments from Federal Reserve Governor Christopher Waller, who signaled support for holding interest rates steady if upcoming inflation data continues to show improvement. However, escalating geopolitical tensions and military strikes between the US and Iran have pushed crude oil prices higher, keeping some inflationary concerns in the background.",
       "catalysts_today": [
-        "Fed Governor Christopher Waller speech at Reuters NEXT Newsmaker event",
-        "Q2 Unit Labor Costs and Non-farm Productivity",
-        "Weekly Initial and Continuing Jobless Claims",
-        "August Challenger Job Cuts report",
-        "Escalating US-Iran geopolitical tensions and rising crude oil prices"
+        "Federal Reserve Governor Christopher Waller speech",
+        "Escalating US-Iran military strikes in the Middle East",
+        "Jobless claims and ISM Services Index data"
       ],
-      "vol_context": "Volatility is being aggressively sold, with the VIX dropping roughly 7% to the low 15s as near-term rate-hike fears subside.",
-      "confidence": 0.95,
+      "vol_context": "Volatility is being aggressively sold, with the VIX dropping roughly 7% to the low 15s as equities catch a bid.",
+      "confidence": 0.9,
       "grounded": true,
       "sources": [
-        "thestreet.com"
+        "financialcontent.com",
+        "federalreserve.gov",
+        "thestreet.com",
+        "fox61.com",
+        "edwardjones.com",
+        "arcpublishing.com"
       ],
       "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
     "summary": "0 of 19 structures would clear the gates at the next open",
-    "ts": "2026-09-03T21:07:46.985652+00:00"
+    "ts": "2026-09-03T22:09:49.594847+00:00"
   },
   "google": {
     "connected": [],
