@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T07:54:33.192600+00:00",
+  "generated_at": "2026-09-04T07:59:51.395776+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -27,8 +27,8 @@
     "profit_factor": 0.133,
     "max_drawdown_pct": 0.0069,
     "equity_start": 100000.0,
-    "equity_latest": 101451.99,
-    "total_pnl": 1451.99,
+    "equity_latest": 101451.07,
+    "total_pnl": 1451.07,
     "realized_in_journal": -468.0,
     "return_pct": 0.0145,
     "by_sleeve": {
@@ -68,8 +68,8 @@
       }
     },
     "open_pnl": 112.0,
-    "realized_implied": 1339.99,
-    "realized_unrecorded": 1807.99
+    "realized_implied": 1339.07,
+    "realized_unrecorded": 1807.07
   },
   "live": {
     "marks": [
@@ -157,13 +157,13 @@
     "ok": true
   },
   "budget": {
-    "equity": 101451.99,
+    "equity": 101451.07,
     "sleeves": [
       {
         "sleeve": "core",
         "used": 0.0,
         "cap_pct": 0.03,
-        "cap": 3043.56,
+        "cap": 3043.53,
         "used_pct_of_equity": 0.0,
         "utilisation": 0.0
       },
@@ -171,7 +171,7 @@
         "sleeve": "convex",
         "used": 0.0,
         "cap_pct": 0.03,
-        "cap": 3043.56,
+        "cap": 3043.53,
         "used_pct_of_equity": 0.0,
         "utilisation": 0.0
       },
@@ -179,13 +179,13 @@
         "sleeve": "carry",
         "used": 2222.0,
         "cap_pct": 0.04,
-        "cap": 4058.08,
+        "cap": 4058.04,
         "used_pct_of_equity": 0.0219,
-        "utilisation": 0.5475
+        "utilisation": 0.5476
       }
     ],
     "total_used": 2222.0,
-    "total_cap": 8116.16,
+    "total_cap": 8116.09,
     "total_cap_pct": 0.08,
     "total_utilisation": 0.2738,
     "daily_kill_pct": 0.04,
@@ -4399,6 +4399,14 @@
       "buying_power": 396895.96,
       "open_risk": 2222.0,
       "day_pnl": -528.1499999999942
+    },
+    {
+      "ts": "2026-09-04T07:58:27.851795+00:00",
+      "equity": 101451.07,
+      "cash": 100423.07,
+      "buying_power": 396892.28,
+      "open_risk": 2222.0,
+      "day_pnl": -34.0
     }
   ],
   "recent_decisions": [
