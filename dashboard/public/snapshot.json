@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T07:28:00.681632+00:00",
+  "generated_at": "2026-09-04T07:33:19.737187+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -4359,6 +4359,14 @@
       "buying_power": 396895.96,
       "open_risk": 2222.0,
       "day_pnl": -528.1499999999942
+    },
+    {
+      "ts": "2026-09-04T07:31:38.955732+00:00",
+      "equity": 101451.99,
+      "cash": 100423.99,
+      "buying_power": 396895.96,
+      "open_risk": 2222.0,
+      "day_pnl": -528.1499999999942
     }
   ],
   "recent_decisions": [
@@ -6023,6 +6031,22 @@
   ],
   "recent_events": [
     {
+      "id": 154,
+      "ts": "2026-09-04T07:32:56.232511+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "9 of 27 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-04T07:31:38.958211+00:00\", \"equity\": 101451.99, \"regimes\": {\"SPY\": {\"spot\": 771.91, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0829, \"atm_iv\": 0.09, \"vol_premium\": 0.0071}, \"QQQ\": {\"spot\": 717.16, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1349, \"atm_iv\": 0.1302, \"vol_premium\": -0.0047}, \"IWM\": {\"spot\": 294.97, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1277, \"atm_iv\": 0.1282, \"vol_premium\": 0.0005}, \"DIA\": {\"spot\": 536.78, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0882, \"atm_iv\": 0.1098, \"vol_premium\": 0.0217}, \"XLK\": {\"spot\": 186.01, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2129, \"atm_iv\": 0.2231, \"vol_premium\": 0.0102}, \"XLF\": {\"spot\": 58.58, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1164, \"atm_iv\": 0.1213, \"vol_premium\": 0.0049}, \"SMH\": {\"spot\": 552.72, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.3075, \"atm_iv\": 0.247, \"vol_premium\": -0.0605}, \"GLD\": {\"spot\": 410.7, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2793, \"atm_iv\": 0.2352, \"vol_premium\": -0.0441}, \"TLT\": {\"spot\": 82.07, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.1067, \"atm_iv\": 0.1003, \"vol_premium\": -0.0064}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -2.45, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 4, \"max_loss\": 980.0, \"reason\": \"G8 buying power room 198,448 -> 4\"}, {\"symbol\": \"SPY\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-09-30\", \"net_price\": -2.9, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 590.0, \"reason\": \"G2 budget: an open SPY risk_reversal already exists\"}, {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.18, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 82.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout\"}, {\"symbol\": \"QQQ\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -2.47, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 4, \"max_loss\": 988.0, \"reason\": \"G8 buying power room 198,448 -> 4\"}, {\"symbol\": \"QQQ\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -3.52, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 704.0, \"reason\": \"G8 buying power room 198,448 -> 2\"}, {\"symbol\": \"QQQ\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-09-30\", \"net_price\": -3.92, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 692.0, \"reason\": \"G2 budget: an open QQQ risk_reversal already exists\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.23, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 77.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-14\", \"net_price\": 0.71, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 428.9, \"reason\": \"G5 pricing: credit 14.2% of width is below the 18% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-14\", \"net_price\": 0.71, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 428.9, \"reason\": \"G5 pricing: credit 14.2% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -1.29, \"width\": 5.0, \"verdict\": \"would trade\", \"qty\": 7, \"max_loss\": 903.0, \"reason\": \"G8 buying power room 198,448 -> 7\"}, {\"symbol\": \"IWM\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-10-16\", \"net_price\": -2.02, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 502.0, \"reason\": \"G2 budget: an open IWM risk_reversal already exists\"}, {\"symbol\": \"IWM\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -1.07, \"width\": 3.0, \"verdict\": \"would trade\", \"qty\": 9, \"max_loss\": 963.0, \"reason\": \"G8 buying power room 198,448 -> 9\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.38, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 162.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.15, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 85.0, \"reason\": \"G5 pricing: credit 15.0% of width is below the 18% floor\"}, {\"symbol\": \"DIA\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-11\", \"net_price\": -2.45, \"width\": 8.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 245.0, \"reason\": \"G7 volatility side: buying premium on DIA while implied sits +2.2% above realized; convexity is expensive here\"}, {\"symbol\": \"DIA\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-10-23\", \"net_price\": -2.63, \"width\": 3.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 1126.0, \"reason\": \"G8 buying power room 198,448 -> 2\"}, {\"symbol\": \"DIA\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.19, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 181.0, \"reason\": \"G5 pricing: credit 9.5% of width is below the 18% floor\"}, {\"symbol\": \"XLK\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLF\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"SMH\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"GLD\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -2.83, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 3, \"max_loss\": 849.0, \"reason\": \"G8 buying power room 198,448 -> 3\"}, {\"symbol\": \"GLD\", \"style\": \"risk_reversal\", \"sleeve\": \"carry\", \"expiry\": \"2026-09-30\", \"net_price\": -2.69, \"width\": 3.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 1138.0, \"reason\": \"G8 buying power room 198,448 -> 2\"}, {\"symbol\": \"GLD\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -2.77, \"width\": 8.0, \"verdict\": \"would trade\", \"qty\": 3, \"max_loss\": 831.0, \"reason\": \"G8 buying power room 198,448 -> 3\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-14\", \"net_price\": 0.84, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 416.0, \"reason\": \"G5 pricing: credit 16.8% of width is below the 18% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-14\", \"net_price\": 0.84, \"width\": 5.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 416.0, \"reason\": \"G5 pricing: credit 16.8% of width is below the 18% floor\"}, {\"symbol\": \"GLD\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.25, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 175.0, \"reason\": \"G5 pricing: credit 12.5% of width is below the 18% floor\"}, {\"symbol\": \"TLT\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-14\", \"net_price\": 0.13, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 87.0, \"reason\": \"G5 pricing: credit 13.0% of width is below the 18% floor\"}], \"brief\": {\"session_tone\": \"quiet\", \"summary\": \"US equity futures for major indices like SPY, QQQ, IWM, and DIA are trading quietly in the pre-market session as investors await the highly anticipated August Non-Farm Payrolls report. Sentiment has been supported in recent days by dovish comments from Fed Governor Christopher Waller, which reduced the probability of a September rate hike. The upcoming jobs data will be critical in determining whether July's weak hiring was a one-off or the start of a broader economic cooling, directly impacting the Fed's next move.\", \"catalysts_today\": [\"US August Non-Farm Payrolls (8:30 AM ET)\"], \"vol_context\": \"Volatility has receded with the VIX closing near 14.3, though traders remain cautious and are holding positions steady ahead of the pivotal payrolls data.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"\\\"US equity markets\\\" September 4 2026\", \"stock market news September 4 2026\", \"economic calendar September 4 2026\", \"\\\"SPY\\\" \\\"QQQ\\\" \\\"IWM\\\" \\\"DIA\\\" \\\"XLK\\\" \\\"XLF\\\" \\\"SMH\\\" \\\"GLD\\\" \\\"TLT\\\" September 4 2026\", \"\\\"US non-farm payrolls\\\" September 4 2026\", \"\\\"volatility\\\" \\\"VIX\\\" September 4 2026\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"9 of 27 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 153,
+      "ts": "2026-09-04T07:32:56.230198+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equity futures for major indices like SPY, QQQ, IWM, and DIA are trading quietly in the pre-market session as investors await the highly anticipated August Non-Farm Payrolls report. Sentiment has been supported in recent days by dovish comments from Fed Governor Christopher Waller, which reduced the probability of a September rate hike. The upcoming jobs data will be critical in determining whe",
+      "data": "{\"session_tone\": \"quiet\", \"summary\": \"US equity futures for major indices like SPY, QQQ, IWM, and DIA are trading quietly in the pre-market session as investors await the highly anticipated August Non-Farm Payrolls report. Sentiment has been supported in recent days by dovish comments from Fed Governor Christopher Waller, which reduced the probability of a September rate hike. The upcoming jobs data will be critical in determining whether July's weak hiring was a one-off or the start of a broader economic cooling, directly impacting the Fed's next move.\", \"catalysts_today\": [\"US August Non-Farm Payrolls (8:30 AM ET)\"], \"vol_context\": \"Volatility has receded with the VIX closing near 14.3, though traders remain cautious and are holding positions steady ahead of the pivotal payrolls data.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"\\\"US equity markets\\\" September 4 2026\", \"stock market news September 4 2026\", \"economic calendar September 4 2026\", \"\\\"SPY\\\" \\\"QQQ\\\" \\\"IWM\\\" \\\"DIA\\\" \\\"XLK\\\" \\\"XLF\\\" \\\"SMH\\\" \\\"GLD\\\" \\\"TLT\\\" September 4 2026\", \"\\\"US non-farm payrolls\\\" September 4 2026\", \"\\\"volatility\\\" \\\"VIX\\\" September 4 2026\"], \"cached\": false}"
+    },
+    {
       "id": 152,
       "ts": "2026-09-04T06:30:25.501552+00:00",
       "level": "info",
@@ -6325,26 +6349,10 @@
       "kind": "reconciliation",
       "message": "0 structures confirmed, 0 marked closed, 2 adopted, 0 orphan positions",
       "data": null
-    },
-    {
-      "id": 114,
-      "ts": "2026-09-03T14:02:16.079750+00:00",
-      "level": "warning",
-      "kind": "adopted",
-      "message": "adopted SPY iron_condor x1 expiring 2026-09-30 into the journal as #19",
-      "data": "{\"underlying\": \"SPY\", \"kind\": \"iron_condor\", \"legs\": [{\"symbol\": \"SPY260930C00782000\", \"side\": \"buy\", \"strike\": 782.0, \"expiry\": \"2026-09-30\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 3.74, \"delta\": null}, {\"symbol\": \"SPY260930C00802000\", \"side\": \"sell\", \"strike\": 802.0, \"expiry\": \"2026-09-30\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 0.51, \"delta\": null}, {\"symbol\": \"SPY260930P00753000\", \"side\": \"buy\", \"strike\": 753.0, \"expiry\": \"2026-09-30\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 5.31, \"delta\": null}, {\"symbol\": \"SPY260930P00756000\", \"side\": \"sell\", \"strike\": 756.0, \"expiry\": \"2026-09-30\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 6.0, \"delta\": null}], \"qty\": 1, \"net_price\": -2.84, \"max_loss\": 2284.0, \"max_gain\": 1716.0}"
-    },
-    {
-      "id": 113,
-      "ts": "2026-09-03T14:02:16.078168+00:00",
-      "level": "warning",
-      "kind": "adopted",
-      "message": "adopted IWM iron_condor x2 expiring 2026-10-02 into the journal as #18",
-      "data": "{\"underlying\": \"IWM\", \"kind\": \"iron_condor\", \"legs\": [{\"symbol\": \"IWM261002C00302000\", \"side\": \"buy\", \"strike\": 302.0, \"expiry\": \"2026-10-02\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 2.24, \"delta\": null}, {\"symbol\": \"IWM261002C00317000\", \"side\": \"sell\", \"strike\": 317.0, \"expiry\": \"2026-10-02\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 0.18, \"delta\": null}, {\"symbol\": \"IWM261002P00285000\", \"side\": \"buy\", \"strike\": 285.0, \"expiry\": \"2026-10-02\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 2.74, \"delta\": null}, {\"symbol\": \"IWM261002P00288000\", \"side\": \"sell\", \"strike\": 288.0, \"expiry\": \"2026-10-02\", \"is_call\": false, \"ratio_qty\": 1, \"mid\": 3.56, \"delta\": null}], \"qty\": 2, \"net_price\": -1.55, \"max_loss\": 3310.0, \"max_gain\": 2690.0}"
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-04T06:29:12.475819+00:00",
+    "generated_at": "2026-09-04T07:31:38.958211+00:00",
     "equity": 101451.99,
     "regimes": {
       "SPY": {
@@ -6455,7 +6463,7 @@
         "verdict": "would refuse",
         "qty": 0,
         "max_loss": 82.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout"
       },
       {
         "symbol": "QQQ",
@@ -6503,7 +6511,7 @@
         "verdict": "would refuse",
         "qty": 0,
         "max_loss": 77.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout"
       },
       {
         "symbol": "QQQ",
@@ -6575,7 +6583,7 @@
         "verdict": "would refuse",
         "qty": 0,
         "max_loss": 162.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it"
+        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout"
       },
       {
         "symbol": "IWM",
@@ -6730,23 +6738,26 @@
     ],
     "brief": {
       "session_tone": "quiet",
-      "summary": "US equity futures are trading quietly in the early overnight session as investors await the highly anticipated August Non-Farm Payrolls report. Markets are coming off a strong rally on Thursday, where SPY, QQQ, and DIA surged following dovish comments from Fed Governor Christopher Waller and a BOJ yen intervention, though small caps (IWM) lagged the broader move. Tech and semiconductors (XLK, SMH) saw strength from AI-related news, while bonds (TLT) rallied and gold (GLD) held steady as Treasury yields fell.",
+      "summary": "US equity futures for major indices like SPY, QQQ, IWM, and DIA are trading quietly in the pre-market session as investors await the highly anticipated August Non-Farm Payrolls report. Sentiment has been supported in recent days by dovish comments from Fed Governor Christopher Waller, which reduced the probability of a September rate hike. The upcoming jobs data will be critical in determining whether July's weak hiring was a one-off or the start of a broader economic cooling, directly impacting the Fed's next move.",
       "catalysts_today": [
-        "US Non-Farm Payrolls (NFP) at 8:30 AM ET"
+        "US August Non-Farm Payrolls (8:30 AM ET)"
       ],
-      "vol_context": "Volatility is being bid as traders hedge ahead of the critical NFP data release this morning.",
+      "vol_context": "Volatility has receded with the VIX closing near 14.3, though traders remain cautious and are holding positions steady ahead of the pivotal payrolls data.",
       "confidence": 0.9,
       "grounded": true,
       "sources": [
-        "\"US stock market\" news September 4 2026",
+        "\"US equity markets\" September 4 2026",
+        "stock market news September 4 2026",
         "economic calendar September 4 2026",
-        "SPY QQQ IWM DIA September 4 2026"
+        "\"SPY\" \"QQQ\" \"IWM\" \"DIA\" \"XLK\" \"XLF\" \"SMH\" \"GLD\" \"TLT\" September 4 2026",
+        "\"US non-farm payrolls\" September 4 2026",
+        "\"volatility\" \"VIX\" September 4 2026"
       ],
       "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
     "summary": "9 of 27 structures would clear the gates at the next open",
-    "ts": "2026-09-04T06:30:25.501552+00:00"
+    "ts": "2026-09-04T07:32:56.232511+00:00"
   },
   "google": {
     "connected": [],
