@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T12:20:02.303808+00:00",
+  "generated_at": "2026-09-04T13:58:31.924333+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -63,17 +63,7 @@
   },
   "live": {
     "marks": [],
-    "spots": {
-      "SPY": 773.11,
-      "QQQ": 717.16,
-      "IWM": 294.97,
-      "DIA": 536.32,
-      "XLK": 186.01,
-      "XLF": 58.58,
-      "SMH": 552.72,
-      "GLD": 410.7,
-      "TLT": 82.39
-    },
+    "spots": {},
     "ok": true
   },
   "budget": {
@@ -3138,6 +3128,14 @@
       "buying_power": 397430.36,
       "open_risk": 0.0,
       "day_pnl": 0.0
+    },
+    {
+      "ts": "2026-09-04T12:20:13.323031+00:00",
+      "equity": 99357.59,
+      "cash": 99357.59,
+      "buying_power": 397430.36,
+      "open_risk": 0.0,
+      "day_pnl": 0.0
     }
   ],
   "recent_decisions": [
@@ -5090,11 +5088,5 @@
       ]
     }
   ],
-  "upcoming": [
-    {
-      "name": "August employment report",
-      "when": "2026-09-04T08:30:00-04:00",
-      "impact": "high"
-    }
-  ]
+  "upcoming": []
 }

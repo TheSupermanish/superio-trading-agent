@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T12:19:52.281518+00:00",
+  "generated_at": "2026-09-04T12:32:18.260543+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -67,93 +67,13 @@
         "wins": 1
       }
     },
-    "open_pnl": 112.0,
-    "realized_implied": 1339.07,
-    "realized_unrecorded": 1807.07
+    "open_pnl": 0,
+    "realized_implied": 1451.07,
+    "realized_unrecorded": 1919.07
   },
   "live": {
-    "marks": [
-      {
-        "structure_id": 16,
-        "underlying": "SPY",
-        "kind": "risk_reversal",
-        "sleeve": "carry",
-        "qty": 1,
-        "entry_price": -2.84,
-        "current_price": -4.06,
-        "unrealized_pnl": 122.0,
-        "pct_of_max_gain": 0.0715,
-        "dte": 26,
-        "action": "hold",
-        "rationale": "+21% of risk, +7% of max gain, 26 days to expiry",
-        "max_loss": 593.0,
-        "max_gain": 1707.0,
-        "spot": 773.01,
-        "short_strike": 756.0,
-        "distance_pct": -0.022,
-        "tp_progress": 0.1191,
-        "sl_progress": 0.0,
-        "tp_basis": "60% of max gain",
-        "sl_basis": "1.2x risk"
-      },
-      {
-        "structure_id": 17,
-        "underlying": "IWM",
-        "kind": "risk_reversal",
-        "sleeve": "carry",
-        "qty": 2,
-        "entry_price": -1.55,
-        "current_price": -1.56,
-        "unrealized_pnl": 1.0,
-        "pct_of_max_gain": 0.0004,
-        "dte": 28,
-        "action": "hold",
-        "rationale": "+0% of risk, +0% of max gain, 28 days to expiry",
-        "max_loss": 923.9999999999999,
-        "max_gain": 2676.0,
-        "spot": 294.97,
-        "short_strike": 288.0,
-        "distance_pct": -0.0236,
-        "tp_progress": 0.0006,
-        "sl_progress": 0.0,
-        "tp_basis": "60% of max gain",
-        "sl_basis": "1.2x risk"
-      },
-      {
-        "structure_id": 20,
-        "underlying": "QQQ",
-        "kind": "risk_reversal",
-        "sleeve": "carry",
-        "qty": 1,
-        "entry_price": -3.76,
-        "current_price": -3.65,
-        "unrealized_pnl": -11.0,
-        "pct_of_max_gain": -0.0069,
-        "dte": 26,
-        "action": "hold",
-        "rationale": "-2% of risk, -1% of max gain, 26 days to expiry",
-        "max_loss": 705.0000000000001,
-        "max_gain": 1595.0,
-        "spot": 717.16,
-        "short_strike": 701.0,
-        "distance_pct": -0.0225,
-        "tp_progress": 0.0,
-        "sl_progress": 0.013,
-        "tp_basis": "60% of max gain",
-        "sl_basis": "1.2x risk"
-      }
-    ],
-    "spots": {
-      "SPY": 773.01,
-      "QQQ": 717.16,
-      "IWM": 294.97,
-      "DIA": 536.27,
-      "XLK": 186.01,
-      "XLF": 58.58,
-      "SMH": 552.72,
-      "GLD": 410.7,
-      "TLT": 82.38
-    },
+    "marks": [],
+    "spots": {},
     "ok": true
   },
   "budget": {
@@ -4807,6 +4727,14 @@
       "buying_power": 396892.28,
       "open_risk": 2222.0,
       "day_pnl": -34.0
+    },
+    {
+      "ts": "2026-09-04T12:23:30.483035+00:00",
+      "equity": 101451.07,
+      "cash": 100423.07,
+      "buying_power": 396892.28,
+      "open_risk": 2222.0,
+      "day_pnl": -34.0
     }
   ],
   "recent_decisions": [
@@ -7247,11 +7175,5 @@
       ]
     }
   ],
-  "upcoming": [
-    {
-      "name": "August employment report",
-      "when": "2026-09-04T08:30:00-04:00",
-      "impact": "high"
-    }
-  ]
+  "upcoming": []
 }
