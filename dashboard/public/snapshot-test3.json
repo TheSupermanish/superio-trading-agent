@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T07:49:24.674722+00:00",
+  "generated_at": "2026-09-04T07:54:42.979240+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -27,8 +27,8 @@
     "profit_factor": 0.243,
     "max_drawdown_pct": 0.0081,
     "equity_start": 100000.0,
-    "equity_latest": 99358.77,
-    "total_pnl": -641.23,
+    "equity_latest": 99357.59,
+    "total_pnl": -642.41,
     "realized_in_journal": -843.0,
     "return_pct": -0.0064,
     "by_sleeve": {
@@ -58,8 +58,8 @@
       }
     },
     "open_pnl": 0,
-    "realized_implied": -641.23,
-    "realized_unrecorded": 201.77
+    "realized_implied": -642.41,
+    "realized_unrecorded": 200.59
   },
   "live": {
     "marks": [],
@@ -77,13 +77,13 @@
     "ok": true
   },
   "budget": {
-    "equity": 99358.77,
+    "equity": 99357.59,
     "sleeves": [
       {
         "sleeve": "core",
         "used": 0.0,
         "cap_pct": 0.03,
-        "cap": 2980.76,
+        "cap": 2980.73,
         "used_pct_of_equity": 0.0,
         "utilisation": 0.0
       },
@@ -105,7 +105,7 @@
       }
     ],
     "total_used": 0.0,
-    "total_cap": 7948.7,
+    "total_cap": 7948.61,
     "total_cap_pct": 0.08,
     "total_utilisation": 0.0,
     "daily_kill_pct": 0.04,
@@ -2722,6 +2722,14 @@
       "buying_power": 397435.08,
       "open_risk": 0.0,
       "day_pnl": -792.5500000000029
+    },
+    {
+      "ts": "2026-09-04T07:52:19.863166+00:00",
+      "equity": 99357.59,
+      "cash": 99357.59,
+      "buying_power": 397430.36,
+      "open_risk": 0.0,
+      "day_pnl": 0.0
     }
   ],
   "recent_decisions": [
