@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T08:31:45.618451+00:00",
+  "generated_at": "2026-09-04T08:37:03.747875+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -4283,6 +4283,22 @@
   ],
   "recent_events": [
     {
+      "id": 212,
+      "ts": "2026-09-04T08:32:13.837041+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "5 of 21 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-04T08:31:21.099349+00:00\", \"equity\": 100793.66, \"regimes\": {\"SPY\": {\"spot\": 771.91, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0829, \"atm_iv\": 0.0866, \"vol_premium\": 0.0037}, \"QQQ\": {\"spot\": 717.16, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1349, \"atm_iv\": 0.1372, \"vol_premium\": 0.0023}, \"IWM\": {\"spot\": 294.97, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1277, \"atm_iv\": 0.1269, \"vol_premium\": -0.0007}, \"DIA\": {\"spot\": 536.78, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0882, \"atm_iv\": 0.1102, \"vol_premium\": 0.0221}, \"XLK\": {\"spot\": 186.01, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2129, \"atm_iv\": 0.2203, \"vol_premium\": 0.0073}, \"XLF\": {\"spot\": 58.58, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1164, \"atm_iv\": 0.1296, \"vol_premium\": 0.0132}, \"SMH\": {\"spot\": 552.72, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.3075, \"atm_iv\": 0.3211, \"vol_premium\": 0.0136}, \"GLD\": {\"spot\": 410.7, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2793, \"atm_iv\": 0.2347, \"vol_premium\": -0.0446}, \"TLT\": {\"spot\": 82.07, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.1067, \"atm_iv\": 0.0991, \"vol_premium\": -0.0077}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -1.95, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 3, \"max_loss\": 585.0, \"reason\": \"G8 buying power room 201,587 -> 3\"}, {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.14, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 86.0, \"reason\": \"G5 pricing: credit 14.0% of width is below the 18% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -1.79, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 3, \"max_loss\": 537.0, \"reason\": \"G8 buying power room 201,587 -> 3\"}, {\"symbol\": \"QQQ\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -3.02, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 604.0, \"reason\": \"G8 buying power room 201,587 -> 2\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.41, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 259.0, \"reason\": \"G5 pricing: credit 13.7% of width is below the 18% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.26, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 174.0, \"reason\": \"G5 pricing: credit 13.0% of width is below the 18% floor\"}, {\"symbol\": \"IWM\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -0.84, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 84.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -0.77, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 77.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.18, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 82.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.1, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 90.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.1, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 90.0, \"reason\": \"G2 budget: IWM already has 2 structures; cap is 2\"}, {\"symbol\": \"DIA\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.08, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 92.0, \"reason\": \"G5 pricing: credit 8.0% of width is below the 18% floor\"}, {\"symbol\": \"XLK\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLF\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"SMH\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"GLD\", \"style\": \"put_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -2.73, \"width\": 10.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 546.0, \"reason\": \"G8 buying power room 201,587 -> 2\"}, {\"symbol\": \"GLD\", \"style\": \"call_debit_spread\", \"sleeve\": \"convex\", \"expiry\": \"2026-09-09\", \"net_price\": -2.05, \"width\": 8.0, \"verdict\": \"would trade\", \"qty\": 2, \"max_loss\": 410.0, \"reason\": \"G8 buying power room 201,587 -> 2\"}, {\"symbol\": \"GLD\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-11\", \"net_price\": 0.25, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 275.0, \"reason\": \"G5 pricing: credit 8.3% of width is below the 18% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.35, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 265.0, \"reason\": \"G5 pricing: credit 11.7% of width is below the 18% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.35, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 265.0, \"reason\": \"G5 pricing: credit 11.7% of width is below the 18% floor\"}, {\"symbol\": \"TLT\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}], \"brief\": {\"session_tone\": \"quiet\", \"summary\": \"US equity futures are trading steadily in the pre-market session as investors await the highly anticipated August jobs report. Markets rallied significantly in yesterday's session following dovish comments from Fed Governor Christopher Waller, which led to a drop in Treasury yields and a pullback in rate-hike bets. Today's payroll data will be critical in shaping expectations for the Fed's upcoming interest rate decision.\", \"catalysts_today\": [\"August Jobs Report (Nonfarm Payrolls, Unemployment Rate, Average Hourly Earnings) at 8:30 AM ET\"], \"vol_context\": \"Volatility is subdued in the pre-market as traders await the payrolls data, following a significant drop in the VIX during yesterday's relief rally.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"tradingeconomics.com\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"5 of 21 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 211,
+      "ts": "2026-09-04T08:32:13.834674+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equity futures are trading steadily in the pre-market session as investors await the highly anticipated August jobs report. Markets rallied significantly in yesterday's session following dovish comments from Fed Governor Christopher Waller, which led to a drop in Treasury yields and a pullback in rate-hike bets. Today's payroll data will be critical in shaping expectations for the Fed's upcomin",
+      "data": "{\"session_tone\": \"quiet\", \"summary\": \"US equity futures are trading steadily in the pre-market session as investors await the highly anticipated August jobs report. Markets rallied significantly in yesterday's session following dovish comments from Fed Governor Christopher Waller, which led to a drop in Treasury yields and a pullback in rate-hike bets. Today's payroll data will be critical in shaping expectations for the Fed's upcoming interest rate decision.\", \"catalysts_today\": [\"August Jobs Report (Nonfarm Payrolls, Unemployment Rate, Average Hourly Earnings) at 8:30 AM ET\"], \"vol_context\": \"Volatility is subdued in the pre-market as traders await the payrolls data, following a significant drop in the VIX during yesterday's relief rally.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"tradingeconomics.com\"], \"cached\": false}"
+    },
+    {
       "id": 210,
       "ts": "2026-09-04T07:30:06.772951+00:00",
       "level": "info",
@@ -4585,99 +4601,83 @@
       "kind": "orphan_position",
       "message": "IWM260903P00286000 is held at the broker but no journal entry claims it",
       "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"6be73164-2ba4-42c0-ab32-2ec28f315cd0\", \"asset_marginable\": true, \"avg_entry_price\": \"0.38\", \"change_today\": \"-0.5\", \"cost_basis\": \"-152\", \"current_price\": \"0.01\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"-4\", \"qty\": \"-4\", \"qty_available\": \"-4\", \"side\": \"short\", \"symbol\": \"IWM260903P00286000\", \"unrealized_intraday_pl\": \"4\", \"unrealized_intraday_plpc\": \"0.5\", \"unrealized_pl\": \"148\", \"unrealized_plpc\": \"0.97368\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 172,
-      "ts": "2026-09-03T16:18:44.496107+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00285000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"cc225ee0-dda6-4222-acab-d2284affea79\", \"asset_marginable\": true, \"avg_entry_price\": \"0.14\", \"change_today\": \"-0.5\", \"cost_basis\": \"-56\", \"current_price\": \"0.01\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"-4\", \"qty\": \"-4\", \"qty_available\": \"-4\", \"side\": \"short\", \"symbol\": \"IWM260903P00285000\", \"unrealized_intraday_pl\": \"4\", \"unrealized_intraday_plpc\": \"0.5\", \"unrealized_pl\": \"52\", \"unrealized_plpc\": \"0.92857\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 171,
-      "ts": "2026-09-03T16:18:44.494424+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "IWM260903P00284000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"06c55358-6533-49c8-8e1e-6f917be5f418\", \"asset_marginable\": true, \"avg_entry_price\": \"0.23\", \"change_today\": \"-1\", \"cost_basis\": \"92\", \"current_price\": \"0\", \"exchange\": \"\", \"lastday_price\": \"0.02\", \"market_value\": \"0\", \"qty\": \"4\", \"qty_available\": \"4\", \"side\": \"long\", \"symbol\": \"IWM260903P00284000\", \"unrealized_intraday_pl\": \"-8\", \"unrealized_intraday_plpc\": \"-1\", \"unrealized_pl\": \"-92\", \"unrealized_plpc\": \"-1\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-04T07:28:45.734595+00:00",
-    "equity": 100793.84,
+    "generated_at": "2026-09-04T08:31:21.099349+00:00",
+    "equity": 100793.66,
     "regimes": {
       "SPY": {
         "spot": 771.91,
         "trend": "up",
         "bias": "bullish",
         "realized_vol": 0.0829,
-        "atm_iv": 0.09,
-        "vol_premium": 0.0071
+        "atm_iv": 0.0866,
+        "vol_premium": 0.0037
       },
       "QQQ": {
         "spot": 717.16,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1349,
-        "atm_iv": 0.1302,
-        "vol_premium": -0.0047
+        "atm_iv": 0.1372,
+        "vol_premium": 0.0023
       },
       "IWM": {
         "spot": 294.97,
         "trend": "chop",
         "bias": "neutral",
         "realized_vol": 0.1277,
-        "atm_iv": 0.1282,
-        "vol_premium": 0.0005
+        "atm_iv": 0.1269,
+        "vol_premium": -0.0007
       },
       "DIA": {
         "spot": 536.78,
         "trend": "up",
         "bias": "bullish",
         "realized_vol": 0.0882,
-        "atm_iv": 0.1098,
-        "vol_premium": 0.0217
+        "atm_iv": 0.1102,
+        "vol_premium": 0.0221
       },
       "XLK": {
         "spot": 186.01,
         "trend": "up",
         "bias": "neutral",
         "realized_vol": 0.2129,
-        "atm_iv": 0.2231,
-        "vol_premium": 0.0102
+        "atm_iv": 0.2203,
+        "vol_premium": 0.0073
       },
       "XLF": {
         "spot": 58.58,
         "trend": "up",
         "bias": "bullish",
         "realized_vol": 0.1164,
-        "atm_iv": 0.1213,
-        "vol_premium": 0.0049
+        "atm_iv": 0.1296,
+        "vol_premium": 0.0132
       },
       "SMH": {
         "spot": 552.72,
         "trend": "down",
         "bias": "bearish",
         "realized_vol": 0.3075,
-        "atm_iv": 0.247,
-        "vol_premium": -0.0605
+        "atm_iv": 0.3211,
+        "vol_premium": 0.0136
       },
       "GLD": {
         "spot": 410.7,
         "trend": "up",
         "bias": "neutral",
         "realized_vol": 0.2793,
-        "atm_iv": 0.2352,
-        "vol_premium": -0.0441
+        "atm_iv": 0.2347,
+        "vol_premium": -0.0446
       },
       "TLT": {
         "spot": 82.07,
         "trend": "down",
         "bias": "bearish",
         "realized_vol": 0.1067,
-        "atm_iv": 0.1003,
-        "vol_premium": -0.0064
+        "atm_iv": 0.0991,
+        "vol_premium": -0.0077
       }
     },
     "candidates": [
@@ -4691,79 +4691,67 @@
         "verdict": "would trade",
         "qty": 3,
         "max_loss": 585.0,
-        "reason": "G8 buying power room 201,588 -> 3"
+        "reason": "G8 buying power room 201,587 -> 3"
       },
       {
         "symbol": "SPY",
         "style": "put_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-11",
-        "net_price": 0.11,
+        "expiry": "2026-09-08",
+        "net_price": 0.14,
         "width": 1.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 89.0,
-        "reason": "G5 pricing: credit 11.0% of width is below the 18% floor"
-      },
-      {
-        "symbol": "QQQ",
-        "style": "put_debit_spread",
-        "sleeve": "convex",
-        "expiry": "2026-09-09",
-        "net_price": -2.32,
-        "width": 10.0,
-        "verdict": "would trade",
-        "qty": 2,
-        "max_loss": 464.0,
-        "reason": "G8 buying power room 201,588 -> 2"
+        "max_loss": 86.0,
+        "reason": "G5 pricing: credit 14.0% of width is below the 18% floor"
       },
       {
         "symbol": "QQQ",
         "style": "call_debit_spread",
         "sleeve": "convex",
         "expiry": "2026-09-09",
-        "net_price": -2.72,
-        "width": 8.0,
+        "net_price": -1.79,
+        "width": 10.0,
+        "verdict": "would trade",
+        "qty": 3,
+        "max_loss": 537.0,
+        "reason": "G8 buying power room 201,587 -> 3"
+      },
+      {
+        "symbol": "QQQ",
+        "style": "put_debit_spread",
+        "sleeve": "convex",
+        "expiry": "2026-09-09",
+        "net_price": -3.02,
+        "width": 10.0,
         "verdict": "would trade",
         "qty": 2,
-        "max_loss": 544.0,
-        "reason": "G8 buying power room 201,588 -> 2"
+        "max_loss": 604.0,
+        "reason": "G8 buying power room 201,587 -> 2"
       },
       {
         "symbol": "QQQ",
         "style": "call_credit_spread",
         "sleeve": "core",
         "expiry": "2026-09-10",
-        "net_price": 0.2,
-        "width": 1.0,
+        "net_price": 0.41,
+        "width": 3.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 80.0,
-        "reason": "G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry and we are inside the 6h blackout"
+        "max_loss": 259.0,
+        "reason": "G5 pricing: credit 13.7% of width is below the 18% floor"
       },
       {
         "symbol": "QQQ",
         "style": "put_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-08",
-        "net_price": 0.25,
+        "expiry": "2026-09-09",
+        "net_price": 0.26,
         "width": 2.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 175.0,
-        "reason": "G5 pricing: credit 12.5% of width is below the 18% floor"
-      },
-      {
-        "symbol": "QQQ",
-        "style": "put_credit_spread",
-        "sleeve": "core",
-        "expiry": "2026-09-08",
-        "net_price": 0.25,
-        "width": 2.0,
-        "verdict": "would refuse",
-        "qty": 0,
-        "max_loss": 175.0,
-        "reason": "G5 pricing: credit 12.5% of width is below the 18% floor"
+        "max_loss": 174.0,
+        "reason": "G5 pricing: credit 13.0% of width is below the 18% floor"
       },
       {
         "symbol": "IWM",
@@ -4799,6 +4787,18 @@
         "verdict": "would refuse",
         "qty": 0,
         "max_loss": 82.0,
+        "reason": "G2 budget: IWM already has 2 structures; cap is 2"
+      },
+      {
+        "symbol": "IWM",
+        "style": "put_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-11",
+        "net_price": 0.1,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 90.0,
         "reason": "G2 budget: IWM already has 2 structures; cap is 2"
       },
       {
@@ -4853,7 +4853,7 @@
         "verdict": "would trade",
         "qty": 2,
         "max_loss": 546.0,
-        "reason": "G8 buying power room 201,588 -> 2"
+        "reason": "G8 buying power room 201,587 -> 2"
       },
       {
         "symbol": "GLD",
@@ -4865,19 +4865,19 @@
         "verdict": "would trade",
         "qty": 2,
         "max_loss": 410.0,
-        "reason": "G8 buying power room 201,588 -> 2"
+        "reason": "G8 buying power room 201,587 -> 2"
       },
       {
         "symbol": "GLD",
         "style": "call_credit_spread",
         "sleeve": "core",
-        "expiry": "2026-09-14",
-        "net_price": 0.55,
-        "width": 5.0,
+        "expiry": "2026-09-11",
+        "net_price": 0.25,
+        "width": 3.0,
         "verdict": "would refuse",
         "qty": 0,
-        "max_loss": 445.0,
-        "reason": "G5 pricing: credit 11.0% of width is below the 18% floor"
+        "max_loss": 275.0,
+        "reason": "G5 pricing: credit 8.3% of width is below the 18% floor"
       },
       {
         "symbol": "GLD",
@@ -4912,23 +4912,21 @@
     ],
     "brief": {
       "session_tone": "quiet",
-      "summary": "US equity futures are trading steadily in the pre-market session as investors await the highly anticipated August Non-Farm Payrolls report. Geopolitical concerns are also in focus following reports of escalating tensions between the US and Iran. Overall trading activity remains subdued as the market braces for the labor data, which is expected to heavily influence the Federal Reserve's upcoming interest rate decision.",
+      "summary": "US equity futures are trading steadily in the pre-market session as investors await the highly anticipated August jobs report. Markets rallied significantly in yesterday's session following dovish comments from Fed Governor Christopher Waller, which led to a drop in Treasury yields and a pullback in rate-hike bets. Today's payroll data will be critical in shaping expectations for the Fed's upcoming interest rate decision.",
       "catalysts_today": [
-        "US August Non-Farm Payrolls (NFP) report at 8:30 AM ET"
+        "August Jobs Report (Nonfarm Payrolls, Unemployment Rate, Average Hourly Earnings) at 8:30 AM ET"
       ],
-      "vol_context": "Volatility is likely being bid as markets hedge ahead of the critical jobs report and monitor geopolitical developments.",
-      "confidence": 0.85,
+      "vol_context": "Volatility is subdued in the pre-market as traders await the payrolls data, following a significant drop in the VIX during yesterday's relief rally.",
+      "confidence": 0.9,
       "grounded": true,
       "sources": [
-        "\"stock market\" OR \"US equity markets\" news September 4 2026",
-        "economic calendar September 4 2026",
-        "SPY QQQ IWM DIA XLK XLF SMH GLD TLT September 4 2026"
+        "tradingeconomics.com"
       ],
       "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
     "summary": "5 of 21 structures would clear the gates at the next open",
-    "ts": "2026-09-04T07:30:06.772951+00:00"
+    "ts": "2026-09-04T08:32:13.837041+00:00"
   },
   "google": {
     "connected": [],
