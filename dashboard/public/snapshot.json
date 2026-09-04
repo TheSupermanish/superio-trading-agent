@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T23:58:34.564788+00:00",
+  "generated_at": "2026-09-04T00:03:44.070530+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -83,9 +83,9 @@
         "current_price": -4.06,
         "unrealized_pnl": 122.0,
         "pct_of_max_gain": 0.0715,
-        "dte": 27,
+        "dte": 26,
         "action": "hold",
-        "rationale": "+21% of risk, +7% of max gain, 27 days to expiry",
+        "rationale": "+21% of risk, +7% of max gain, 26 days to expiry",
         "max_loss": 593.0,
         "max_gain": 1707.0,
         "spot": 771.91,
@@ -106,9 +106,9 @@
         "current_price": -1.56,
         "unrealized_pnl": 1.0,
         "pct_of_max_gain": 0.0004,
-        "dte": 29,
+        "dte": 28,
         "action": "hold",
-        "rationale": "+0% of risk, +0% of max gain, 29 days to expiry",
+        "rationale": "+0% of risk, +0% of max gain, 28 days to expiry",
         "max_loss": 923.9999999999999,
         "max_gain": 2676.0,
         "spot": 294.97,
@@ -129,9 +129,9 @@
         "current_price": -3.65,
         "unrealized_pnl": -11.0,
         "pct_of_max_gain": -0.0069,
-        "dte": 27,
+        "dte": 26,
         "action": "hold",
-        "rationale": "-2% of risk, -1% of max gain, 27 days to expiry",
+        "rationale": "-2% of risk, -1% of max gain, 26 days to expiry",
         "max_loss": 705.0000000000001,
         "max_gain": 1595.0,
         "spot": 717.16,
@@ -192,8 +192,8 @@
     "drawdown_kill_pct": 0.1,
     "max_new_trades_per_day": 7,
     "max_open_structures": 10,
-    "trades_today": 3,
-    "failed_today": 2
+    "trades_today": 0,
+    "failed_today": 0
   },
   "gates": {
     "considered": 400,
@@ -3706,6 +3706,14 @@
     },
     {
       "ts": "2026-09-03T23:58:34.562233+00:00",
+      "equity": 101451.99,
+      "cash": 100423.99,
+      "buying_power": 396895.96,
+      "open_risk": 2222.0,
+      "day_pnl": -528.1499999999942
+    },
+    {
+      "ts": "2026-09-04T00:03:40.354473+00:00",
       "equity": 101451.99,
       "cash": 100423.99,
       "buying_power": 396895.96,

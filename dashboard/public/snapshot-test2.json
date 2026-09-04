@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T23:58:30.538599+00:00",
+  "generated_at": "2026-09-04T00:03:48.773841+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -122,8 +122,8 @@
     "drawdown_kill_pct": 0.1,
     "max_new_trades_per_day": 7,
     "max_open_structures": 10,
-    "trades_today": 3,
-    "failed_today": 2
+    "trades_today": 0,
+    "failed_today": 0
   },
   "gates": {
     "considered": 400,
@@ -2186,6 +2186,14 @@
     },
     {
       "ts": "2026-09-03T23:57:51.128361+00:00",
+      "equity": 100785.84,
+      "cash": 100793.84,
+      "buying_power": 403175.36,
+      "open_risk": 1268.0,
+      "day_pnl": -404.1999999999971
+    },
+    {
+      "ts": "2026-09-04T00:02:56.957413+00:00",
       "equity": 100785.84,
       "cash": 100793.84,
       "buying_power": 403175.36,
