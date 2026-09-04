@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T14:19:46.509877+00:00",
+  "generated_at": "2026-09-04T19:42:32.258801+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -57,47 +57,13 @@
         "wins": 1
       }
     },
-    "open_pnl": -52.5,
-    "realized_implied": -646.61,
-    "realized_unrecorded": 196.39
+    "open_pnl": 0,
+    "realized_implied": -699.11,
+    "realized_unrecorded": 143.89
   },
   "live": {
-    "marks": [
-      {
-        "structure_id": 10,
-        "underlying": "SPY",
-        "kind": "iron_condor",
-        "sleeve": "core",
-        "qty": 7,
-        "entry_price": 0.7,
-        "current_price": 0.77,
-        "unrealized_pnl": -52.5,
-        "pct_of_max_gain": -0.1071,
-        "dte": 5,
-        "action": "hold",
-        "rationale": "captured -11% of credit, 5 days to expiry",
-        "max_loss": 938.0,
-        "max_gain": 462.0,
-        "spot": 770.96,
-        "short_strike": 769.0,
-        "distance_pct": -0.0025,
-        "tp_progress": 0.0,
-        "sl_progress": 0.1071,
-        "tp_basis": "55% of credit",
-        "sl_basis": "2.0x credit"
-      }
-    ],
-    "spots": {
-      "SPY": 770.96,
-      "QQQ": 719.87,
-      "IWM": 295.13,
-      "DIA": 534.05,
-      "XLK": 187.56,
-      "XLF": 57.96,
-      "SMH": 567.42,
-      "GLD": 405.66,
-      "TLT": 82.35
-    },
+    "marks": [],
+    "spots": {},
     "ok": true
   },
   "budget": {
@@ -141,18 +107,18 @@
   },
   "gates": {
     "considered": 400,
-    "approved": 2,
-    "rejected": 398,
+    "approved": 3,
+    "rejected": 397,
     "rejections_by_gate": [
       {
         "gate": "G1",
         "name": "kill switches",
-        "count": 94
+        "count": 95
       },
       {
         "gate": "G2",
         "name": "daily and concurrent trade budget",
-        "count": 6
+        "count": 5
       },
       {
         "gate": "G3",
@@ -172,7 +138,7 @@
       {
         "gate": "G6",
         "name": "scheduled event blackout",
-        "count": 85
+        "count": 84
       },
       {
         "gate": "G7",
@@ -3267,6 +3233,36 @@
   ],
   "recent_decisions": [
     {
+      "id": 851,
+      "ts": "2026-09-04T14:20:58.898936+00:00",
+      "agent": "strategist",
+      "sleeve": null,
+      "underlying": null,
+      "proposal": "{\"action\": \"stand_aside\", \"confidence\": 0.95, \"tool_calls\": [{\"step\": 0, \"tool\": \"get_account_state\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_open_positions\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_calendar\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SPY\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"QQQ\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SMH\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"DIA\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"GLD\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"TLT\"}}, {\"step\": 1, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"IWM\"}}, {\"step\": 1, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"XLK\"}}, {\"step\": 1, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"XLF\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"DIA\", \"style\": \"put_credit_spread\"}}, {\"step\": 3, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"DIA\", \"style\": \"call_credit_spread\"}}, {\"step\": 4, \"tool\": \"propose_structure\", \"args\": {\"style\": \"iron_condor\", \"symbol\": \"DIA\"}}, {\"step\": 5, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"QQQ\", \"style\": \"call_debit_spread\"}}, {\"step\": 6, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\"}}], \"chosen\": [], \"market_brief\": {\"session_tone\": \"mixed\", \"summary\": \"US equity markets are trading mixed following a significantly stronger-than-expected August jobs report, which saw nonfarm payrolls surge by 162,000 while the unemployment rate held steady at 4.1%. Tech and semiconductor stocks (QQQ, SMH) are outperforming, buoyed by AI optimism and Nvidia's reported acquisition of Hugging Face, while the Dow (DIA) and S&P 500 (SPY) are lagging. Meanwhile, geopolitical tensions involving US-Iran hostilities and attacks on oil tankers are keeping energy prices elevated and adding a layer of caution to the broader market.\", \"catalysts_today\": [\"August US Nonfarm Payrolls and Unemployment Report\", \"US-Iran geopolitical tensions and oil tanker attacks\", \"Nvidia acquisition of Hugging Face\"], \"vol_context\": \"Volatility is catching a bid as market makers hedge against geopolitical escalations and shifting interest rate expectations.\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"benzinga.com\", \"totalrealreturns.com\", \"valueforum.com\", \"ndtvprofit.com\", \"tipranks.com\", \"vantagemarkets.com\"], \"cached\": true}}",
+      "verdict": "stand_aside",
+      "reasons": "[\"Across nearly all underlyings (SPY, QQQ, SMH, IWM, XLK, XLF, GLD, TLT), implied volatility trades at a discount to realized volatility, making credit structures poorly compensated. DIA was the sole underlying with positive volatility premium, but no chain strikes met liquidity and delta criteria, while the convex risk budget is fully constrained at zero. Standing aside avoids underpriced risk.\", \"source: gemini\", \"17 tool calls over 8 steps\"]"
+    },
+    {
+      "id": 850,
+      "ts": "2026-09-04T14:20:35.371035+00:00",
+      "agent": "risk_officer",
+      "sleeve": "core",
+      "underlying": "SPY",
+      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"SPY\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"SPY260908P00768000\", \"side\": \"sell\", \"strike\": 768.0, \"expiry\": \"2026-09-08\", \"is_call\": false, \"mid\": 1.125, \"bid\": 1.1, \"ask\": 1.15, \"delta\": -0.2955, \"ratio_qty\": 1}, {\"symbol\": \"SPY260908P00767000\", \"side\": \"buy\", \"strike\": 767.0, \"expiry\": \"2026-09-08\", \"is_call\": false, \"mid\": 0.875, \"bid\": 0.87, \"ask\": 0.88, \"delta\": -0.2428, \"ratio_qty\": 1}], \"net_price\": 0.22, \"net_price_mid\": 0.25, \"width\": 1.0, \"max_loss_per_unit\": 78.0, \"max_gain_per_unit\": 22.0, \"qty\": 0, \"vol_premium\": -0.0142, \"thesis\": \"Sell the 768 put at 0.30 delta expiring 2026-09-08, buy the 767 wing. Collect 0.22 on 1 wide (22% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:4\", \"delta:0.30\", \"iv:0.07\", \"width:1\"]}",
+      "verdict": "approved",
+      "reasons": "[\"G1 kill switches clear\", \"G2 1/7 trades today, 1/10 open, 0/8 failed entries\", \"G3 all short legs covered by same-expiry long legs\", \"G4 all legs liquid\", \"G5 credit is 22.0% of width\", \"G6 no high-impact event before expiry\", \"G7 volatility premium -1.4% supports this side of the trade\", \"G8 per-trade cap 993 / unit risk 78 -> 12\", \"G8 portfolio room 7,006 -> 12\", \"G8 core sleeve room 2,041 -> 12\", \"G8 SPY room 2,041 -> 12\", \"G8 buying power room 196,894 -> 12\"]"
+    },
+    {
+      "id": 849,
+      "ts": "2026-09-04T14:20:29.898345+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260909C00721000\", \"side\": \"buy\", \"strike\": 721.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 3.04, \"bid\": 3.02, \"ask\": 3.06, \"delta\": 0.4467, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260909C00731000\", \"side\": \"sell\", \"strike\": 731.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 0.355, \"bid\": 0.35, \"ask\": 0.36, \"delta\": 0.0916, \"ratio_qty\": 1}], \"net_price\": -2.71, \"net_price_mid\": -2.685, \"width\": 10.0, \"max_loss_per_unit\": 271.0, \"max_gain_per_unit\": 729.0, \"qty\": 0, \"vol_premium\": -0.0312, \"thesis\": \"Pay 2.71 for the 721/731 call spread expiring 2026-09-09: 2.7x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:2.7x\", \"iv:0.11\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G1 kill switches clear\", \"G2 1/7 trades today, 1/10 open, 0/8 failed entries\", \"G3 all short legs covered by same-expiry long legs\", \"G4 all legs liquid\", \"G5 debit is 27.1% of width\", \"G6 no scheduled catalyst before expiry\", \"G7 volatility premium -3.1% supports this side of the trade\", \"G8 per-trade cap 993 / unit risk 271 -> 3\", \"G8 portfolio room 7,006 -> 3\", \"G8 convex sleeve room 0 -> 0\", \"G8 QQQ room 2,979 -> 0\", \"G8 buying power room 196,894 -> 0\", \"G8 sized to zero contracts\"]"
+    },
+    {
       "id": 848,
       "ts": "2026-09-04T14:19:29.972250+00:00",
       "agent": "risk_officer",
@@ -4435,36 +4431,6 @@
       "proposal": "{\"action\": \"stand_aside\", \"confidence\": 0.9, \"tool_calls\": [{\"step\": 0, \"tool\": \"get_account_state\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_open_positions\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_calendar\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SPY\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"QQQ\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"IWM\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"style\": \"put_credit_spread\", \"symbol\": \"IWM\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"risk_reversal\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"QQQ\", \"style\": \"risk_reversal\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"style\": \"risk_reversal\", \"symbol\": \"IWM\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"put_debit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"QQQ\", \"style\": \"put_debit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"IWM\", \"style\": \"put_debit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"SPY\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"QQQ\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"IWM\"}}], \"chosen\": [], \"market_brief\": {\"session_tone\": \"risk_on\", \"summary\": \"U.S. equity markets are trading higher, with a risk-on sentiment fueled by a drop in Treasury yields. [1, 2] This follows comments from Federal Reserve Governor Christopher Waller, who indicated he would support holding interest rates steady if upcoming inflation data shows continued improvement. [1, 16] Despite this, rising oil prices, driven by escalating U.S.-Iran tensions, are adding an inflationary concern to the market. [1, 2] Major indices like the S&P 500 (SPY), Nasdaq 100 (QQQ), and Russell 2000 (IWM) are all in positive territory, led by gains in technology and other growth-oriented sectors. [1, 4]\", \"catalysts_today\": [\"Speech by Federal Reserve Governor Christopher Waller on the economic outlook. [15, 16]\", \"Release of U.S. Trade Balance for July, which showed a wider-than-expected deficit. [7, 14]\", \"Release of weekly initial jobless claims, which were slightly higher than expected but remain low. [8]\", \"Release of Challenger Job-Cut report for August. [1, 8]\", \"Release of revised Q2 Productivity and Costs data. [13]\", \"Release of ISM Non-Manufacturing Composite for August. [7]\", \"Ongoing U.S.-Iran military conflict impacting oil prices. [1, 2, 12]\"], \"vol_context\": \"Implied volatility is lower, with the VIX trading near 15, suggesting reduced fear in the market despite the geopolitical backdrop. [8, 12]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US equity market news September 3 2026\", \"SPY QQQ IWM trading today September 3 2026\", \"US stock market tone today September 3 2026\", \"economic data releases September 3 2026\", \"Federal Reserve speakers today September 3 2026\", \"VIX today September 3 2026\"], \"cached\": true}}",
       "verdict": "stand_aside",
       "reasons": "[\"The primary signal is elevated implied volatility across all underlyings, making premium selling the favored strategy. However, a high-impact jobs report tomorrow blocks all short-premium structures. Long-premium structures are unattractive because options are expensive. With all avenues blocked, the only reasonable course is to do nothing.\", \"source: gemini\", \"18 tool calls over 4 steps\"]"
-    },
-    {
-      "id": 731,
-      "ts": "2026-09-03T19:01:06.680138+00:00",
-      "agent": "risk_officer",
-      "sleeve": "convex",
-      "underlying": "IWM",
-      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"IWM\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"IWM260908C00296000\", \"side\": \"buy\", \"strike\": 296.0, \"expiry\": \"2026-09-08\", \"is_call\": true, \"mid\": 1.08, \"bid\": 1.05, \"ask\": 1.11, \"delta\": 0.4007, \"ratio_qty\": 1}, {\"symbol\": \"IWM260908C00301000\", \"side\": \"sell\", \"strike\": 301.0, \"expiry\": \"2026-09-08\", \"is_call\": true, \"mid\": 0.125, \"bid\": 0.12, \"ask\": 0.13, \"delta\": 0.0707, \"ratio_qty\": 1}], \"net_price\": -0.99, \"net_price_mid\": -0.955, \"width\": 5.0, \"max_loss_per_unit\": 99.0, \"max_gain_per_unit\": 401.0, \"qty\": 0, \"vol_premium\": 0.063, \"thesis\": \"Pay 0.99 for the 296/301 call spread expiring 2026-09-08: 4.1x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:4.1x\", \"iv:0.11\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G7 volatility side: buying premium on IWM while implied sits +6.3% above realized; convexity is expensive here\"]"
-    },
-    {
-      "id": 730,
-      "ts": "2026-09-03T19:01:05.909318+00:00",
-      "agent": "risk_officer",
-      "sleeve": "convex",
-      "underlying": "QQQ",
-      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"QQQ\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"QQQ260908C00720000\", \"side\": \"buy\", \"strike\": 720.0, \"expiry\": \"2026-09-08\", \"is_call\": true, \"mid\": 3.145, \"bid\": 3.14, \"ask\": 3.15, \"delta\": 0.443, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260908C00728000\", \"side\": \"sell\", \"strike\": 728.0, \"expiry\": \"2026-09-08\", \"is_call\": true, \"mid\": 0.67, \"bid\": 0.66, \"ask\": 0.68, \"delta\": 0.1471, \"ratio_qty\": 1}], \"net_price\": -2.49, \"net_price_mid\": -2.475, \"width\": 8.0, \"max_loss_per_unit\": 249.0, \"max_gain_per_unit\": 551.0, \"qty\": 0, \"vol_premium\": 0.0404, \"thesis\": \"Pay 2.49 for the 720/728 call spread expiring 2026-09-08: 2.2x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:2.2x\", \"iv:0.11\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G7 volatility side: buying premium on QQQ while implied sits +4.0% above realized; convexity is expensive here\"]"
-    },
-    {
-      "id": 729,
-      "ts": "2026-09-03T19:01:05.076290+00:00",
-      "agent": "risk_officer",
-      "sleeve": "convex",
-      "underlying": "SPY",
-      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"SPY\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"SPY260908C00775000\", \"side\": \"buy\", \"strike\": 775.0, \"expiry\": \"2026-09-08\", \"is_call\": true, \"mid\": 2.175, \"bid\": 2.17, \"ask\": 2.18, \"delta\": 0.4344, \"ratio_qty\": 1}, {\"symbol\": \"SPY260908C00783000\", \"side\": \"sell\", \"strike\": 783.0, \"expiry\": \"2026-09-08\", \"is_call\": true, \"mid\": 0.205, \"bid\": 0.2, \"ask\": 0.21, \"delta\": 0.0736, \"ratio_qty\": 1}], \"net_price\": -1.98, \"net_price_mid\": -1.97, \"width\": 8.0, \"max_loss_per_unit\": 198.0, \"max_gain_per_unit\": 602.0, \"qty\": 0, \"vol_premium\": 0.0361, \"thesis\": \"Pay 1.98 for the 775/783 call spread expiring 2026-09-08: 3.0x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:3.0x\", \"iv:0.08\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G7 volatility side: buying premium on SPY while implied sits +3.6% above realized; convexity is expensive here\"]"
     }
   ],
   "recent_orders": [

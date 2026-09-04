@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T14:19:41.029618+00:00",
+  "generated_at": "2026-09-04T19:42:31.528517+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -77,93 +77,13 @@
         "wins": 0
       }
     },
-    "open_pnl": -189.5,
-    "realized_implied": 764.76,
-    "realized_unrecorded": 1212.76
+    "open_pnl": 0,
+    "realized_implied": 575.26,
+    "realized_unrecorded": 1023.26
   },
   "live": {
-    "marks": [
-      {
-        "structure_id": 16,
-        "underlying": "QQQ",
-        "kind": "call_debit_spread",
-        "sleeve": "convex",
-        "qty": 2,
-        "entry_price": -2.21,
-        "current_price": -1.73,
-        "unrealized_pnl": -95.0,
-        "pct_of_max_gain": -0.0613,
-        "dte": 5,
-        "action": "hold",
-        "rationale": "up -21% on debit, 5 days to expiry",
-        "max_loss": 450.0,
-        "max_gain": 1550.0,
-        "spot": 719.93,
-        "short_strike": 734.0,
-        "distance_pct": 0.0195,
-        "tp_progress": 0.0,
-        "sl_progress": 0.2866,
-        "tp_basis": "75% on debit",
-        "sl_basis": "75% of debit lost"
-      },
-      {
-        "structure_id": 17,
-        "underlying": "SPY",
-        "kind": "call_debit_spread",
-        "sleeve": "convex",
-        "qty": 3,
-        "entry_price": -1.61,
-        "current_price": -1.29,
-        "unrealized_pnl": -94.5,
-        "pct_of_max_gain": -0.0495,
-        "dte": 5,
-        "action": "hold",
-        "rationale": "up -20% on debit, 5 days to expiry",
-        "max_loss": 492.0,
-        "max_gain": 1908.0,
-        "spot": 771.08,
-        "short_strike": 782.0,
-        "distance_pct": 0.0142,
-        "tp_progress": 0.0,
-        "sl_progress": 0.2609,
-        "tp_basis": "75% on debit",
-        "sl_basis": "75% of debit lost"
-      },
-      {
-        "structure_id": 18,
-        "underlying": "IWM",
-        "kind": "put_debit_spread",
-        "sleeve": "convex",
-        "qty": 5,
-        "entry_price": -0.96,
-        "current_price": -0.96,
-        "unrealized_pnl": -0.0,
-        "pct_of_max_gain": -0.0,
-        "dte": 5,
-        "action": "hold",
-        "rationale": "up -0% on debit, 5 days to expiry",
-        "max_loss": 524.9999999999999,
-        "max_gain": 4474.999999999999,
-        "spot": 295.16,
-        "short_strike": 284.0,
-        "distance_pct": -0.0378,
-        "tp_progress": 0.0,
-        "sl_progress": 0.0,
-        "tp_basis": "75% on debit",
-        "sl_basis": "75% of debit lost"
-      }
-    ],
-    "spots": {
-      "SPY": 771.08,
-      "QQQ": 719.93,
-      "IWM": 295.16,
-      "DIA": 534.08,
-      "XLK": 187.55,
-      "XLF": 57.97,
-      "SMH": 567.33,
-      "GLD": 405.66,
-      "TLT": 82.35
-    },
+    "marks": [],
+    "spots": {},
     "ok": true
   },
   "budget": {
@@ -179,11 +99,11 @@
       },
       {
         "sleeve": "convex",
-        "used": 1467.0,
+        "used": 1895.0,
         "cap_pct": 0.025,
         "cap": 2514.38,
-        "used_pct_of_equity": 0.01459,
-        "utilisation": 0.5834
+        "used_pct_of_equity": 0.01884,
+        "utilisation": 0.7537
       },
       {
         "sleeve": "carry",
@@ -194,21 +114,21 @@
         "utilisation": null
       }
     ],
-    "total_used": 1467.0,
+    "total_used": 1895.0,
     "total_cap": 8046.01,
     "total_cap_pct": 0.08,
-    "total_utilisation": 0.1823,
+    "total_utilisation": 0.2355,
     "daily_kill_pct": 0.04,
     "drawdown_kill_pct": 0.1,
     "max_new_trades_per_day": 7,
     "max_open_structures": 10,
-    "trades_today": 3,
+    "trades_today": 4,
     "failed_today": 0
   },
   "gates": {
     "considered": 400,
-    "approved": 10,
-    "rejected": 390,
+    "approved": 13,
+    "rejected": 387,
     "rejections_by_gate": [
       {
         "gate": "G1",
@@ -233,7 +153,7 @@
       {
         "gate": "G5",
         "name": "credit floor and debit cap",
-        "count": 195
+        "count": 192
       },
       {
         "gate": "G6",
@@ -384,6 +304,50 @@
       "client_order_id": "superio-test2-5ba1a14b6e99",
       "thesis": "Pay 1.05 for the 294/284 put spread expiring 2026-09-09: 8.5x payoff if the move continues. The NFP report has passed, clearing the major catalyst risk for the day. IWM options are cheap relative to realized volatility (implied at 9.5% vs realized at 12.0%), favoring long convexity. The put debit spread offers an excellent payoff ratio of 8.52 to capture potential downside if rate expectations shift negatively.",
       "net_price_mid": -1.0150000000000001
+    },
+    {
+      "id": 19,
+      "opened_at": "2026-09-04T14:21:09.415280+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "GLD",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "GLD260909C00409000",
+          "side": "buy",
+          "strike": 409.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 2.57,
+          "bid": 2.49,
+          "ask": 2.65,
+          "delta": 0.3993,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "GLD260909C00419000",
+          "side": "sell",
+          "strike": 419.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 0.54,
+          "bid": 0.51,
+          "ask": 0.57,
+          "delta": 0.1125,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 2,
+      "net_price": -2.1399999999999997,
+      "max_loss": 427.99999999999994,
+      "max_gain": 1572.0,
+      "status": "pending",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-e2d992693773",
+      "thesis": "Pay 2.14 for the 409/419 call spread expiring 2026-09-09: 3.7x payoff if the move continues. Implied volatility is significantly below realized volatility across the board, particularly in GLD where the discount is nearly 10%. The NFP catalyst has passed, clearing the way for tactical trades. Buying convexity via a GLD call debit spread takes advantage of the cheap options pricing.",
+      "net_price_mid": -2.0300000000000002
     }
   ],
   "closed_structures": [
@@ -606,7 +570,7 @@
       "return_on_risk": 0.0
     }
   ],
-  "open_risk": 1467.0,
+  "open_risk": 1895.0,
   "equity_curve": [
     {
       "ts": "2026-08-28T14:07:24.913878+00:00",
@@ -3547,6 +3511,56 @@
   ],
   "recent_decisions": [
     {
+      "id": 832,
+      "ts": "2026-09-04T14:21:09.407785+00:00",
+      "agent": "strategist",
+      "sleeve": null,
+      "underlying": null,
+      "proposal": "{\"action\": \"trade\", \"confidence\": 0.8, \"tool_calls\": [{\"step\": 0, \"tool\": \"get_account_state\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_open_positions\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_calendar\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SPY\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"QQQ\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"IWM\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"DIA\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"XLK\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"XLF\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SMH\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"GLD\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"TLT\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"style\": \"put_debit_spread\", \"symbol\": \"TLT\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"SMH\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"style\": \"risk_reversal\", \"symbol\": \"SMH\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"GLD\", \"style\": \"risk_reversal\"}}, {\"step\": 3, \"tool\": \"propose_structure\", \"args\": {\"style\": \"put_debit_spread\", \"symbol\": \"GLD\"}}, {\"step\": 3, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"XLK\"}}, {\"step\": 4, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"GLD\"}}], \"chosen\": [{\"sleeve\": \"convex\", \"underlying\": \"GLD\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"GLD260909C00409000\", \"side\": \"buy\", \"strike\": 409.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 2.57, \"bid\": 2.49, \"ask\": 2.65, \"delta\": 0.3993, \"ratio_qty\": 1}, {\"symbol\": \"GLD260909C00419000\", \"side\": \"sell\", \"strike\": 419.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 0.54, \"bid\": 0.51, \"ask\": 0.57, \"delta\": 0.1125, \"ratio_qty\": 1}], \"net_price\": -2.14, \"net_price_mid\": -2.03, \"width\": 10.0, \"max_loss_per_unit\": 214.0, \"max_gain_per_unit\": 786.0, \"qty\": 2, \"vol_premium\": -0.0988, \"thesis\": \"Pay 2.14 for the 409/419 call spread expiring 2026-09-09: 3.7x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:3.7x\", \"iv:0.19\"]}], \"market_brief\": {\"session_tone\": \"mixed\", \"summary\": \"US equity futures are trading cautiously higher as the market awaits the critical August Nonfarm Payrolls report. Yesterday saw a strong rally driven by dovish comments from Fed Governor Christopher Waller and falling Treasury yields, which led traders to pare back bets on a rate hike. Today's jobs data is expected to be the ultimate catalyst for near-term yield trajectory and will heavily influence the Federal Reserve's interest rate decision later this month.\", \"catalysts_today\": [\"August Nonfarm Payrolls (NFP) report at 8:30 AM ET\"], \"vol_context\": \"Volatility is largely tethered to rate expectations, with traders keeping tight stops against potential yield spikes following the employment data.\", \"confidence\": 0.85, \"grounded\": true, \"sources\": [\"tradingeconomics.com\"], \"cached\": true}}",
+      "verdict": "trade",
+      "reasons": "[\"Implied volatility is significantly below realized volatility across the board, particularly in GLD where the discount is nearly 10%. The NFP catalyst has passed, clearing the way for tactical trades. Buying convexity via a GLD call debit spread takes advantage of the cheap options pricing.\", \"source: gemini\", \"19 tool calls over 6 steps\"]"
+    },
+    {
+      "id": 831,
+      "ts": "2026-09-04T14:20:56.042032+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "GLD",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"GLD\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"GLD260909C00409000\", \"side\": \"buy\", \"strike\": 409.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 2.57, \"bid\": 2.49, \"ask\": 2.65, \"delta\": 0.3993, \"ratio_qty\": 1}, {\"symbol\": \"GLD260909C00419000\", \"side\": \"sell\", \"strike\": 419.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 0.54, \"bid\": 0.51, \"ask\": 0.57, \"delta\": 0.1125, \"ratio_qty\": 1}], \"net_price\": -2.14, \"net_price_mid\": -2.03, \"width\": 10.0, \"max_loss_per_unit\": 214.0, \"max_gain_per_unit\": 786.0, \"qty\": 0, \"vol_premium\": -0.0988, \"thesis\": \"Pay 2.14 for the 409/419 call spread expiring 2026-09-09: 3.7x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:3.7x\", \"iv:0.19\"]}",
+      "verdict": "approved",
+      "reasons": "[\"G1 kill switches clear\", \"G2 3/7 trades today, 3/10 open, 0/8 failed entries\", \"G3 all short legs covered by same-expiry long legs\", \"G4 all legs liquid\", \"G5 debit is 21.4% of width\", \"G6 no scheduled catalyst before expiry\", \"G7 volatility premium -9.9% supports this side of the trade\", \"G8 per-trade cap 603 / unit risk 214 -> 2\", \"G8 portfolio room 6,579 -> 2\", \"G8 convex sleeve room 1,047 -> 2\", \"G8 GLD room 3,017 -> 2\", \"G8 buying power room 198,776 -> 2\"]"
+    },
+    {
+      "id": 830,
+      "ts": "2026-09-04T14:20:46.481020+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "GLD",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"GLD\", \"kind\": \"put_debit_spread\", \"legs\": [{\"symbol\": \"GLD260909P00404000\", \"side\": \"buy\", \"strike\": 404.0, \"expiry\": \"2026-09-09\", \"is_call\": false, \"mid\": 2.535, \"bid\": 2.47, \"ask\": 2.6, \"delta\": -0.3844, \"ratio_qty\": 1}, {\"symbol\": \"GLD260909P00394000\", \"side\": \"sell\", \"strike\": 394.0, \"expiry\": \"2026-09-09\", \"is_call\": false, \"mid\": 0.485, \"bid\": 0.46, \"ask\": 0.51, \"delta\": -0.1002, \"ratio_qty\": 1}], \"net_price\": -2.14, \"net_price_mid\": -2.05, \"width\": 10.0, \"max_loss_per_unit\": 214.0, \"max_gain_per_unit\": 786.0, \"qty\": 0, \"vol_premium\": -0.0988, \"thesis\": \"Pay 2.14 for the 404/394 put spread expiring 2026-09-09: 3.7x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:3.7x\", \"iv:0.20\"]}",
+      "verdict": "approved",
+      "reasons": "[\"G1 kill switches clear\", \"G2 3/7 trades today, 3/10 open, 0/8 failed entries\", \"G3 all short legs covered by same-expiry long legs\", \"G4 all legs liquid\", \"G5 debit is 21.4% of width\", \"G6 no scheduled catalyst before expiry\", \"G7 volatility premium -9.9% supports this side of the trade\", \"G8 per-trade cap 603 / unit risk 214 -> 2\", \"G8 portfolio room 6,579 -> 2\", \"G8 convex sleeve room 1,047 -> 2\", \"G8 GLD room 3,017 -> 2\", \"G8 buying power room 198,776 -> 2\"]"
+    },
+    {
+      "id": 829,
+      "ts": "2026-09-04T14:19:59.548089+00:00",
+      "agent": "risk_officer",
+      "sleeve": "convex",
+      "underlying": "GLD",
+      "proposal": "{\"sleeve\": \"convex\", \"underlying\": \"GLD\", \"kind\": \"call_debit_spread\", \"legs\": [{\"symbol\": \"GLD260909C00409000\", \"side\": \"buy\", \"strike\": 409.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 2.6, \"bid\": 2.54, \"ask\": 2.66, \"delta\": 0.4032, \"ratio_qty\": 1}, {\"symbol\": \"GLD260909C00419000\", \"side\": \"sell\", \"strike\": 419.0, \"expiry\": \"2026-09-09\", \"is_call\": true, \"mid\": 0.565, \"bid\": 0.55, \"ask\": 0.58, \"delta\": 0.1161, \"ratio_qty\": 1}], \"net_price\": -2.11, \"net_price_mid\": -2.035, \"width\": 10.0, \"max_loss_per_unit\": 211.0, \"max_gain_per_unit\": 789.0, \"qty\": 0, \"vol_premium\": -0.0988, \"thesis\": \"Pay 2.11 for the 409/419 call spread expiring 2026-09-09: 3.7x payoff if the move continues.\", \"tags\": [\"dte:5\", \"payoff:3.7x\", \"iv:0.19\"]}",
+      "verdict": "approved",
+      "reasons": "[\"G1 kill switches clear\", \"G2 3/7 trades today, 3/10 open, 0/8 failed entries\", \"G3 all short legs covered by same-expiry long legs\", \"G4 all legs liquid\", \"G5 debit is 21.1% of width\", \"G6 no scheduled catalyst before expiry\", \"G7 volatility premium -9.9% supports this side of the trade\", \"G8 per-trade cap 603 / unit risk 211 -> 2\", \"G8 portfolio room 6,579 -> 2\", \"G8 convex sleeve room 1,047 -> 2\", \"G8 GLD room 3,017 -> 2\", \"G8 buying power room 198,776 -> 2\"]"
+    },
+    {
+      "id": 828,
+      "ts": "2026-09-04T14:19:48.137810+00:00",
+      "agent": "risk_officer",
+      "sleeve": "core",
+      "underlying": "DIA",
+      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"DIA\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"DIA260911P00527500\", \"side\": \"sell\", \"strike\": 527.5, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 0.795, \"bid\": 0.75, \"ask\": 0.84, \"delta\": -0.1849, \"ratio_qty\": 1}, {\"symbol\": \"DIA260911P00524000\", \"side\": \"buy\", \"strike\": 524.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 0.425, \"bid\": 0.41, \"ask\": 0.44, \"delta\": -0.1048, \"ratio_qty\": 1}], \"net_price\": 0.31, \"net_price_mid\": 0.37, \"width\": 3.5, \"max_loss_per_unit\": 319.0, \"max_gain_per_unit\": 31.0, \"qty\": 0, \"vol_premium\": 0.0084, \"thesis\": \"Sell the 527.5 put at 0.18 delta expiring 2026-09-11, buy the 524 wing. Collect 0.31 on 3.5 wide (9% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:7\", \"delta:0.18\", \"iv:0.11\", \"width:3.5\"]}",
+      "verdict": "rejected",
+      "reasons": "[\"G5 pricing: credit 8.9% of width is below the 18% floor\"]"
+    },
+    {
       "id": 827,
       "ts": "2026-09-04T14:19:44.893493+00:00",
       "agent": "risk_officer",
@@ -4695,59 +4709,21 @@
       "proposal": "{\"sleeve\": \"core\", \"underlying\": \"QQQ\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"QQQ260909P00707000\", \"side\": \"sell\", \"strike\": 707.0, \"expiry\": \"2026-09-09\", \"is_call\": false, \"mid\": 1.38, \"bid\": 1.37, \"ask\": 1.39, \"delta\": -0.1872, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260909P00706000\", \"side\": \"buy\", \"strike\": 706.0, \"expiry\": \"2026-09-09\", \"is_call\": false, \"mid\": 1.2, \"bid\": 1.19, \"ask\": 1.21, \"delta\": -0.1676, \"ratio_qty\": 1}], \"net_price\": 0.16, \"net_price_mid\": 0.18, \"width\": 1.0, \"max_loss_per_unit\": 84.0, \"max_gain_per_unit\": 16.0, \"qty\": 0, \"vol_premium\": 0.0405, \"thesis\": \"Sell the 707 put at 0.19 delta expiring 2026-09-09, buy the 706 wing. Collect 0.16 on 1 wide (16% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:6\", \"delta:0.19\", \"iv:0.14\", \"width:1\"]}",
       "verdict": "rejected",
       "reasons": "[\"G5 pricing: credit 16.0% of width is below the 18% floor\"]"
-    },
-    {
-      "id": 712,
-      "ts": "2026-09-03T19:02:37.722814+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"SPY\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"SPY260909P00765000\", \"side\": \"sell\", \"strike\": 765.0, \"expiry\": \"2026-09-09\", \"is_call\": false, \"mid\": 0.935, \"bid\": 0.93, \"ask\": 0.94, \"delta\": -0.1765, \"ratio_qty\": 1}, {\"symbol\": \"SPY260909P00764000\", \"side\": \"buy\", \"strike\": 764.0, \"expiry\": \"2026-09-09\", \"is_call\": false, \"mid\": 0.775, \"bid\": 0.77, \"ask\": 0.78, \"delta\": -0.1516, \"ratio_qty\": 1}], \"net_price\": 0.15, \"net_price_mid\": 0.16, \"width\": 1.0, \"max_loss_per_unit\": 85.0, \"max_gain_per_unit\": 15.0, \"qty\": 0, \"vol_premium\": 0.0357, \"thesis\": \"Sell the 765 put at 0.18 delta expiring 2026-09-09, buy the 764 wing. Collect 0.15 on 1 wide (15% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:6\", \"delta:0.18\", \"iv:0.10\", \"width:1\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G5 pricing: credit 15.0% of width is below the 18% floor\"]"
-    },
-    {
-      "id": 711,
-      "ts": "2026-09-03T19:02:17.504260+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "IWM",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"IWM\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"IWM260911P00289000\", \"side\": \"sell\", \"strike\": 289.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 0.785, \"bid\": 0.77, \"ask\": 0.8, \"delta\": -0.1924, \"ratio_qty\": 1}, {\"symbol\": \"IWM260911P00286000\", \"side\": \"buy\", \"strike\": 286.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 0.4, \"bid\": 0.39, \"ask\": 0.41, \"delta\": -0.1079, \"ratio_qty\": 1}], \"net_price\": 0.36, \"net_price_mid\": 0.385, \"width\": 3.0, \"max_loss_per_unit\": 264.0, \"max_gain_per_unit\": 36.0, \"qty\": 0, \"vol_premium\": 0.0607, \"thesis\": \"Sell the 289 put at 0.19 delta expiring 2026-09-11, buy the 286 wing. Collect 0.36 on 3 wide (12% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:8\", \"delta:0.19\", \"iv:0.17\", \"width:3\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G2 budget: IWM already has 2 structures; cap is 2\"]"
-    },
-    {
-      "id": 710,
-      "ts": "2026-09-03T19:02:15.462678+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "QQQ",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"QQQ\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"QQQ260911P00703000\", \"side\": \"sell\", \"strike\": 703.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 1.895, \"bid\": 1.88, \"ask\": 1.91, \"delta\": -0.1871, \"ratio_qty\": 1}, {\"symbol\": \"QQQ260911P00702000\", \"side\": \"buy\", \"strike\": 702.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 1.71, \"bid\": 1.69, \"ask\": 1.73, \"delta\": -0.1725, \"ratio_qty\": 1}], \"net_price\": 0.15, \"net_price_mid\": 0.185, \"width\": 1.0, \"max_loss_per_unit\": 85.0, \"max_gain_per_unit\": 15.0, \"qty\": 0, \"vol_premium\": 0.0405, \"thesis\": \"Sell the 703 put at 0.19 delta expiring 2026-09-11, buy the 702 wing. Collect 0.15 on 1 wide (15% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:8\", \"delta:0.19\", \"iv:0.17\", \"width:1\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G5 pricing: credit 15.0% of width is below the 18% floor\"]"
-    },
-    {
-      "id": 709,
-      "ts": "2026-09-03T19:02:12.483774+00:00",
-      "agent": "risk_officer",
-      "sleeve": "core",
-      "underlying": "SPY",
-      "proposal": "{\"sleeve\": \"core\", \"underlying\": \"SPY\", \"kind\": \"put_credit_spread\", \"legs\": [{\"symbol\": \"SPY260911P00762000\", \"side\": \"sell\", \"strike\": 762.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 1.295, \"bid\": 1.27, \"ask\": 1.32, \"delta\": -0.1775, \"ratio_qty\": 1}, {\"symbol\": \"SPY260911P00760000\", \"side\": \"buy\", \"strike\": 760.0, \"expiry\": \"2026-09-11\", \"is_call\": false, \"mid\": 1.035, \"bid\": 1.03, \"ask\": 1.04, \"delta\": -0.1459, \"ratio_qty\": 1}], \"net_price\": 0.23, \"net_price_mid\": 0.26, \"width\": 2.0, \"max_loss_per_unit\": 177.0, \"max_gain_per_unit\": 23.0, \"qty\": 0, \"vol_premium\": 0.0357, \"thesis\": \"Sell the 762 put at 0.18 delta expiring 2026-09-11, buy the 760 wing. Collect 0.23 on 2 wide (12% of width), priced at the touch rather than the mid.\", \"tags\": [\"dte:8\", \"delta:0.18\", \"iv:0.12\", \"width:2\"]}",
-      "verdict": "rejected",
-      "reasons": "[\"G5 pricing: credit 11.5% of width is below the 18% floor\"]"
-    },
-    {
-      "id": 708,
-      "ts": "2026-09-03T18:57:04.579265+00:00",
-      "agent": "strategist",
-      "sleeve": null,
-      "underlying": null,
-      "proposal": "{\"action\": \"stand_aside\", \"confidence\": 0.9, \"tool_calls\": [{\"step\": 0, \"tool\": \"get_account_state\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_open_positions\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_calendar\", \"args\": {}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"SPY\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"QQQ\"}}, {\"step\": 0, \"tool\": \"get_regime\", \"args\": {\"symbol\": \"IWM\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"style\": \"risk_reversal\", \"symbol\": \"SPY\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"style\": \"risk_reversal\", \"symbol\": \"QQQ\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"put_credit_spread\"}}, {\"step\": 1, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"put_debit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"SPY\", \"style\": \"call_debit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"symbol\": \"QQQ\", \"style\": \"put_debit_spread\"}}, {\"step\": 2, \"tool\": \"propose_structure\", \"args\": {\"style\": \"call_debit_spread\", \"symbol\": \"QQQ\"}}], \"chosen\": [], \"market_brief\": {\"session_tone\": \"risk_on\", \"summary\": \"US equity markets are broadly higher, with major indices like the S&P 500, Dow, and Nasdaq showing gains of over 1% as of midday. [3, 6] The positive sentiment is primarily driven by a pullback in Treasury yields following comments from Federal Reserve Governor Christopher Waller, who suggested he could support holding interest rates steady if upcoming inflation data remains favorable. [5, 14, 17] This has been interpreted as a dovish signal, overshadowing ongoing geopolitical tensions in the Middle East and elevated oil prices. [2, 5]\", \"catalysts_today\": [\"Fed Governor Christopher Waller speech (8:30 AM ET) suggesting a potential pause in rate hikes. [12, 14, 21]\", \"US ISM Services PMI for August. [2, 13]\", \"US Initial Jobless Claims for the week ending August 29. [7]\", \"US Trade Balance for July. [13, 20]\", \"Geopolitical developments related to the U.S.-Iran conflict and their impact on oil prices. [2, 6]\"], \"vol_context\": \"Implied volatility is relatively contained, with the VIX index holding near 15, suggesting a lack of significant fear despite the geopolitical backdrop. [2, 7]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US stock market today September 3 2026\", \"US equity markets session tone September 3 2026\", \"SPY QQQ IWM trading today September 3 2026\", \"economic data releases today September 3 2026\", \"Federal Reserve speakers today September 3 2026\", \"VIX index today September 3 2026\"], \"cached\": true}}",
-      "verdict": "stand_aside",
-      "reasons": "[\"A high-impact jobs report tomorrow blocks credit structures. The elevated volatility premium across the board makes debit structures too expensive, as confirmed by the risk gates. With no structures able to pass the risk checks, standing aside is the only viable option.\", \"source: gemini\", \"14 tool calls over 4 steps\"]"
     }
   ],
   "recent_orders": [
+    {
+      "id": 15,
+      "ts": "2026-09-04T14:21:10.841067+00:00",
+      "structure_id": 19,
+      "client_order_id": "superio-test2-e2d992693773",
+      "broker_order_id": "1f4c679a-086c-43c6-860c-87246178c829",
+      "intent": "open",
+      "payload": "{\"order_class\": \"mleg\", \"qty\": \"2\", \"type\": \"limit\", \"time_in_force\": \"day\", \"limit_price\": \"2.03\", \"legs\": [{\"symbol\": \"GLD260909C00409000\", \"side\": \"buy\", \"ratio_qty\": \"1\", \"position_intent\": \"buy_to_open\"}, {\"symbol\": \"GLD260909C00419000\", \"side\": \"sell\", \"ratio_qty\": \"1\", \"position_intent\": \"sell_to_open\"}], \"client_order_id\": \"superio-test2-e2d992693773\"}",
+      "status": "pending_new",
+      "fill_price": null,
+      "error": null
+    },
     {
       "id": 14,
       "ts": "2026-09-04T14:14:21.563432+00:00",

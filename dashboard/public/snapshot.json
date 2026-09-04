@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T14:19:35.690585+00:00",
+  "generated_at": "2026-09-04T19:42:30.751115+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -67,93 +67,13 @@
         "wins": 1
       }
     },
-    "open_pnl": 23.95,
-    "realized_implied": 1384.12,
-    "realized_unrecorded": 1852.12
+    "open_pnl": 0,
+    "realized_implied": 1408.07,
+    "realized_unrecorded": 1876.07
   },
   "live": {
-    "marks": [
-      {
-        "structure_id": 16,
-        "underlying": "SPY",
-        "kind": "risk_reversal",
-        "sleeve": "carry",
-        "qty": 1,
-        "entry_price": -2.84,
-        "current_price": -2.96,
-        "unrealized_pnl": 11.95,
-        "pct_of_max_gain": 0.007,
-        "dte": 26,
-        "action": "hold",
-        "rationale": "+2% of risk, +1% of max gain, 26 days to expiry",
-        "max_loss": 593.0,
-        "max_gain": 1707.0,
-        "spot": 771.04,
-        "short_strike": 756.0,
-        "distance_pct": -0.0195,
-        "tp_progress": 0.0117,
-        "sl_progress": 0.0,
-        "tp_basis": "60% of max gain",
-        "sl_basis": "1.2x risk"
-      },
-      {
-        "structure_id": 17,
-        "underlying": "IWM",
-        "kind": "risk_reversal",
-        "sleeve": "carry",
-        "qty": 2,
-        "entry_price": -1.55,
-        "current_price": -1.5,
-        "unrealized_pnl": -10.0,
-        "pct_of_max_gain": -0.0037,
-        "dte": 28,
-        "action": "hold",
-        "rationale": "-1% of risk, -0% of max gain, 28 days to expiry",
-        "max_loss": 923.9999999999999,
-        "max_gain": 2676.0,
-        "spot": 295.18,
-        "short_strike": 288.0,
-        "distance_pct": -0.0243,
-        "tp_progress": 0.0,
-        "sl_progress": 0.009,
-        "tp_basis": "60% of max gain",
-        "sl_basis": "1.2x risk"
-      },
-      {
-        "structure_id": 20,
-        "underlying": "QQQ",
-        "kind": "risk_reversal",
-        "sleeve": "carry",
-        "qty": 1,
-        "entry_price": -3.76,
-        "current_price": -3.98,
-        "unrealized_pnl": 22.0,
-        "pct_of_max_gain": 0.0138,
-        "dte": 26,
-        "action": "hold",
-        "rationale": "+3% of risk, +1% of max gain, 26 days to expiry",
-        "max_loss": 705.0000000000001,
-        "max_gain": 1595.0,
-        "spot": 719.88,
-        "short_strike": 701.0,
-        "distance_pct": -0.0262,
-        "tp_progress": 0.023,
-        "sl_progress": 0.0,
-        "tp_basis": "60% of max gain",
-        "sl_basis": "1.2x risk"
-      }
-    ],
-    "spots": {
-      "SPY": 771.04,
-      "QQQ": 719.88,
-      "IWM": 295.18,
-      "DIA": 534.12,
-      "XLK": 187.52,
-      "XLF": 57.97,
-      "SMH": 567.19,
-      "GLD": 405.5,
-      "TLT": 82.35
-    },
+    "marks": [],
+    "spots": {},
     "ok": true
   },
   "budget": {
@@ -6631,6 +6551,14 @@
   ],
   "recent_events": [
     {
+      "id": 164,
+      "ts": "2026-09-04T15:13:23.333030+00:00",
+      "level": "error",
+      "kind": "pass_error",
+      "message": "alpaca clock exited 1: {'code': 0, 'error': 'could not reach https://paper-api.alpaca.markets/v2/clock: Get \"https://paper-api.alpaca.markets/v2/clock\": dial tcp: lookup paper-api.alpaca.markets: no such host', 'hint': 'check your internet connection and base URL. Run `alpaca doctor` to verify configuration', 'status': 0}",
+      "data": null
+    },
+    {
       "id": 163,
       "ts": "2026-09-04T14:02:32.711243+00:00",
       "level": "info",
@@ -6941,14 +6869,6 @@
       "kind": "market_brief",
       "message": "U.S. equity markets are trading higher, with a risk-on sentiment prevailing as Treasury yields have eased. This follows comments from Federal Reserve Governor Christopher Waller, who indicated a willingness to hold interest rates steady if upcoming inflation data shows continued improvement. [2, 5, 8, 11] The major indices, including the S&P 500 (SPY), Nasdaq 100 (QQQ), and Russell 2000 (IWM), are",
       "data": "{\"session_tone\": \"risk_on\", \"summary\": \"U.S. equity markets are trading higher, with a risk-on sentiment prevailing as Treasury yields have eased. This follows comments from Federal Reserve Governor Christopher Waller, who indicated a willingness to hold interest rates steady if upcoming inflation data shows continued improvement. [2, 5, 8, 11] The major indices, including the S&P 500 (SPY), Nasdaq 100 (QQQ), and Russell 2000 (IWM), are all in positive territory, with technology and communication services stocks leading the gains. [2, 3] However, escalating U.S.-Iran tensions and rising oil prices are creating some underlying concern in the market. [2, 3, 5]\", \"catalysts_today\": [\"Federal Reserve Governor Christopher Waller's speech on the economic outlook. [10, 15, 19, 22]\", \"Release of U.S. Trade Balance data for July, showing a wider deficit. [20]\", \"Weekly U.S. initial jobless claims, which met expectations. [8]\", \"Challenger Job-Cut report for August. [2, 13]\", \"Escalating U.S.-Iran tensions leading to higher oil prices. [2, 3, 5]\"], \"vol_context\": \"Implied equity volatility as measured by the VIX index is relatively contained despite the geopolitical backdrop, trading near 15. [6, 13, 16]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US stock market today September 3 2026\", \"US equity market news September 3 2026\", \"SPY QQQ IWM trading today September 3 2026\", \"economic data releases today September 3 2026\", \"Federal Reserve speakers today September 3 2026\", \"VIX index today September 3 2026\"], \"cached\": false}"
-    },
-    {
-      "id": 124,
-      "ts": "2026-09-03T17:07:43.462417+00:00",
-      "level": "info",
-      "kind": "market_brief",
-      "message": "US equity markets are trading higher, driven by a pullback in Treasury yields after comments from a Federal Reserve official. [1, 2] Federal Reserve Governor Christopher Waller indicated he would be inclined to support holding interest rates steady if upcoming inflation data shows continued improvement, which has lowered market expectations for a September rate hike. [1, 10] This positive sentimen",
-      "data": "{\"session_tone\": \"risk_on\", \"summary\": \"US equity markets are trading higher, driven by a pullback in Treasury yields after comments from a Federal Reserve official. [1, 2] Federal Reserve Governor Christopher Waller indicated he would be inclined to support holding interest rates steady if upcoming inflation data shows continued improvement, which has lowered market expectations for a September rate hike. [1, 10] This positive sentiment is outweighing concerns about rising oil prices, which have climbed due to escalating U.S.-Iran tensions. [1, 2]\", \"catalysts_today\": [\"Speech by Federal Reserve Governor Christopher Waller. [18]\", \"U.S. Trade Balance (July). [9]\", \"U.S. Productivity (Q2 Final). [9]\", \"ISM Non-Manufacturing Composite (August). [9]\", \"Challenger Job-Cut Report (August). [1, 15]\", \"Weekly Initial Jobless Claims. [15]\", \"Escalating U.S.-Iran tensions and rising oil prices. [1, 7]\"], \"vol_context\": \"Implied volatility is relatively contained, with the VIX index trading near 15, suggesting that the current equity market rally is not being met with a significant bid for protection. [4, 15, 19]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US equity markets today September 3 2026\", \"SPY QQQ IWM trading today September 3 2026\", \"market sentiment today September 3 2026\", \"economic data calendar September 3 2026\", \"Fed speakers today September 3 2026\", \"VIX index today September 3 2026\"], \"cached\": false}"
     }
   ],
   "session_plan": {
