@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T13:58:31.132966+00:00",
+  "generated_at": "2026-09-04T14:03:39.397628+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -17,7 +17,7 @@
     "max_debit_to_width": 0.4
   },
   "performance": {
-    "trades_closed": 3,
+    "trades_closed": 5,
     "wins": 0,
     "losses": 1,
     "win_rate": 0.0,
@@ -33,12 +33,12 @@
     "return_pct": 0.0079,
     "by_sleeve": {
       "convex": {
-        "n": 2,
+        "n": 3,
         "pnl": 0.0,
         "wins": 0
       },
       "core": {
-        "n": 1,
+        "n": 2,
         "pnl": -448.0,
         "wins": 0
       }
@@ -53,6 +53,16 @@
         "n": 1,
         "pnl": -448.0,
         "wins": 0
+      },
+      "put_debit_spread": {
+        "n": 1,
+        "pnl": 0.0,
+        "wins": 0
+      },
+      "put_credit_spread": {
+        "n": 1,
+        "pnl": 0.0,
+        "wins": 0
       }
     },
     "by_underlying": {
@@ -62,7 +72,7 @@
         "wins": 0
       },
       "IWM": {
-        "n": 2,
+        "n": 4,
         "pnl": -448.0,
         "wins": 0
       }
@@ -73,7 +83,17 @@
   },
   "live": {
     "marks": [],
-    "spots": {},
+    "spots": {
+      "SPY": 772.09,
+      "QQQ": 721.44,
+      "IWM": 294.87,
+      "DIA": 534.64,
+      "XLK": 187.94,
+      "XLF": 58.0,
+      "SMH": 568.57,
+      "GLD": 405.56,
+      "TLT": 82.27
+    },
     "ok": true
   },
   "budget": {
@@ -81,19 +101,19 @@
     "sleeves": [
       {
         "sleeve": "core",
-        "used": 740.0,
+        "used": 0.0,
         "cap_pct": 0.03,
         "cap": 3023.81,
-        "used_pct_of_equity": 0.00734,
-        "utilisation": 0.2447
+        "used_pct_of_equity": 0.0,
+        "utilisation": 0.0
       },
       {
         "sleeve": "convex",
-        "used": 528.0,
+        "used": 0.0,
         "cap_pct": 0.025,
         "cap": 2519.84,
-        "used_pct_of_equity": 0.00524,
-        "utilisation": 0.2095
+        "used_pct_of_equity": 0.0,
+        "utilisation": 0.0
       },
       {
         "sleeve": "carry",
@@ -104,10 +124,10 @@
         "utilisation": null
       }
     ],
-    "total_used": 1268.0,
+    "total_used": 0.0,
     "total_cap": 8063.49,
     "total_cap_pct": 0.08,
-    "total_utilisation": 0.1573,
+    "total_utilisation": 0.0,
     "daily_kill_pct": 0.04,
     "drawdown_kill_pct": 0.1,
     "max_new_trades_per_day": 7,
@@ -162,51 +182,12 @@
       }
     ]
   },
-  "open_structures": [
-    {
-      "id": 14,
-      "opened_at": "2026-09-03T16:18:44.502710+00:00",
-      "closed_at": null,
-      "sleeve": "convex",
-      "underlying": "IWM",
-      "kind": "put_debit_spread",
-      "legs": [
-        {
-          "symbol": "IWM260903P00285000",
-          "side": "sell",
-          "strike": 285.0,
-          "expiry": "2026-09-03",
-          "is_call": false,
-          "ratio_qty": 1,
-          "mid": 0.01,
-          "delta": null
-        },
-        {
-          "symbol": "IWM260903P00293000",
-          "side": "buy",
-          "strike": 293.0,
-          "expiry": "2026-09-03",
-          "is_call": false,
-          "ratio_qty": 1,
-          "mid": 0.04,
-          "delta": null
-        }
-      ],
-      "qty": 4,
-      "net_price": -1.32,
-      "max_loss": 528.0,
-      "max_gain": 2672.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
-      "client_order_id": null,
-      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": -1.32
-    },
+  "open_structures": [],
+  "closed_structures": [
     {
       "id": 15,
       "opened_at": "2026-09-03T16:18:44.505017+00:00",
-      "closed_at": null,
+      "closed_at": "2026-09-04T14:02:33.194935+00:00",
       "sleeve": "core",
       "underlying": "IWM",
       "kind": "put_credit_spread",
@@ -236,15 +217,57 @@
       "net_price": 0.15,
       "max_loss": 740.0,
       "max_gain": 60.0,
-      "status": "open",
-      "realized_pnl": null,
-      "close_reason": null,
+      "status": "closed",
+      "realized_pnl": 0.0,
+      "close_reason": "reconciled_flat",
       "client_order_id": null,
       "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
-      "net_price_mid": 0.15
-    }
-  ],
-  "closed_structures": [
+      "net_price_mid": 0.15,
+      "held_hours": 21.73,
+      "return_on_risk": 0.0
+    },
+    {
+      "id": 14,
+      "opened_at": "2026-09-03T16:18:44.502710+00:00",
+      "closed_at": "2026-09-04T14:02:33.193220+00:00",
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "kind": "put_debit_spread",
+      "legs": [
+        {
+          "symbol": "IWM260903P00285000",
+          "side": "sell",
+          "strike": 285.0,
+          "expiry": "2026-09-03",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 0.01,
+          "delta": null
+        },
+        {
+          "symbol": "IWM260903P00293000",
+          "side": "buy",
+          "strike": 293.0,
+          "expiry": "2026-09-03",
+          "is_call": false,
+          "ratio_qty": 1,
+          "mid": 0.04,
+          "delta": null
+        }
+      ],
+      "qty": 4,
+      "net_price": -1.32,
+      "max_loss": 528.0,
+      "max_gain": 2672.0,
+      "status": "closed",
+      "realized_pnl": 0.0,
+      "close_reason": "reconciled_flat",
+      "client_order_id": null,
+      "thesis": "adopted from the broker: this position was open with no journal entry claiming it, so the exit rules could not see it",
+      "net_price_mid": -1.32,
+      "held_hours": 21.73,
+      "return_on_risk": 0.0
+    },
     {
       "id": 11,
       "opened_at": "2026-09-03T13:54:49.678940+00:00",
@@ -380,7 +403,7 @@
       "return_on_risk": 0.0
     }
   ],
-  "open_risk": 1268.0,
+  "open_risk": 0.0,
   "equity_curve": [
     {
       "ts": "2026-08-28T14:07:24.913878+00:00",
@@ -3293,6 +3316,14 @@
       "buying_power": 403174.64,
       "open_risk": 1268.0,
       "day_pnl": 0.0
+    },
+    {
+      "ts": "2026-09-04T14:02:34.241142+00:00",
+      "equity": 100793.66,
+      "cash": 100793.66,
+      "buying_power": 403174.64,
+      "open_risk": 0.0,
+      "day_pnl": 0.0
     }
   ],
   "recent_decisions": [
@@ -4633,6 +4664,14 @@
   ],
   "recent_events": [
     {
+      "id": 219,
+      "ts": "2026-09-04T14:02:33.197154+00:00",
+      "level": "warning",
+      "kind": "reconciliation",
+      "message": "0 structures confirmed, 2 marked closed, 0 adopted, 0 orphan positions",
+      "data": null
+    },
+    {
       "id": 218,
       "ts": "2026-09-04T11:38:49.538437+00:00",
       "level": "info",
@@ -4943,14 +4982,6 @@
       "kind": "market_brief",
       "message": "U.S. equity markets are trading higher, continuing a rebound from a three-day losing streak earlier in the week. [5] The positive sentiment is largely driven by a pullback in Treasury yields following comments from Federal Reserve Governor Christopher Waller, who indicated a willingness to hold interest rates steady if upcoming inflation data remains favorable. [3, 4] This has overshadowed concern",
       "data": "{\"session_tone\": \"risk_on\", \"summary\": \"U.S. equity markets are trading higher, continuing a rebound from a three-day losing streak earlier in the week. [5] The positive sentiment is largely driven by a pullback in Treasury yields following comments from Federal Reserve Governor Christopher Waller, who indicated a willingness to hold interest rates steady if upcoming inflation data remains favorable. [3, 4] This has overshadowed concerns about rising oil prices, which are climbing due to escalating geopolitical tensions in the Middle East. [3, 5]\", \"catalysts_today\": [\"Speech by Federal Reserve Governor Christopher Waller suggesting a potential pause in rate hikes. [3, 14, 18]\", \"U.S. Trade Balance, Productivity, and Jobless Claims data released at 8:30 AM. [13, 16]\", \"Challenger Job Cuts report released at 5:30 AM. [16]\", \"Rising oil prices (WTI above $92, Brent above $97) amid U.S.-Iran military strikes. [3, 5, 6]\"], \"vol_context\": \"The CBOE Volatility Index (VIX) was reported to have fallen yesterday, but different sources show it rising today, indicating some bidding in volatility despite the positive equity market tone. [2, 8, 15]\", \"confidence\": 0.8, \"grounded\": true, \"sources\": [\"US equity market news today September 3 2026\", \"US stock market today's performance SPY QQQ IWM\", \"economic data calendar September 3 2026\", \"Fed speakers today September 3 2026\", \"VIX index today\", \"US stock market tone today risk-on risk-off\"], \"cached\": false}"
-    },
-    {
-      "id": 179,
-      "ts": "2026-09-03T16:31:35.509774+00:00",
-      "level": "info",
-      "kind": "market_brief",
-      "message": "US equity markets are trading higher, continuing a rebound from a three-day slide. The positive sentiment is primarily driven by a pullback in Treasury yields and comments from Federal Reserve Governor Waller suggesting a pause in rate hikes if inflation data continues to cool. [8, 10, 11] However, gains are somewhat capped by ongoing geopolitical tensions in the Middle East, which are keeping oil",
-      "data": "{\"session_tone\": \"risk_on\", \"summary\": \"US equity markets are trading higher, continuing a rebound from a three-day slide. The positive sentiment is primarily driven by a pullback in Treasury yields and comments from Federal Reserve Governor Waller suggesting a pause in rate hikes if inflation data continues to cool. [8, 10, 11] However, gains are somewhat capped by ongoing geopolitical tensions in the Middle East, which are keeping oil prices elevated. [2, 3, 4]\", \"catalysts_today\": [\"Geopolitical tensions: Iran targeted U.S. allies with missiles and drones, keeping crude oil prices firm. [2, 3, 5]\", \"Fed Speaker: Governor Christopher Waller stated the upcoming inflation report will be a key factor in determining the next interest rate move, suggesting a pause is possible if inflation cools. [11, 13, 18]\", \"Economic Data: Weekly jobless claims were in line with expectations at 206K, indicating a stable labor market. [9] The July trade deficit widened to $88.6 billion. [17] Q2 non-farm productivity was in-line at +1.4%, while unit labor costs were slightly below estimates. [15]\", \"Fed Speakers: Cleveland Fed President Beth Hammack and Chicago Fed President Austan Goolsbee are scheduled to speak later today. [15]\"], \"vol_context\": \"Implied equity volatility is relatively contained, with the VIX index trading slightly higher around 15.30 after closing near 15.20 the previous day. [9, 14]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US equity markets today September 3 2026\", \"SPY QQQ IWM trading today September 3 2026\", \"market news today September 3 2026\", \"economic data today September 3 2026\", \"Fed speakers today September 3 2026\", \"VIX trading today September 3 2026\"], \"cached\": false}"
     }
   ],
   "session_plan": {
