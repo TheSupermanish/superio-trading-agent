@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T06:24:32.347217+00:00",
+  "generated_at": "2026-09-04T06:29:50.902962+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -3922,6 +3922,22 @@
   ],
   "recent_events": [
     {
+      "id": 74,
+      "ts": "2026-09-04T06:25:00.907062+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "0 of 15 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-04T06:24:13.288440+00:00\", \"equity\": 99358.77, \"regimes\": {\"SPY\": {\"spot\": 771.91, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0829, \"atm_iv\": 0.09, \"vol_premium\": 0.0071}, \"QQQ\": {\"spot\": 717.16, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1349, \"atm_iv\": 0.1302, \"vol_premium\": -0.0047}, \"IWM\": {\"spot\": 294.97, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1277, \"atm_iv\": 0.1282, \"vol_premium\": 0.0005}, \"DIA\": {\"spot\": 536.78, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0882, \"atm_iv\": 0.1098, \"vol_premium\": 0.0217}, \"XLK\": {\"spot\": 186.01, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2129, \"atm_iv\": 0.2231, \"vol_premium\": 0.0102}, \"XLF\": {\"spot\": 58.58, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1164, \"atm_iv\": 0.1213, \"vol_premium\": 0.0049}, \"SMH\": {\"spot\": 552.72, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.3075, \"atm_iv\": 0.247, \"vol_premium\": -0.0605}, \"GLD\": {\"spot\": 410.7, \"trend\": \"up\", \"bias\": \"neutral\", \"realized_vol\": 0.2793, \"atm_iv\": 0.2352, \"vol_premium\": -0.0441}, \"TLT\": {\"spot\": 82.07, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.1067, \"atm_iv\": 0.1003, \"vol_premium\": -0.0064}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.39, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 161.0, \"reason\": \"G5 pricing: credit 19.5% of width is below the 22% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"iron_condor\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.67, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 133.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.29, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 71.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.38, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 162.0, \"reason\": \"G5 pricing: credit 19.0% of width is below the 22% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.38, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 162.0, \"reason\": \"G5 pricing: credit 19.0% of width is below the 22% floor\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.42, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 158.0, \"reason\": \"G5 pricing: credit 21.0% of width is below the 22% floor\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.26, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 74.0, \"reason\": \"G6 event blackout: August employment report at Fri 08:30 ET lands before this expiry; not writing premium across it\"}, {\"symbol\": \"DIA\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLK\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLF\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"SMH\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.41, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 159.0, \"reason\": \"G5 pricing: credit 20.5% of width is below the 22% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-09\", \"net_price\": 0.41, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 159.0, \"reason\": \"G5 pricing: credit 20.5% of width is below the 22% floor\"}, {\"symbol\": \"GLD\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.59, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 241.0, \"reason\": \"G5 pricing: credit 19.7% of width is below the 22% floor\"}, {\"symbol\": \"TLT\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}], \"brief\": {\"session_tone\": \"risk_on\", \"summary\": \"US equity futures are carrying positive momentum into Friday's session following a sharp tech-led rally on Thursday. Dovish commentary from Fed Governor Christopher Waller has significantly cooled September rate hike expectations, prompting a pullback in Treasury yields and a broad bid in risk assets. Market participants are now squarely focused on this morning's August Non-Farm Payrolls report to confirm the labor market's trajectory and solidify the Fed's policy path.\", \"catalysts_today\": [\"August Non-Farm Payrolls (NFP) report\", \"August Unemployment Rate data\"], \"vol_context\": \"Volatility is broadly being sold as rate-hike anxiety cools, though front-end implied volatility remains elevated pending the NFP data release.\", \"confidence\": 0.85, \"grounded\": true, \"sources\": [\"hdfcsky.com\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"0 of 15 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 73,
+      "ts": "2026-09-04T06:25:00.906314+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equity futures are carrying positive momentum into Friday's session following a sharp tech-led rally on Thursday. Dovish commentary from Fed Governor Christopher Waller has significantly cooled September rate hike expectations, prompting a pullback in Treasury yields and a broad bid in risk assets. Market participants are now squarely focused on this morning's August Non-Farm Payrolls report to",
+      "data": "{\"session_tone\": \"risk_on\", \"summary\": \"US equity futures are carrying positive momentum into Friday's session following a sharp tech-led rally on Thursday. Dovish commentary from Fed Governor Christopher Waller has significantly cooled September rate hike expectations, prompting a pullback in Treasury yields and a broad bid in risk assets. Market participants are now squarely focused on this morning's August Non-Farm Payrolls report to confirm the labor market's trajectory and solidify the Fed's policy path.\", \"catalysts_today\": [\"August Non-Farm Payrolls (NFP) report\", \"August Unemployment Rate data\"], \"vol_context\": \"Volatility is broadly being sold as rate-hike anxiety cools, though front-end implied volatility remains elevated pending the NFP data release.\", \"confidence\": 0.85, \"grounded\": true, \"sources\": [\"hdfcsky.com\"], \"cached\": false}"
+    },
+    {
       "id": 72,
       "ts": "2026-09-04T05:23:09.575979+00:00",
       "level": "info",
@@ -4224,26 +4240,10 @@
       "kind": "adopted",
       "message": "adopted SPY call_credit_spread x21 expiring 2026-09-03 into the journal as #8",
       "data": "{\"underlying\": \"SPY\", \"kind\": \"call_credit_spread\", \"legs\": [{\"symbol\": \"SPY260903C00766000\", \"side\": \"sell\", \"strike\": 766.0, \"expiry\": \"2026-09-03\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 3.67, \"delta\": null}, {\"symbol\": \"SPY260903C00767000\", \"side\": \"buy\", \"strike\": 767.0, \"expiry\": \"2026-09-03\", \"is_call\": true, \"ratio_qty\": 1, \"mid\": 2.79, \"delta\": null}], \"qty\": 21, \"net_price\": 0.35, \"max_loss\": 1365.0, \"max_gain\": 735.0}"
-    },
-    {
-      "id": 34,
-      "ts": "2026-09-03T13:54:19.772537+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "SPY260903P00760000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"2733b121-367e-4847-89df-a62ff44645f8\", \"asset_marginable\": true, \"avg_entry_price\": \"1.83\", \"change_today\": \"-0.88095\", \"cost_basis\": \"-1830\", \"current_price\": \"0.05\", \"exchange\": \"\", \"lastday_price\": \"0.42\", \"market_value\": \"-50\", \"qty\": \"-10\", \"qty_available\": \"-10\", \"side\": \"short\", \"symbol\": \"SPY260903P00760000\", \"unrealized_intraday_pl\": \"370\", \"unrealized_intraday_plpc\": \"0.88095\", \"unrealized_pl\": \"1780\", \"unrealized_plpc\": \"0.97268\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
-    },
-    {
-      "id": 33,
-      "ts": "2026-09-03T13:54:19.771375+00:00",
-      "level": "warning",
-      "kind": "orphan_position",
-      "message": "SPY260903P00759000 is held at the broker but no journal entry claims it",
-      "data": "{\"asset_class\": \"us_option\", \"asset_id\": \"5398029a-604b-4597-b2e9-15943d38b246\", \"asset_marginable\": true, \"avg_entry_price\": \"1.55\", \"change_today\": \"-0.91176\", \"cost_basis\": \"1550\", \"current_price\": \"0.03\", \"exchange\": \"\", \"lastday_price\": \"0.34\", \"market_value\": \"30\", \"qty\": \"10\", \"qty_available\": \"10\", \"side\": \"long\", \"symbol\": \"SPY260903P00759000\", \"unrealized_intraday_pl\": \"-310\", \"unrealized_intraday_plpc\": \"-0.91176\", \"unrealized_pl\": \"-1520\", \"unrealized_plpc\": \"-0.98065\", \"usd\": {\"avg_entry_price\": \"\", \"cost_basis\": \"\"}}"
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-04T05:22:24.536476+00:00",
+    "generated_at": "2026-09-04T06:24:13.288440+00:00",
     "equity": 99358.77,
     "regimes": {
       "SPY": {
@@ -4473,24 +4473,22 @@
     ],
     "brief": {
       "session_tone": "risk_on",
-      "summary": "US equity futures are advancing in the early pre-market hours, building on yesterday's broad rally across the SPY, QQQ, and DIA. The prevailing risk-on tone is being driven by dovish remarks from Fed Governor Christopher Waller, which sparked a strong bid in mega-cap tech (XLK) and semiconductors (SMH) while pushing Treasury yields lower and boosting TLT. Markets are currently in a holding pattern as participants await the pivotal August jobs report to confirm whether the Fed will pause rate hikes at its September meeting.",
+      "summary": "US equity futures are carrying positive momentum into Friday's session following a sharp tech-led rally on Thursday. Dovish commentary from Fed Governor Christopher Waller has significantly cooled September rate hike expectations, prompting a pullback in Treasury yields and a broad bid in risk assets. Market participants are now squarely focused on this morning's August Non-Farm Payrolls report to confirm the labor market's trajectory and solidify the Fed's policy path.",
       "catalysts_today": [
-        "August Non-Farm Payrolls (8:30 AM ET)",
-        "August Unemployment Rate (8:30 AM ET)",
-        "August Average Hourly Earnings (8:30 AM ET)"
+        "August Non-Farm Payrolls (NFP) report",
+        "August Unemployment Rate data"
       ],
-      "vol_context": "Volatility is generally being compressed as rate-hike fears subside, though event risk remains priced in ahead of the morning's payroll data.",
-      "confidence": 0.9,
+      "vol_context": "Volatility is broadly being sold as rate-hike anxiety cools, though front-end implied volatility remains elevated pending the NFP data release.",
+      "confidence": 0.85,
       "grounded": true,
       "sources": [
-        "metrobank.com.ph",
         "hdfcsky.com"
       ],
       "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
     "summary": "0 of 15 structures would clear the gates at the next open",
-    "ts": "2026-09-04T05:23:09.575979+00:00"
+    "ts": "2026-09-04T06:25:00.907062+00:00"
   },
   "google": {
     "connected": [],
