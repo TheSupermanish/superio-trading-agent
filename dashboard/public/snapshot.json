@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T12:14:33.871044+00:00",
+  "generated_at": "2026-09-04T12:19:52.281518+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -88,9 +88,9 @@
         "rationale": "+21% of risk, +7% of max gain, 26 days to expiry",
         "max_loss": 593.0,
         "max_gain": 1707.0,
-        "spot": 772.86,
+        "spot": 773.01,
         "short_strike": 756.0,
-        "distance_pct": -0.0218,
+        "distance_pct": -0.022,
         "tp_progress": 0.1191,
         "sl_progress": 0.0,
         "tp_basis": "60% of max gain",
@@ -144,15 +144,15 @@
       }
     ],
     "spots": {
-      "SPY": 772.86,
+      "SPY": 773.01,
       "QQQ": 717.16,
       "IWM": 294.97,
-      "DIA": 536.22,
+      "DIA": 536.27,
       "XLK": 186.01,
       "XLF": 58.58,
       "SMH": 552.72,
       "GLD": 410.7,
-      "TLT": 82.31
+      "TLT": 82.38
     },
     "ok": true
   },
@@ -4794,6 +4794,14 @@
     },
     {
       "ts": "2026-09-04T12:13:16.556597+00:00",
+      "equity": 101451.07,
+      "cash": 100423.07,
+      "buying_power": 396892.28,
+      "open_risk": 2222.0,
+      "day_pnl": -34.0
+    },
+    {
+      "ts": "2026-09-04T12:18:24.649681+00:00",
       "equity": 101451.07,
       "cash": 100423.07,
       "buying_power": 396892.28,
