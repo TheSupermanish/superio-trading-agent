@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T11:02:23.659172+00:00",
+  "generated_at": "2026-09-05T11:08:33.456129+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -77,82 +77,12 @@
         "wins": 0
       }
     },
-    "open_pnl": -530.5,
-    "realized_implied": 751.22,
-    "realized_unrecorded": 1199.22
+    "open_pnl": 0,
+    "realized_implied": 220.72,
+    "realized_unrecorded": 668.72
   },
   "live": {
-    "marks": [
-      {
-        "structure_id": 16,
-        "underlying": "QQQ",
-        "kind": "call_debit_spread",
-        "sleeve": "convex",
-        "qty": 2,
-        "entry_price": -2.21,
-        "current_price": -1.43,
-        "unrealized_pnl": -157.0,
-        "pct_of_max_gain": -0.1013,
-        "dte": 4,
-        "action": "hold",
-        "rationale": "up -36% on debit, 4 days to expiry",
-        "max_loss": 450.0,
-        "max_gain": 1550.0,
-        "spot": 717.87,
-        "short_strike": 734.0,
-        "distance_pct": 0.0225,
-        "tp_progress": 0.0,
-        "sl_progress": 0.4736,
-        "tp_basis": "75% on debit",
-        "sl_basis": "75% of debit lost"
-      },
-      {
-        "structure_id": 17,
-        "underlying": "SPY",
-        "kind": "call_debit_spread",
-        "sleeve": "convex",
-        "qty": 3,
-        "entry_price": -1.61,
-        "current_price": -0.86,
-        "unrealized_pnl": -223.5,
-        "pct_of_max_gain": -0.1171,
-        "dte": 4,
-        "action": "hold",
-        "rationale": "up -46% on debit, 4 days to expiry",
-        "max_loss": 492.0,
-        "max_gain": 1908.0,
-        "spot": 769.92,
-        "short_strike": 782.0,
-        "distance_pct": 0.0157,
-        "tp_progress": 0.0,
-        "sl_progress": 0.617,
-        "tp_basis": "75% on debit",
-        "sl_basis": "75% of debit lost"
-      },
-      {
-        "structure_id": 18,
-        "underlying": "IWM",
-        "kind": "put_debit_spread",
-        "sleeve": "convex",
-        "qty": 5,
-        "entry_price": -0.96,
-        "current_price": -0.66,
-        "unrealized_pnl": -150.0,
-        "pct_of_max_gain": -0.0335,
-        "dte": 4,
-        "action": "hold",
-        "rationale": "up -31% on debit, 4 days to expiry",
-        "max_loss": 524.9999999999999,
-        "max_gain": 4474.999999999999,
-        "spot": 295.75,
-        "short_strike": 284.0,
-        "distance_pct": -0.0397,
-        "tp_progress": 0.0,
-        "sl_progress": 0.4167,
-        "tp_basis": "75% on debit",
-        "sl_basis": "75% of debit lost"
-      }
-    ],
+    "marks": [],
     "spots": {
       "SPY": 769.92,
       "QQQ": 717.87,
@@ -4150,6 +4080,14 @@
     },
     {
       "ts": "2026-09-05T11:01:59.004872+00:00",
+      "equity": 100220.62,
+      "cash": 98985.62,
+      "buying_power": 395942.48,
+      "open_risk": 1894.9999999999998,
+      "day_pnl": 16.0
+    },
+    {
+      "ts": "2026-09-05T11:07:07.485764+00:00",
       "equity": 100220.62,
       "cash": 98985.62,
       "buying_power": 395942.48,

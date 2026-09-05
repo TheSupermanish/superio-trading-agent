@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T11:02:28.544504+00:00",
+  "generated_at": "2026-09-05T11:09:28.026041+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -57,36 +57,12 @@
         "wins": 1
       }
     },
-    "open_pnl": -56.0,
-    "realized_implied": -643.64,
-    "realized_unrecorded": 199.36
+    "open_pnl": 0,
+    "realized_implied": -699.64,
+    "realized_unrecorded": 143.36
   },
   "live": {
-    "marks": [
-      {
-        "structure_id": 10,
-        "underlying": "SPY",
-        "kind": "iron_condor",
-        "sleeve": "core",
-        "qty": 7,
-        "entry_price": 0.7,
-        "current_price": 0.78,
-        "unrealized_pnl": -56.0,
-        "pct_of_max_gain": -0.1143,
-        "dte": 4,
-        "action": "hold",
-        "rationale": "captured -11% of credit, 4 days to expiry",
-        "max_loss": 938.0,
-        "max_gain": 462.0,
-        "spot": 769.92,
-        "short_strike": 769.0,
-        "distance_pct": -0.0012,
-        "tp_progress": 0.0,
-        "sl_progress": 0.1143,
-        "tp_basis": "55% of credit",
-        "sl_basis": "2.0x credit"
-      }
-    ],
+    "marks": [],
     "spots": {
       "SPY": 769.92,
       "QQQ": 717.87,
@@ -3810,6 +3786,22 @@
     },
     {
       "ts": "2026-09-05T10:59:07.514235+00:00",
+      "equity": 99300.36,
+      "cash": 99846.36,
+      "buying_power": 393785.44,
+      "open_risk": 938.0,
+      "day_pnl": 14.0
+    },
+    {
+      "ts": "2026-09-05T11:04:13.451518+00:00",
+      "equity": 99300.36,
+      "cash": 99846.36,
+      "buying_power": 393785.44,
+      "open_risk": 938.0,
+      "day_pnl": 14.0
+    },
+    {
+      "ts": "2026-09-05T11:09:22.302984+00:00",
       "equity": 99300.36,
       "cash": 99846.36,
       "buying_power": 393785.44,
