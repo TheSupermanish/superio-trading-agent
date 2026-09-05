@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T14:05:50.726098+00:00",
+  "generated_at": "2026-09-05T04:18:19.031003+00:00",
   "bars": {
     "SPY": [
       {
@@ -958,9 +958,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 772.035,
         "high": 772.85,
-        "low": 771.83,
-        "close": 771.95,
-        "volume": 155026.0
+        "low": 769.0,
+        "close": 770.18,
+        "volume": 1009491.0
       }
     ],
     "QQQ": [
@@ -1920,9 +1920,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 719.16,
         "high": 721.84,
-        "low": 718.575,
-        "close": 721.25,
-        "volume": 63479.0
+        "low": 716.605,
+        "close": 719.1,
+        "volume": 552942.0
       }
     ],
     "IWM": [
@@ -2881,10 +2881,10 @@
       {
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 293.68,
-        "high": 295.205,
+        "high": 296.18,
         "low": 293.58,
-        "close": 294.93,
-        "volume": 234149.0
+        "close": 295.94,
+        "volume": 843429.0
       }
     ],
     "DIA": [
@@ -3844,9 +3844,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 535.12,
         "high": 536.33,
-        "low": 534.66,
-        "close": 534.66,
-        "volume": 3938.0
+        "low": 533.03,
+        "close": 534.04,
+        "volume": 34476.0
       }
     ],
     "XLK": [
@@ -4807,8 +4807,8 @@
         "open": 187.44,
         "high": 188.18,
         "low": 186.47,
-        "close": 187.92,
-        "volume": 53661.0
+        "close": 187.3,
+        "volume": 301701.0
       }
     ],
     "XLF": [
@@ -5768,9 +5768,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 58.04,
         "high": 58.37,
-        "low": 58.0,
-        "close": 58.005,
-        "volume": 250863.0
+        "low": 57.92,
+        "close": 58.1,
+        "volume": 1870693.0
       }
     ],
     "SMH": [
@@ -6731,8 +6731,8 @@
         "open": 560.71,
         "high": 569.38,
         "low": 558.05,
-        "close": 568.12,
-        "volume": 94651.0
+        "close": 567.05,
+        "volume": 419336.0
       }
     ],
     "GLD": [
@@ -7691,10 +7691,10 @@
       {
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 404.69,
-        "high": 406.58,
+        "high": 407.985,
         "low": 404.175,
-        "close": 404.62,
-        "volume": 19261.0
+        "close": 406.78,
+        "volume": 121841.0
       }
     ],
     "TLT": [
@@ -8653,10 +8653,10 @@
       {
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 82.29,
-        "high": 82.43,
-        "low": 82.27,
-        "close": 82.28,
-        "volume": 143709.0
+        "high": 82.49,
+        "low": 82.18,
+        "close": 82.22,
+        "volume": 883551.0
       }
     ]
   },
@@ -9437,6 +9437,99 @@
         "target_value": -280.0
       },
       "held_hours": 2.41
+    },
+    {
+      "id": 10,
+      "opened_at": "2026-09-04T14:05:45.864741+00:00",
+      "closed_at": null,
+      "sleeve": "core",
+      "underlying": "SPY",
+      "kind": "iron_condor",
+      "legs": [
+        {
+          "symbol": "SPY260909P00769000",
+          "side": "sell",
+          "strike": 769.0,
+          "expiry": "2026-09-09",
+          "is_call": false,
+          "mid": 1.535,
+          "bid": 1.53,
+          "ask": 1.54,
+          "delta": -0.3168,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260909P00767000",
+          "side": "buy",
+          "strike": 767.0,
+          "expiry": "2026-09-09",
+          "is_call": false,
+          "mid": 1.095,
+          "bid": 1.07,
+          "ask": 1.12,
+          "delta": -0.2378,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260909C00776000",
+          "side": "sell",
+          "strike": 776.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 1.11,
+          "bid": 1.1,
+          "ask": 1.12,
+          "delta": 0.2879,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260909C00777000",
+          "side": "buy",
+          "strike": 777.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 0.845,
+          "bid": 0.84,
+          "ask": 0.85,
+          "delta": 0.235,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 7,
+      "net_price": 0.7,
+      "max_loss": 938.0,
+      "max_gain": 462.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test3-ebdbae83e3be",
+      "thesis": "Range-bound SPY into 2026-09-09: sell both wings for 0.66 on 2 wide (33% of width). The analyst read indicates that SPY is lagging in a mixed market, and the convex risk budget is zero, restricting us to credit structures. The SPY iron condor passes all risk gates and offers a balanced way to collect premium on a lagging index.",
+      "net_price_mid": 0.7050000000000001,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          769.0,
+          776.0
+        ],
+        "long_strikes": [
+          767.0,
+          777.0
+        ],
+        "min_strike": 767.0,
+        "max_strike": 777.0,
+        "breakeven": null
+      },
+      "take_profit": {
+        "basis": "fraction of the credit captured",
+        "target_pct": 0.55,
+        "target_value": 269.5
+      },
+      "stop": {
+        "basis": "multiple of the credit received",
+        "target_pct": 2.0,
+        "target_value": -490.0
+      },
+      "held_hours": null
     }
   ],
   "exit_rules": {
