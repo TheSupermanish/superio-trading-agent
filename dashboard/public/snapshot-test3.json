@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T05:22:12.835354+00:00",
+  "generated_at": "2026-09-05T05:27:32.235267+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -3287,6 +3287,14 @@
       "buying_power": 393787.56,
       "open_risk": 938.0,
       "day_pnl": -56.69999999999709
+    },
+    {
+      "ts": "2026-09-05T05:23:01.804301+00:00",
+      "equity": 99300.89,
+      "cash": 99846.89,
+      "buying_power": 393787.56,
+      "open_risk": 938.0,
+      "day_pnl": -56.69999999999709
     }
   ],
   "recent_decisions": [
@@ -4627,6 +4635,22 @@
   ],
   "recent_events": [
     {
+      "id": 93,
+      "ts": "2026-09-05T05:23:47.919461+00:00",
+      "level": "info",
+      "kind": "session_plan",
+      "message": "0 of 13 structures would clear the gates at the next open",
+      "data": "{\"generated_at\": \"2026-09-05T05:23:01.805796+00:00\", \"equity\": 99300.89, \"regimes\": {\"SPY\": {\"spot\": 769.92, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.0813, \"atm_iv\": 0.0699, \"vol_premium\": -0.0114}, \"QQQ\": {\"spot\": 717.87, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1285, \"atm_iv\": 0.1087, \"vol_premium\": -0.0198}, \"IWM\": {\"spot\": 295.75, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.1211, \"atm_iv\": 0.0998, \"vol_premium\": -0.0213}, \"DIA\": {\"spot\": 532.66, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.0894, \"atm_iv\": 0.1028, \"vol_premium\": 0.0134}, \"XLK\": {\"spot\": 187.12, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.2081, \"atm_iv\": 0.2029, \"vol_premium\": -0.0053}, \"XLF\": {\"spot\": 58.31, \"trend\": \"up\", \"bias\": \"bullish\", \"realized_vol\": 0.1192, \"atm_iv\": 0.0968, \"vol_premium\": -0.0223}, \"SMH\": {\"spot\": 565.82, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.314, \"atm_iv\": 0.2467, \"vol_premium\": -0.0673}, \"GLD\": {\"spot\": 406.78, \"trend\": \"chop\", \"bias\": \"neutral\", \"realized_vol\": 0.2717, \"atm_iv\": 0.1814, \"vol_premium\": -0.0904}, \"TLT\": {\"spot\": 82.22, \"trend\": \"down\", \"bias\": \"bearish\", \"realized_vol\": 0.1065, \"atm_iv\": 0.0806, \"vol_premium\": -0.0258}}, \"candidates\": [{\"symbol\": \"SPY\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.21, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 79.0, \"reason\": \"G5 pricing: credit 21.0% of width is below the 22% floor\"}, {\"symbol\": \"QQQ\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.47, \"width\": 3.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 253.1, \"reason\": \"G5 pricing: credit 15.6% of width is below the 22% floor\"}, {\"symbol\": \"IWM\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.27, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 73.0, \"reason\": \"G7 volatility side: selling premium on IWM while implied sits -2.1% below realized; the market is paying too little for the movement\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.23, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 77.0, \"reason\": \"G7 volatility side: selling premium on IWM while implied sits -2.1% below realized; the market is paying too little for the movement\"}, {\"symbol\": \"IWM\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.23, \"width\": 1.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 77.0, \"reason\": \"G7 volatility side: selling premium on IWM while implied sits -2.1% below realized; the market is paying too little for the movement\"}, {\"symbol\": \"DIA\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLK\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"XLF\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"SMH\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.44, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 156.0, \"reason\": \"G5 pricing: credit 22.0% of width is below the 22% floor\"}, {\"symbol\": \"GLD\", \"style\": \"put_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-10\", \"net_price\": 0.44, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 156.0, \"reason\": \"G5 pricing: credit 22.0% of width is below the 22% floor\"}, {\"symbol\": \"GLD\", \"style\": \"call_credit_spread\", \"sleeve\": \"core\", \"expiry\": \"2026-09-08\", \"net_price\": 0.41, \"width\": 2.0, \"verdict\": \"would refuse\", \"qty\": 0, \"max_loss\": 159.0, \"reason\": \"G5 pricing: credit 20.5% of width is below the 22% floor\"}, {\"symbol\": \"TLT\", \"style\": \"any\", \"verdict\": \"unavailable\", \"reason\": \"nothing built from last known quotes in this regime\"}], \"brief\": {\"session_tone\": \"quiet\", \"summary\": \"US equity markets are closed today for the weekend ahead of the Labor Day holiday. During Friday's session, a risk-off tone prevailed as a surprisingly strong August jobs report (162,000 jobs added vs. 55,000 expected) reignited fears of a September Fed rate hike. Major indices like the S&P 500, Dow, and Nasdaq closed lower, dragging down SPY, DIA, and QQQ, while surging Treasury yields pressured TLT and GLD. Small caps (IWM) were a rare bright spot, managing a slight gain despite the broader defensive rotation.\", \"catalysts_today\": [\"Markets closed for the weekend (Labor Day holiday on Monday)\"], \"vol_context\": \"Volatility was slightly bid during Friday's session, with the VIX ticking up to 14.49 as interest rate anxiety returned.\", \"confidence\": 0.95, \"grounded\": true, \"sources\": [\"thestreet.com\", \"fool.com\"], \"cached\": false}, \"note\": \"Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.\", \"summary\": \"0 of 13 structures would clear the gates at the next open\"}"
+    },
+    {
+      "id": 92,
+      "ts": "2026-09-05T05:23:47.918543+00:00",
+      "level": "info",
+      "kind": "market_brief",
+      "message": "US equity markets are closed today for the weekend ahead of the Labor Day holiday. During Friday's session, a risk-off tone prevailed as a surprisingly strong August jobs report (162,000 jobs added vs. 55,000 expected) reignited fears of a September Fed rate hike. Major indices like the S&P 500, Dow, and Nasdaq closed lower, dragging down SPY, DIA, and QQQ, while surging Treasury yields pressured ",
+      "data": "{\"session_tone\": \"quiet\", \"summary\": \"US equity markets are closed today for the weekend ahead of the Labor Day holiday. During Friday's session, a risk-off tone prevailed as a surprisingly strong August jobs report (162,000 jobs added vs. 55,000 expected) reignited fears of a September Fed rate hike. Major indices like the S&P 500, Dow, and Nasdaq closed lower, dragging down SPY, DIA, and QQQ, while surging Treasury yields pressured TLT and GLD. Small caps (IWM) were a rare bright spot, managing a slight gain despite the broader defensive rotation.\", \"catalysts_today\": [\"Markets closed for the weekend (Labor Day holiday on Monday)\"], \"vol_context\": \"Volatility was slightly bid during Friday's session, with the VIX ticking up to 14.49 as interest rate anxiety returned.\", \"confidence\": 0.95, \"grounded\": true, \"sources\": [\"thestreet.com\", \"fool.com\"], \"cached\": false}"
+    },
+    {
       "id": 91,
       "ts": "2026-09-05T05:18:00.311007+00:00",
       "level": "error",
@@ -4929,28 +4953,20 @@
       "kind": "preflight",
       "message": "journal write check",
       "data": null
-    },
-    {
-      "id": 53,
-      "ts": "2026-09-03T20:36:13.527001+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=test3 variant=income_only mode=LIVE PAPER",
-      "data": null
-    },
-    {
-      "id": 52,
-      "ts": "2026-09-03T20:28:25.842488+00:00",
-      "level": "info",
-      "kind": "preflight",
-      "message": "journal write check",
-      "data": null
     }
   ],
   "session_plan": {
-    "generated_at": "2026-09-05T04:07:54.015456+00:00",
+    "generated_at": "2026-09-05T05:23:01.805796+00:00",
     "equity": 99300.89,
     "regimes": {
+      "SPY": {
+        "spot": 769.92,
+        "trend": "up",
+        "bias": "bullish",
+        "realized_vol": 0.0813,
+        "atm_iv": 0.0699,
+        "vol_premium": -0.0114
+      },
       "QQQ": {
         "spot": 717.87,
         "trend": "up",
@@ -5017,6 +5033,18 @@
       }
     },
     "candidates": [
+      {
+        "symbol": "SPY",
+        "style": "put_credit_spread",
+        "sleeve": "core",
+        "expiry": "2026-09-08",
+        "net_price": 0.21,
+        "width": 1.0,
+        "verdict": "would refuse",
+        "qty": 0,
+        "max_loss": 79.0,
+        "reason": "G5 pricing: credit 21.0% of width is below the 22% floor"
+      },
       {
         "symbol": "QQQ",
         "style": "put_credit_spread",
@@ -5133,24 +5161,23 @@
       }
     ],
     "brief": {
-      "session_tone": "risk_off",
-      "summary": "US equity markets closed lower on Friday, September 4, after a surprisingly strong August jobs report (162,000 jobs added vs. 55,000 expected) reignited fears of a September Fed rate hike. The robust data sent Treasury yields surging, pressuring major indices (SPY, QQQ, DIA) and reversing Thursday's relief rally, though small-caps (IWM) managed a slight gain. Rate-sensitive assets like Gold (GLD) and long-duration bonds (TLT) sold off on the hawkish repricing, while defensive sectors outperformed.",
+      "session_tone": "quiet",
+      "summary": "US equity markets are closed today for the weekend ahead of the Labor Day holiday. During Friday's session, a risk-off tone prevailed as a surprisingly strong August jobs report (162,000 jobs added vs. 55,000 expected) reignited fears of a September Fed rate hike. Major indices like the S&P 500, Dow, and Nasdaq closed lower, dragging down SPY, DIA, and QQQ, while surging Treasury yields pressured TLT and GLD. Small caps (IWM) were a rare bright spot, managing a slight gain despite the broader defensive rotation.",
       "catalysts_today": [
-        "August Nonfarm Payrolls (162K vs 55K expected)",
-        "August Unemployment Rate (Unchanged at 4.1%)"
+        "Markets closed for the weekend (Labor Day holiday on Monday)"
       ],
-      "vol_context": "Volatility saw a slight bid with the VIX ticking up 1.19% to 14.49 as rate hike anxieties returned.",
+      "vol_context": "Volatility was slightly bid during Friday's session, with the VIX ticking up to 14.49 as interest rate anxiety returned.",
       "confidence": 0.95,
       "grounded": true,
       "sources": [
-        "\"US stock market\" September 4 2026",
-        "stock market close September 4 2026"
+        "thestreet.com",
+        "fool.com"
       ],
       "cached": false
     },
     "note": "Produced while the market was closed. Quotes are last known rather than live, so these are intentions to re-verify at the open, not orders.",
-    "summary": "0 of 12 structures would clear the gates at the next open",
-    "ts": "2026-09-05T04:18:16.209987+00:00"
+    "summary": "0 of 13 structures would clear the gates at the next open",
+    "ts": "2026-09-05T05:23:47.919461+00:00"
   },
   "google": {
     "connected": [],
