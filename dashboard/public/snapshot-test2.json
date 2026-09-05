@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T04:06:38.482766+00:00",
+  "generated_at": "2026-09-05T04:11:56.648825+00:00",
   "profile": "test2",
   "variant": "convex_tilt",
   "dry_run": false,
@@ -25,12 +25,12 @@
     "avg_win": null,
     "avg_loss": -448.0,
     "profit_factor": 0.0,
-    "max_drawdown_pct": 0.0057,
+    "max_drawdown_pct": 0.0092,
     "equity_start": 99999.9,
-    "equity_latest": 100575.16,
-    "total_pnl": 575.26,
+    "equity_latest": 100221.06,
+    "total_pnl": 221.16,
     "realized_in_journal": -448.0,
-    "return_pct": 0.0058,
+    "return_pct": 0.0022,
     "by_sleeve": {
       "convex": {
         "n": 3,
@@ -78,8 +78,8 @@
       }
     },
     "open_pnl": -530.5,
-    "realized_implied": 1105.76,
-    "realized_unrecorded": 1553.76
+    "realized_implied": 751.66,
+    "realized_unrecorded": 1199.66
   },
   "live": {
     "marks": [
@@ -167,13 +167,13 @@
     "ok": true
   },
   "budget": {
-    "equity": 100575.16,
+    "equity": 100221.06,
     "sleeves": [
       {
         "sleeve": "core",
         "used": 0.0,
         "cap_pct": 0.03,
-        "cap": 3017.25,
+        "cap": 3006.63,
         "used_pct_of_equity": 0.0,
         "utilisation": 0.0
       },
@@ -181,9 +181,9 @@
         "sleeve": "convex",
         "used": 1895.0,
         "cap_pct": 0.025,
-        "cap": 2514.38,
-        "used_pct_of_equity": 0.01884,
-        "utilisation": 0.7537
+        "cap": 2505.53,
+        "used_pct_of_equity": 0.01891,
+        "utilisation": 0.7563
       },
       {
         "sleeve": "carry",
@@ -195,9 +195,9 @@
       }
     ],
     "total_used": 1895.0,
-    "total_cap": 8046.01,
+    "total_cap": 8017.68,
     "total_cap_pct": 0.08,
-    "total_utilisation": 0.2355,
+    "total_utilisation": 0.2364,
     "daily_kill_pct": 0.04,
     "drawdown_kill_pct": 0.1,
     "max_new_trades_per_day": 7,
@@ -3587,6 +3587,14 @@
       "buying_power": 397552.64,
       "open_risk": 1467.0,
       "day_pnl": -218.5
+    },
+    {
+      "ts": "2026-09-05T04:08:01.294179+00:00",
+      "equity": 100221.06,
+      "cash": 98986.06,
+      "buying_power": 395944.24,
+      "open_risk": 1894.9999999999998,
+      "day_pnl": -572.6000000000058
     }
   ],
   "recent_decisions": [
