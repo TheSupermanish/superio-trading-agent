@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T01:31:50.440009+00:00",
+  "generated_at": "2026-09-05T04:06:42.938308+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -57,13 +57,47 @@
         "wins": 1
       }
     },
-    "open_pnl": 0,
-    "realized_implied": -699.11,
-    "realized_unrecorded": 143.89
+    "open_pnl": -56.0,
+    "realized_implied": -643.11,
+    "realized_unrecorded": 199.89
   },
   "live": {
-    "marks": [],
-    "spots": {},
+    "marks": [
+      {
+        "structure_id": 10,
+        "underlying": "SPY",
+        "kind": "iron_condor",
+        "sleeve": "core",
+        "qty": 7,
+        "entry_price": 0.7,
+        "current_price": 0.78,
+        "unrealized_pnl": -56.0,
+        "pct_of_max_gain": -0.1143,
+        "dte": 4,
+        "action": "hold",
+        "rationale": "captured -11% of credit, 4 days to expiry",
+        "max_loss": 938.0,
+        "max_gain": 462.0,
+        "spot": 769.92,
+        "short_strike": 769.0,
+        "distance_pct": -0.0012,
+        "tp_progress": 0.0,
+        "sl_progress": 0.1143,
+        "tp_basis": "55% of credit",
+        "sl_basis": "2.0x credit"
+      }
+    ],
+    "spots": {
+      "SPY": 769.92,
+      "QQQ": 717.87,
+      "IWM": 295.75,
+      "DIA": 532.66,
+      "XLK": 187.12,
+      "XLF": 58.31,
+      "SMH": 565.82,
+      "GLD": 406.78,
+      "TLT": 82.22
+    },
     "ok": true
   },
   "budget": {
@@ -4569,6 +4603,14 @@
   ],
   "recent_events": [
     {
+      "id": 88,
+      "ts": "2026-09-05T03:27:38.666545+00:00",
+      "level": "error",
+      "kind": "pass_error",
+      "message": "alpaca clock exited 1: {'code': 0, 'error': 'could not reach https://paper-api.alpaca.markets/v2/clock: Get \"https://paper-api.alpaca.markets/v2/clock\": dial tcp: lookup paper-api.alpaca.markets: no such host', 'hint': 'check your internet connection and base URL. Run `alpaca doctor` to verify configuration', 'status': 0}",
+      "data": null
+    },
+    {
       "id": 87,
       "ts": "2026-09-04T21:27:33.484765+00:00",
       "level": "error",
@@ -4879,14 +4921,6 @@
       "kind": "market_brief",
       "message": "US equity markets are rallying, with the S&P 500, Dow, and Nasdaq all posting significant gains. [36, 40, 42] The positive sentiment is primarily driven by a drop in Treasury yields following comments from Federal Reserve Governor Christopher Waller, who indicated he would support holding interest rates steady if inflation data continues to show improvement. [37, 44] This has overshadowed concerns",
       "data": "{\"session_tone\": \"risk_on\", \"summary\": \"US equity markets are rallying, with the S&P 500, Dow, and Nasdaq all posting significant gains. [36, 40, 42] The positive sentiment is primarily driven by a drop in Treasury yields following comments from Federal Reserve Governor Christopher Waller, who indicated he would support holding interest rates steady if inflation data continues to show improvement. [37, 44] This has overshadowed concerns about rising oil prices stemming from escalating U.S.-Iran tensions and has led to a rotation into growth-oriented stocks. [36, 40]\", \"catalysts_today\": [\"Speech by Federal Reserve Governor Christopher Waller suggesting a potential pause in rate hikes. [37, 50]\", \"U.S. weekly jobless claims reported at 206,000, remaining low and indicating a stable labor market. [43]\", \"Release of the U.S. trade balance for July and revised Q2 productivity data. [51, 53]\", \"Ongoing geopolitical tensions in the Middle East, with Iran targeting U.S. allies. [37, 40]\", \"Corporate news, including Nvidia's agreement to acquire Hugging Face for $13 billion and strong earnings from Snowflake. [36, 40, 44]\"], \"vol_context\": \"Volatility is being sold, with the VIX index trading near 15, down from the previous day's close as equity markets rally. [39, 43, 47]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US equity markets news today September 3 2026\", \"US stock market today\", \"SPY QQQ IWM trading today September 3 2026\", \"market tone today September 3 2026 risk-on risk-off\", \"economic data releases today September 3 2026\", \"Federal Reserve speakers today September 3 2026\"], \"cached\": false}"
-    },
-    {
-      "id": 48,
-      "ts": "2026-09-03T18:49:11.937881+00:00",
-      "level": "info",
-      "kind": "market_brief",
-      "message": "U.S. equity markets are trading higher, with a risk-on sentiment fueled by a drop in Treasury yields. [1, 2] This follows comments from Federal Reserve Governor Christopher Waller, who indicated he would support holding interest rates steady if upcoming inflation data shows continued improvement. [1, 16] Despite this, rising oil prices, driven by escalating U.S.-Iran tensions, are adding an inflat",
-      "data": "{\"session_tone\": \"risk_on\", \"summary\": \"U.S. equity markets are trading higher, with a risk-on sentiment fueled by a drop in Treasury yields. [1, 2] This follows comments from Federal Reserve Governor Christopher Waller, who indicated he would support holding interest rates steady if upcoming inflation data shows continued improvement. [1, 16] Despite this, rising oil prices, driven by escalating U.S.-Iran tensions, are adding an inflationary concern to the market. [1, 2] Major indices like the S&P 500 (SPY), Nasdaq 100 (QQQ), and Russell 2000 (IWM) are all in positive territory, led by gains in technology and other growth-oriented sectors. [1, 4]\", \"catalysts_today\": [\"Speech by Federal Reserve Governor Christopher Waller on the economic outlook. [15, 16]\", \"Release of U.S. Trade Balance for July, which showed a wider-than-expected deficit. [7, 14]\", \"Release of weekly initial jobless claims, which were slightly higher than expected but remain low. [8]\", \"Release of Challenger Job-Cut report for August. [1, 8]\", \"Release of revised Q2 Productivity and Costs data. [13]\", \"Release of ISM Non-Manufacturing Composite for August. [7]\", \"Ongoing U.S.-Iran military conflict impacting oil prices. [1, 2, 12]\"], \"vol_context\": \"Implied volatility is lower, with the VIX trading near 15, suggesting reduced fear in the market despite the geopolitical backdrop. [8, 12]\", \"confidence\": 0.9, \"grounded\": true, \"sources\": [\"US equity market news September 3 2026\", \"SPY QQQ IWM trading today September 3 2026\", \"US stock market tone today September 3 2026\", \"economic data releases September 3 2026\", \"Federal Reserve speakers today September 3 2026\", \"VIX today September 3 2026\"], \"cached\": false}"
     }
   ],
   "session_plan": {

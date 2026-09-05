@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T01:31:46.993642+00:00",
+  "generated_at": "2026-09-05T04:06:33.872362+00:00",
   "profile": "main",
   "variant": "barbell",
   "dry_run": false,
@@ -27,10 +27,10 @@
     "profit_factor": 0.133,
     "max_drawdown_pct": 0.0069,
     "equity_start": 100000.0,
-    "equity_latest": 101408.07,
-    "total_pnl": 1408.07,
+    "equity_latest": 101497.87,
+    "total_pnl": 1497.87,
     "realized_in_journal": -468.0,
-    "return_pct": 0.0141,
+    "return_pct": 0.015,
     "by_sleeve": {
       "core": {
         "n": 4,
@@ -67,23 +67,103 @@
         "wins": 1
       }
     },
-    "open_pnl": 0,
-    "realized_implied": 1408.07,
-    "realized_unrecorded": 1876.07
+    "open_pnl": 1.9,
+    "realized_implied": 1495.97,
+    "realized_unrecorded": 1963.97
   },
   "live": {
-    "marks": [],
-    "spots": {},
+    "marks": [
+      {
+        "structure_id": 16,
+        "underlying": "SPY",
+        "kind": "risk_reversal",
+        "sleeve": "carry",
+        "qty": 1,
+        "entry_price": -2.84,
+        "current_price": -2.68,
+        "unrealized_pnl": -15.5,
+        "pct_of_max_gain": -0.0091,
+        "dte": 25,
+        "action": "hold",
+        "rationale": "-3% of risk, -1% of max gain, 25 days to expiry",
+        "max_loss": 593.0,
+        "max_gain": 1707.0,
+        "spot": 769.92,
+        "short_strike": 756.0,
+        "distance_pct": -0.0181,
+        "tp_progress": 0.0,
+        "sl_progress": 0.0218,
+        "tp_basis": "60% of max gain",
+        "sl_basis": "1.2x risk"
+      },
+      {
+        "structure_id": 17,
+        "underlying": "IWM",
+        "kind": "risk_reversal",
+        "sleeve": "carry",
+        "qty": 2,
+        "entry_price": -1.55,
+        "current_price": -1.66,
+        "unrealized_pnl": 22.9,
+        "pct_of_max_gain": 0.0086,
+        "dte": 27,
+        "action": "hold",
+        "rationale": "+2% of risk, +1% of max gain, 27 days to expiry",
+        "max_loss": 923.9999999999999,
+        "max_gain": 2676.0,
+        "spot": 295.75,
+        "short_strike": 288.0,
+        "distance_pct": -0.0262,
+        "tp_progress": 0.0143,
+        "sl_progress": 0.0,
+        "tp_basis": "60% of max gain",
+        "sl_basis": "1.2x risk"
+      },
+      {
+        "structure_id": 20,
+        "underlying": "QQQ",
+        "kind": "risk_reversal",
+        "sleeve": "carry",
+        "qty": 1,
+        "entry_price": -3.76,
+        "current_price": -3.7,
+        "unrealized_pnl": -5.5,
+        "pct_of_max_gain": -0.0034,
+        "dte": 25,
+        "action": "hold",
+        "rationale": "-1% of risk, -0% of max gain, 25 days to expiry",
+        "max_loss": 705.0000000000001,
+        "max_gain": 1595.0,
+        "spot": 717.87,
+        "short_strike": 701.0,
+        "distance_pct": -0.0235,
+        "tp_progress": 0.0,
+        "sl_progress": 0.0065,
+        "tp_basis": "60% of max gain",
+        "sl_basis": "1.2x risk"
+      }
+    ],
+    "spots": {
+      "SPY": 769.92,
+      "QQQ": 717.87,
+      "IWM": 295.75,
+      "DIA": 532.66,
+      "XLK": 187.12,
+      "XLF": 58.31,
+      "SMH": 565.82,
+      "GLD": 406.78,
+      "TLT": 82.22
+    },
     "ok": true
   },
   "budget": {
-    "equity": 101408.07,
+    "equity": 101497.87,
     "sleeves": [
       {
         "sleeve": "core",
         "used": 0.0,
         "cap_pct": 0.03,
-        "cap": 3042.24,
+        "cap": 3044.94,
         "used_pct_of_equity": 0.0,
         "utilisation": 0.0
       },
@@ -91,23 +171,23 @@
         "sleeve": "convex",
         "used": 1692.0,
         "cap_pct": 0.03,
-        "cap": 3042.24,
-        "used_pct_of_equity": 0.01669,
-        "utilisation": 0.5562
+        "cap": 3044.94,
+        "used_pct_of_equity": 0.01667,
+        "utilisation": 0.5557
       },
       {
         "sleeve": "carry",
         "used": 2222.0,
         "cap_pct": 0.04,
-        "cap": 4056.32,
-        "used_pct_of_equity": 0.02191,
-        "utilisation": 0.5478
+        "cap": 4059.91,
+        "used_pct_of_equity": 0.02189,
+        "utilisation": 0.5473
       }
     ],
     "total_used": 3914.0,
-    "total_cap": 8112.65,
+    "total_cap": 8119.83,
     "total_cap_pct": 0.08,
-    "total_utilisation": 0.4825,
+    "total_utilisation": 0.482,
     "daily_kill_pct": 0.04,
     "drawdown_kill_pct": 0.1,
     "max_new_trades_per_day": 7,
@@ -4839,6 +4919,14 @@
       "buying_power": 390700.28,
       "open_risk": 3914.0,
       "day_pnl": -77.0
+    },
+    {
+      "ts": "2026-09-05T03:55:49.005550+00:00",
+      "equity": 101497.87,
+      "cash": 99506.87,
+      "buying_power": 393227.48,
+      "open_risk": 3914.0,
+      "day_pnl": 12.799999999988358
     }
   ],
   "recent_decisions": [
