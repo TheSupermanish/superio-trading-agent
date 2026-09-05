@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T14:07:18.110565+00:00",
+  "generated_at": "2026-09-05T04:15:37.085915+00:00",
   "bars": {
     "SPY": [
       {
@@ -958,9 +958,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 772.035,
         "high": 772.85,
-        "low": 771.83,
-        "close": 772.095,
-        "volume": 159964.0
+        "low": 769.0,
+        "close": 770.18,
+        "volume": 1009491.0
       }
     ],
     "QQQ": [
@@ -1920,9 +1920,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 719.16,
         "high": 721.84,
-        "low": 718.575,
-        "close": 721.18,
-        "volume": 67587.0
+        "low": 716.605,
+        "close": 719.1,
+        "volume": 552942.0
       }
     ],
     "IWM": [
@@ -2881,10 +2881,10 @@
       {
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 293.68,
-        "high": 295.205,
+        "high": 296.18,
         "low": 293.58,
-        "close": 294.91,
-        "volume": 239354.0
+        "close": 295.94,
+        "volume": 843429.0
       }
     ],
     "DIA": [
@@ -3844,9 +3844,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 535.12,
         "high": 536.33,
-        "low": 534.65,
-        "close": 534.71,
-        "volume": 4388.0
+        "low": 533.03,
+        "close": 534.04,
+        "volume": 34476.0
       }
     ],
     "XLK": [
@@ -4807,8 +4807,8 @@
         "open": 187.44,
         "high": 188.18,
         "low": 186.47,
-        "close": 187.85,
-        "volume": 55802.0
+        "close": 187.3,
+        "volume": 301701.0
       }
     ],
     "XLF": [
@@ -5768,9 +5768,9 @@
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 58.04,
         "high": 58.37,
-        "low": 57.965,
-        "close": 57.98,
-        "volume": 255804.0
+        "low": 57.92,
+        "close": 58.1,
+        "volume": 1870693.0
       }
     ],
     "SMH": [
@@ -6731,8 +6731,8 @@
         "open": 560.71,
         "high": 569.38,
         "low": 558.05,
-        "close": 567.93,
-        "volume": 96991.0
+        "close": 567.05,
+        "volume": 419336.0
       }
     ],
     "GLD": [
@@ -7691,10 +7691,10 @@
       {
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 404.69,
-        "high": 406.58,
+        "high": 407.985,
         "low": 404.175,
-        "close": 405.09,
-        "volume": 19830.0
+        "close": 406.78,
+        "volume": 121841.0
       }
     ],
     "TLT": [
@@ -8653,10 +8653,10 @@
       {
         "ts": "2026-09-04T04:00:00+00:00",
         "open": 82.29,
-        "high": 82.43,
-        "low": 82.27,
-        "close": 82.29,
-        "volume": 150953.0
+        "high": 82.49,
+        "low": 82.18,
+        "close": 82.22,
+        "volume": 883551.0
       }
     ]
   },
@@ -9519,6 +9519,207 @@
         "target_value": -60.0
       },
       "held_hours": 21.73
+    },
+    {
+      "id": 16,
+      "opened_at": "2026-09-04T14:07:12.740240+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "QQQ",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "QQQ260909C00724000",
+          "side": "buy",
+          "strike": 724.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 2.515,
+          "bid": 2.5,
+          "ask": 2.53,
+          "delta": 0.4009,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "QQQ260909C00734000",
+          "side": "sell",
+          "strike": 734.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 0.285,
+          "bid": 0.28,
+          "ask": 0.29,
+          "delta": 0.0756,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 2,
+      "net_price": -2.21,
+      "max_loss": 450.0,
+      "max_gain": 1550.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-5c5c90978716",
+      "thesis": "Pay 2.25 for the 724/734 call spread expiring 2026-09-09: 3.4x payoff if the move continues. The critical NFP report has passed, clearing the way for directional trades. Implied volatility is trading at a discount to realized volatility across major indices, making options cheap. With SPY and QQQ both in bullish trends, buying call debit spreads offers a favorable risk-reward profile to capture further upside.",
+      "net_price_mid": -2.2299999999999995,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          734.0
+        ],
+        "long_strikes": [
+          724.0
+        ],
+        "min_strike": 724.0,
+        "max_strike": 734.0,
+        "breakeven": 731.79
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 331.5
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -331.5
+      },
+      "held_hours": null
+    },
+    {
+      "id": 17,
+      "opened_at": "2026-09-04T14:07:13.836789+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "SPY",
+      "kind": "call_debit_spread",
+      "legs": [
+        {
+          "symbol": "SPY260909C00774000",
+          "side": "buy",
+          "strike": 774.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 1.8,
+          "bid": 1.79,
+          "ask": 1.81,
+          "delta": 0.4021,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "SPY260909C00782000",
+          "side": "sell",
+          "strike": 782.0,
+          "expiry": "2026-09-09",
+          "is_call": true,
+          "mid": 0.175,
+          "bid": 0.17,
+          "ask": 0.18,
+          "delta": 0.0644,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 3,
+      "net_price": -1.61,
+      "max_loss": 492.0,
+      "max_gain": 1908.0,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-a80ae01fcf92",
+      "thesis": "Pay 1.64 for the 774/782 call spread expiring 2026-09-09: 3.9x payoff if the move continues. The critical NFP report has passed, clearing the way for directional trades. Implied volatility is trading at a discount to realized volatility across major indices, making options cheap. With SPY and QQQ both in bullish trends, buying call debit spreads offers a favorable risk-reward profile to capture further upside.",
+      "net_price_mid": -1.625,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          782.0
+        ],
+        "long_strikes": [
+          774.0
+        ],
+        "min_strike": 774.0,
+        "max_strike": 782.0,
+        "breakeven": 780.39
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 362.25
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -362.25
+      },
+      "held_hours": null
+    },
+    {
+      "id": 18,
+      "opened_at": "2026-09-04T14:14:20.429805+00:00",
+      "closed_at": null,
+      "sleeve": "convex",
+      "underlying": "IWM",
+      "kind": "put_debit_spread",
+      "legs": [
+        {
+          "symbol": "IWM260909P00294000",
+          "side": "buy",
+          "strike": 294.0,
+          "expiry": "2026-09-09",
+          "is_call": false,
+          "mid": 1.1,
+          "bid": 1.07,
+          "ask": 1.13,
+          "delta": -0.3962,
+          "ratio_qty": 1
+        },
+        {
+          "symbol": "IWM260909P00284000",
+          "side": "sell",
+          "strike": 284.0,
+          "expiry": "2026-09-09",
+          "is_call": false,
+          "mid": 0.085,
+          "bid": 0.08,
+          "ask": 0.09,
+          "delta": -0.0345,
+          "ratio_qty": 1
+        }
+      ],
+      "qty": 5,
+      "net_price": -0.96,
+      "max_loss": 524.9999999999999,
+      "max_gain": 4474.999999999999,
+      "status": "open",
+      "realized_pnl": null,
+      "close_reason": null,
+      "client_order_id": "superio-test2-5ba1a14b6e99",
+      "thesis": "Pay 1.05 for the 294/284 put spread expiring 2026-09-09: 8.5x payoff if the move continues. The NFP report has passed, clearing the major catalyst risk for the day. IWM options are cheap relative to realized volatility (implied at 9.5% vs realized at 12.0%), favoring long convexity. The put debit spread offers an excellent payoff ratio of 8.52 to capture potential downside if rate expectations shift negatively.",
+      "net_price_mid": -1.0150000000000001,
+      "gates": "",
+      "levels": {
+        "short_strikes": [
+          284.0
+        ],
+        "long_strikes": [
+          294.0
+        ],
+        "min_strike": 284.0,
+        "max_strike": 294.0,
+        "breakeven": 284.96
+      },
+      "take_profit": {
+        "basis": "gain on the debit paid",
+        "target_pct": 0.75,
+        "target_value": 360.0
+      },
+      "stop": {
+        "basis": "share of the debit remaining",
+        "target_pct": 0.25,
+        "target_value": -360.0
+      },
+      "held_hours": null
     }
   ],
   "exit_rules": {
