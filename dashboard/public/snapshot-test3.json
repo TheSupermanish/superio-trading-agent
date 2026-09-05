@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T04:33:14.646343+00:00",
+  "generated_at": "2026-09-05T05:22:12.835354+00:00",
   "profile": "test3",
   "variant": "income_only",
   "dry_run": false,
@@ -4627,6 +4627,14 @@
   ],
   "recent_events": [
     {
+      "id": 91,
+      "ts": "2026-09-05T05:18:00.311007+00:00",
+      "level": "error",
+      "kind": "pass_error",
+      "message": "alpaca clock exited 1: {'code': 0, 'error': 'could not reach https://paper-api.alpaca.markets/v2/clock: Get \"https://paper-api.alpaca.markets/v2/clock\": dial tcp: lookup paper-api.alpaca.markets: no such host', 'hint': 'check your internet connection and base URL. Run `alpaca doctor` to verify configuration', 'status': 0}",
+      "data": null
+    },
+    {
       "id": 90,
       "ts": "2026-09-05T04:18:16.209987+00:00",
       "level": "info",
@@ -4936,14 +4944,6 @@
       "level": "info",
       "kind": "preflight",
       "message": "journal write check",
-      "data": null
-    },
-    {
-      "id": 51,
-      "ts": "2026-09-03T20:28:22.471842+00:00",
-      "level": "info",
-      "kind": "loop_start",
-      "message": "profile=test3 variant=income_only mode=LIVE PAPER",
       "data": null
     }
   ],
