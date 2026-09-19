@@ -1,0 +1,209 @@
+{"kind":"deck","id":"pr/kdelam","name":"Deck"}
+{"kind":"layout","layoutId":"2e160676-9275-4e96-a615-00f84cb12174","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"b4962df4-f958-4d03-82a1-68b8edc1b6af","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/re5x0g","slide":1,"title":"ALPACA AI TRADING AGENTS HACKATHON","textShapes":7}
+{"kind":"shape","id":"sh/xc3ud8v2","slide":1,"bbox":[0,0,1280,7]}
+{"kind":"shape","id":"sh/a9cbidcb","slide":1,"bbox":[66,194,96,5]}
+{"kind":"textbox","id":"sh/balcbidw","slide":1,"text":"ALPACA AI TRADING AGENTS HACKATHON","textPreview":"ALPACA AI TRADING AGENTS HACKATHON","textChars":34,"textLines":1,"bbox":[66,60,690,28]}
+{"kind":"textbox","id":"sh/o7utg3u5","slide":1,"text":"alphaca","textPreview":"alphaca","textChars":7,"textLines":1,"bbox":[66,102,310,92]}
+{"kind":"textbox","id":"sh/983u98vq","slide":1,"text":"Autonomous options trading with deterministic risk control","textPreview":"Autonomous options trading with deterministic risk control","textChars":58,"textLines":1,"bbox":[66,228,790,92]}
+{"kind":"textbox","id":"sh/m5sbetwz","slide":1,"text":"Gemini reads the market and selects an approved structure. Code controls every leg, size, limit, and exit.","textPreview":"Gemini reads the market and selects an approved structure. Code controls every leg, size, limit, and exit.","textChars":106,"textLines":1,"bbox":[66,332,760,92]}
+{"kind":"shape","id":"sh/03atc3e9","slide":1,"bbox":[915,390,250,3]}
+{"kind":"textbox","id":"sh/14ju5ovu","slide":1,"text":"PAPER TRADING","textPreview":"PAPER TRADING","textChars":13,"textLines":1,"bbox":[915,406,250,24]}
+{"kind":"textbox","id":"sh/h4za10na","slide":1,"text":"Nine ETFs across three independently managed paper accounts","textPreview":"Nine ETFs across three independently managed paper accounts","textChars":59,"textLines":1,"bbox":[66,622,980,30]}
+{"kind":"textbox","id":"sh/w3q98v6p","slide":1,"text":"SEP 2026","textPreview":"SEP 2026","textChars":8,"textLines":1,"bbox":[1110,622,90,30]}
+{"kind":"image","id":"im/mxcfidc7","slide":1,"name":"","geometry":"ellipse","alt":"Alphaca mascot wearing sunglasses","bbox":[915,118,250,250]}
+{"kind":"notes","id":"nt/re5x0g","slide":1,"text":"Project sources: README.md, engine/config.py, and dashboard/public/snapshot*.json. This project uses Alpaca paper accounts only."}
+{"kind":"slide","id":"sl/iins1d","slide":2,"title":"PROBLEM","textShapes":13}
+{"kind":"shape","id":"sh/2l4jqhwz","slide":2,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/pov2lwvq","slide":2,"text":"PROBLEM","textPreview":"PROBLEM","textChars":7,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/onm1sre5","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/fytkfmd8","slide":2,"text":"Models can read markets. Limits need code.","textPreview":"Models can read markets. Limits need code.","textChars":42,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/exkjmhw3","slide":2,"text":"A useful trading agent must reason under uncertainty without gaining authority over the account's safety boundaries.","textPreview":"A useful trading agent must reason under uncertainty without gaining authority over the account's safety boundaries.","textChars":116,"textLines":1,"bbox":[66,158,1100,54]}
+{"kind":"shape","id":"sh/1kv2hwve","slide":2,"bbox":[66,245,530,294]}
+{"kind":"textbox","id":"sh/0jm1oret","slide":2,"text":"AI IS GOOD AT","textPreview":"AI IS GOOD AT","textChars":13,"textLines":1,"bbox":[96,276,440,22]}
+{"kind":"textbox","id":"sh/rutkb2dc","slide":2,"text":"Reading regime and volatility","textPreview":"Reading regime and volatility","textChars":29,"textLines":1,"bbox":[96,315,430,36]}
+{"kind":"textbox","id":"sh/qtkjixwr","slide":2,"text":"Interpreting news and catalysts","textPreview":"Interpreting news and catalysts","textChars":31,"textLines":1,"bbox":[96,372,430,36]}
+{"kind":"textbox","id":"sh/4n6pwnmt","slide":2,"text":"Comparing strategy tradeoffs","textPreview":"Comparing strategy tradeoffs","textChars":28,"textLines":1,"bbox":[96,429,430,36]}
+{"kind":"shape","id":"sh/pof65s3e","slide":2,"bbox":[626,245,530,294]}
+{"kind":"textbox","id":"sh/2l47ud43","slide":2,"text":"CODE MUST OWN","textPreview":"CODE MUST OWN","textChars":13,"textLines":1,"bbox":[656,276,440,22]}
+{"kind":"textbox","id":"sh/3mdo3il8","slide":2,"text":"Position sizing and maximum loss","textPreview":"Position sizing and maximum loss","textChars":32,"textLines":1,"bbox":[656,315,430,36]}
+{"kind":"textbox","id":"sh/gzmps3mx","slide":2,"text":"Liquidity and event constraints","textPreview":"Liquidity and event constraints","textChars":31,"textLines":1,"bbox":[656,372,430,36]}
+{"kind":"textbox","id":"sh/h0v6183i","slide":2,"text":"Orders, exits, and kill switches","textPreview":"Orders, exits, and kill switches","textChars":32,"textLines":1,"bbox":[656,429,430,36]}
+{"kind":"textbox","id":"sh/ux47qd4r","slide":2,"text":"Alphaca separates judgment from authority.","textPreview":"Alphaca separates judgment from authority.","textChars":42,"textLines":1,"bbox":[66,582,1090,46]}
+{"kind":"notes","id":"nt/iins1d","slide":2,"text":"Design rationale and system thesis are documented in README.md and docs/WRITEUP.md."}
+{"kind":"slide","id":"sl/9u60di","slide":3,"title":"ARCHITECTURE","textShapes":21}
+{"kind":"shape","id":"sh/7udk7ax8","slide":3,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/8vml0fet","slide":3,"text":"ARCHITECTURE","textPreview":"ARCHITECTURE","textChars":12,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/9wvmtkfe","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/y5k3ulwr","slide":3,"text":"Six roles turn market data into a managed position","textPreview":"Six roles turn market data into a managed position","textChars":50,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/z6tk3qxc","slide":3,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[72,170,44,42]}
+{"kind":"shape","id":"sh/k72lwveh","slide":3,"bbox":[124,190,66,2]}
+{"kind":"textbox","id":"sh/l8v250f2","slide":3,"text":"Scout","textPreview":"Scout","textChars":5,"textLines":1,"bbox":[212,168,205,44]}
+{"kind":"textbox","id":"sh/i1o36pwv","slide":3,"text":"Measures trend, realized volatility, implied volatility, and their spread","textPreview":"Measures trend, realized volatility, implied volatility, and their spread","textChars":73,"textLines":1,"bbox":[430,168,720,48]}
+{"kind":"textbox","id":"sh/j2x4zuxg","slide":3,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[72,244,44,42]}
+{"kind":"shape","id":"sh/7q58nehk","slide":3,"bbox":[124,264,66,2]}
+{"kind":"textbox","id":"sh/6pw7etgz","slide":3,"text":"Analyst","textPreview":"Analyst","textChars":7,"textLines":1,"bbox":[212,242,205,44]}
+{"kind":"textbox","id":"sh/tsnqpozq","slide":3,"text":"Uses Gemini with search grounding to capture news and scheduled catalysts","textPreview":"Uses Gemini with search grounding to capture news and scheduled catalysts","textChars":73,"textLines":1,"bbox":[430,242,720,48]}
+{"kind":"textbox","id":"sh/srepgjy5","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[72,318,44,42]}
+{"kind":"shape","id":"sh/fe58ryhg","slide":3,"bbox":[124,338,66,2]}
+{"kind":"textbox","id":"sh/utw7itgb","slide":3,"text":"Strategist","textPreview":"Strategist","textChars":10,"textLines":1,"bbox":[212,316,205,44]}
+{"kind":"textbox","id":"sh/hg7qt8zm","slide":3,"text":"Compares approved structures and returns a proposal reference","textPreview":"Compares approved structures and returns a proposal reference","textChars":61,"textLines":1,"bbox":[430,316,720,48]}
+{"kind":"textbox","id":"sh/gfepk3y1","slide":3,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[72,392,44,42]}
+{"kind":"shape","id":"sh/3ip8vyhs","slide":3,"bbox":[124,412,66,2]}
+{"kind":"textbox","id":"sh/2hg7mdg7","slide":3,"text":"Risk officer","textPreview":"Risk officer","textChars":12,"textLines":1,"bbox":[212,390,205,44]}
+{"kind":"textbox","id":"sh/ypkja14r","slide":3,"text":"Applies deterministic gates and computes a safe quantity","textPreview":"Applies deterministic gates and computes a safe quantity","textChars":56,"textLines":1,"bbox":[430,390,720,48]}
+{"kind":"textbox","id":"sh/zqtk365c","slide":3,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[72,466,44,42]}
+{"kind":"shape","id":"sh/0r21cbmx","slide":3,"bbox":[124,486,66,2]}
+{"kind":"textbox","id":"sh/lsv25gn2","slide":3,"text":"Executor","textPreview":"Executor","textChars":8,"textLines":1,"bbox":[212,464,205,44]}
+{"kind":"textbox","id":"sh/qlkj614f","slide":3,"text":"Places reproducible multi-leg orders through the Alpaca CLI","textPreview":"Places reproducible multi-leg orders through the Alpaca CLI","textChars":59,"textLines":1,"bbox":[430,464,720,48]}
+{"kind":"textbox","id":"sh/bmt0zm50","slide":3,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[72,540,44,42]}
+{"kind":"shape","id":"sh/cn218rml","slide":3,"bbox":[124,560,66,2]}
+{"kind":"textbox","id":"sh/dobi1wn6","slide":3,"text":"Manager","textPreview":"Manager","textChars":7,"textLines":1,"bbox":[212,538,205,44]}
+{"kind":"textbox","id":"sh/ah4jil4z","slide":3,"text":"Monitors fills, profit targets, stops, and expiration safety","textPreview":"Monitors fills, profit targets, stops, and expiration safety","textChars":60,"textLines":1,"bbox":[430,538,720,48]}
+{"kind":"notes","id":"nt/9u60di","slide":3,"text":"Architecture source: README.md. Model routing source: engine/llm.py. Execution and management source: engine/executor.py and engine/manager.py."}
+{"kind":"slide","id":"sl/poemol","slide":4,"title":"CONTROL MODEL","textShapes":11}
+{"kind":"shape","id":"sh/eh8ze9g7","slide":4,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/14zip4fy","slide":4,"text":"CONTROL MODEL","textPreview":"CONTROL MODEL","textChars":13,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/03qhgzyd","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/rexgjuhw","slide":4,"text":"The strategist chooses from trades that already passed risk review","textPreview":"The strategist chooses from trades that already passed risk review","textChars":66,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/qdozapgb","slide":4,"text":"The model never emits a strike, quantity, price, or option leg.","textPreview":"The model never emits a strike, quantity, price, or option leg.","textChars":63,"textLines":1,"bbox":[66,150,1090,42]}
+{"kind":"shape","id":"sh/dgzyl4zm","slide":4,"bbox":[66,234,336,245]}
+{"kind":"textbox","id":"sh/sf6hczyh","slide":4,"text":"1. CANDIDATE FACTORY","textPreview":"1. CANDIDATE FACTORY","textChars":20,"textLines":1,"bbox":[94,258,280,22]}
+{"kind":"textbox","id":"sh/jaxgfahk","slide":4,"text":"Deterministic code builds defined-risk structures from the live chain.","textPreview":"Deterministic code builds defined-risk structures from the live chain.","textChars":70,"textLines":1,"bbox":[94,300,278,118]}
+{"kind":"shape","id":"sh/i9oz65gz","slide":4,"bbox":[402,354,72,3]}
+{"kind":"shape","id":"sh/87a1o3yh","slide":4,"bbox":[474,234,336,245]}
+{"kind":"textbox","id":"sh/98j2x8z2","slide":4,"text":"2. RISK VERDICT","textPreview":"2. RISK VERDICT","textChars":15,"textLines":1,"bbox":[502,258,280,22]}
+{"kind":"textbox","id":"sh/m5sjmtgb","slide":4,"text":"Each proposal receives a named approval or rejection before the model sees it.","textPreview":"Each proposal receives a named approval or rejection before the model sees it.","textChars":78,"textLines":1,"bbox":[502,300,278,118]}
+{"kind":"shape","id":"sh/761kvyhw","slide":4,"bbox":[810,354,72,3]}
+{"kind":"shape","id":"sh/k3a1k3y5","slide":4,"bbox":[882,234,306,245]}
+{"kind":"textbox","id":"sh/l4j2tozq","slide":4,"text":"3. SELECTION","textPreview":"3. SELECTION","textChars":12,"textLines":1,"bbox":[910,258,250,22]}
+{"kind":"textbox","id":"sh/y1sjitgf","slide":4,"text":"Gemini returns an approved proposal ID or declines to trade.","textPreview":"Gemini returns an approved proposal ID or declines to trade.","textChars":60,"textLines":1,"bbox":[910,300,248,118]}
+{"kind":"shape","id":"sh/z210ryhk","slide":4,"bbox":[192,538,900,80]}
+{"kind":"textbox","id":"sh/4zu1wnyp","slide":4,"text":"A confused model can choose a worse safe trade. It cannot create an unsafe one.","textPreview":"A confused model can choose a worse safe trade. It cannot create an unsafe one.","textChars":79,"textLines":1,"bbox":[226,552,832,52]}
+{"kind":"notes","id":"nt/poemol","slide":4,"text":"The strategist's tool loop and bounded output are described in README.md and docs/WRITEUP.md. Candidate construction and gate evaluation live in engine/structures.py and engine/risk.py."}
+{"kind":"slide","id":"sl/yhnahz","slide":5,"title":"RISK SYSTEM","textShapes":29}
+{"kind":"shape","id":"sh/szud8zq1","slide":5,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/7ylcfupg","slide":5,"text":"RISK SYSTEM","textPreview":"RISK SYSTEM","textChars":11,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/6xcv6p8b","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/5wjudk7q","slide":5,"text":"Eight checks stand between an idea and an order","textPreview":"Eight checks stand between an idea and an order","textChars":47,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/kvad4fq5","slide":5,"text":"Current barbell preset. Limits are explicit, tested, and journalled by name.","textPreview":"Current barbell preset. Limits are explicit, tested, and journalled by name.","textChars":76,"textLines":1,"bbox":[66,135,1110,48]}
+{"kind":"shape","id":"sh/ju1cbupk","slide":5,"bbox":[66,205,558,72]}
+{"kind":"textbox","id":"sh/itsv2p8z","slide":5,"text":"G1","textPreview":"G1","textChars":2,"textLines":1,"bbox":[84,218,54,42]}
+{"kind":"textbox","id":"sh/psnepo7u","slide":5,"text":"Kill switches","textPreview":"Kill switches","textChars":13,"textLines":1,"bbox":[150,213,178,30]}
+{"kind":"textbox","id":"sh/oredgj69","slide":5,"text":"4% day loss, 10% total drawdown","textPreview":"4% day loss, 10% total drawdown","textChars":31,"textLines":1,"bbox":[150,241,440,25]}
+{"kind":"shape","id":"sh/mxo3yt03","slide":5,"bbox":[656,205,558,72]}
+{"kind":"textbox","id":"sh/7yxk7yho","slide":5,"text":"G2","textPreview":"G2","textChars":2,"textLines":1,"bbox":[674,218,54,42]}
+{"kind":"textbox","id":"sh/8z6l03i9","slide":5,"text":"Trade budget","textPreview":"Trade budget","textChars":12,"textLines":1,"bbox":[740,213,178,30]}
+{"kind":"textbox","id":"sh/90f298ze","slide":5,"text":"7 new trades, 10 open structures","textPreview":"7 new trades, 10 open structures","textChars":32,"textLines":1,"bbox":[740,241,440,25]}
+{"kind":"shape","id":"sh/y943u90r","slide":5,"bbox":[66,297,558,72]}
+{"kind":"textbox","id":"sh/zadk3ehc","slide":5,"text":"G3","textPreview":"G3","textChars":2,"textLines":1,"bbox":[84,310,54,42]}
+{"kind":"textbox","id":"sh/kbmlwjix","slide":5,"text":"Defined risk","textPreview":"Defined risk","textChars":12,"textLines":1,"bbox":[150,305,178,30]}
+{"kind":"textbox","id":"sh/lcf25ozi","slide":5,"text":"Every short leg requires matching cover","textPreview":"Every short leg requires matching cover","textChars":39,"textLines":1,"bbox":[150,333,440,25]}
+{"kind":"shape","id":"sh/i5836dgb","slide":5,"bbox":[656,297,558,72]}
+{"kind":"textbox","id":"sh/j6h4fihw","slide":5,"text":"G4","textPreview":"G4","textChars":2,"textLines":1,"bbox":[674,310,54,42]}
+{"kind":"textbox","id":"sh/fa90rax8","slide":5,"text":"Liquidity","textPreview":"Liquidity","textChars":9,"textLines":1,"bbox":[740,305,178,30]}
+{"kind":"textbox","id":"sh/e90zy5gn","slide":5,"text":"Rejects wide or unusable quotes","textPreview":"Rejects wide or unusable quotes","textChars":31,"textLines":1,"bbox":[740,333,440,25]}
+{"kind":"shape","id":"sh/1critkfe","slide":5,"bbox":[66,389,558,72]}
+{"kind":"textbox","id":"sh/gbih0fyt","slide":5,"text":"G5","textPreview":"G5","textChars":2,"textLines":1,"bbox":[84,402,54,42]}
+{"kind":"textbox","id":"sh/3et0vax4","slide":5,"text":"Pricing","textPreview":"Pricing","textChars":7,"textLines":1,"bbox":[150,397,178,30]}
+{"kind":"textbox","id":"sh/2dkj2pgj","slide":5,"text":"18% credit floor, 45% debit cap","textPreview":"18% credit floor, 45% debit cap","textChars":31,"textLines":1,"bbox":[150,425,440,25]}
+{"kind":"shape","id":"sh/pgbixkfa","slide":5,"bbox":[656,389,558,72]}
+{"kind":"textbox","id":"sh/of214fyp","slide":5,"text":"G6","textPreview":"G6","textChars":2,"textLines":1,"bbox":[674,402,54,42]}
+{"kind":"textbox","id":"sh/bit0zuxg","slide":5,"text":"Event blackout","textPreview":"Event blackout","textChars":14,"textLines":1,"bbox":[740,397,178,30]}
+{"kind":"textbox","id":"sh/qhkj6pgv","slide":5,"text":"Blocks premium selling across catalysts","textPreview":"Blocks premium selling across catalysts","textChars":39,"textLines":1,"bbox":[740,425,440,25]}
+{"kind":"shape","id":"sh/87mhwzut","slide":5,"bbox":[66,481,558,72]}
+{"kind":"textbox","id":"sh/98vip4ve","slide":5,"text":"G7","textPreview":"G7","textChars":2,"textLines":1,"bbox":[84,494,54,42]}
+{"kind":"textbox","id":"sh/m54zupc3","slide":5,"text":"Position sizing","textPreview":"Position sizing","textChars":15,"textLines":1,"bbox":[150,489,178,30]}
+{"kind":"textbox","id":"sh/76dgnud8","slide":5,"text":"1% tactical, 1.25% carry per trade","textPreview":"1% tactical, 1.25% carry per trade","textChars":34,"textLines":1,"bbox":[150,517,440,25]}
+{"kind":"shape","id":"sh/0j2hsfux","slide":5,"bbox":[656,481,558,72]}
+{"kind":"textbox","id":"sh/l4vylkvi","slide":5,"text":"G8","textPreview":"G8","textChars":2,"textLines":1,"bbox":[674,494,54,42]}
+{"kind":"textbox","id":"sh/yhkzqpcr","slide":5,"text":"Portfolio limits","textPreview":"Portfolio limits","textChars":16,"textLines":1,"bbox":[740,489,178,30]}
+{"kind":"textbox","id":"sh/zitgjudc","slide":5,"text":"8% open risk with sleeve and symbol caps","textPreview":"8% open risk with sleeve and symbol caps","textChars":40,"textLines":1,"bbox":[740,517,440,25]}
+{"kind":"textbox","id":"sh/cf2hoful","slide":5,"text":"Naked short options are structurally impossible. No configuration flag disables the coverage rule.","textPreview":"Naked short options are structurally impossible. No configuration flag disables the coverage rule.","textChars":98,"textLines":1,"bbox":[66,602,1120,34]}
+{"kind":"notes","id":"nt/yhnahz","slide":5,"text":"Current limits verified from engine/config.py on 4 September 2026. Gate implementation source: engine/risk.py. All values refer to Alpaca paper trading."}
+{"kind":"slide","id":"sl/ayva8e","slide":6,"title":"STRATEGY EXPERIMENT","textShapes":17}
+{"kind":"shape","id":"sh/ax43q98r","slide":6,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/x0vml472","slide":6,"text":"STRATEGY EXPERIMENT","textPreview":"STRATEGY EXPERIMENT","textChars":19,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/wzm5szqx","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/nud4fup0","slide":6,"text":"Three accounts test different sources of return on the same tape","textPreview":"Three accounts test different sources of return on the same tape","textChars":64,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"shape","id":"sh/mt43mp8f","slide":6,"bbox":[66,190,352,354]}
+{"kind":"textbox","id":"sh/9wvmh476","slide":6,"text":"BARBELL","textPreview":"BARBELL","textChars":7,"textLines":1,"bbox":[94,218,296,22]}
+{"kind":"textbox","id":"sh/8vmlozql","slide":6,"text":"Balanced","textPreview":"Balanced","textChars":8,"textLines":1,"bbox":[94,252,296,50]}
+{"kind":"shape","id":"sh/7qx4repk","slide":6,"bbox":[94,316,70,3]}
+{"kind":"textbox","id":"sh/6ponyt8z","slide":6,"text":"Core income, convex trades, and financed carry","textPreview":"Core income, convex trades, and financed carry","textChars":46,"textLines":1,"bbox":[94,346,292,92]}
+{"kind":"textbox","id":"sh/8rap0rap","slide":6,"text":"Best for changing volatility regimes","textPreview":"Best for changing volatility regimes","textChars":36,"textLines":1,"bbox":[94,456,292,60]}
+{"kind":"shape","id":"sh/tsjq9wru","slide":6,"bbox":[458,190,352,354]}
+{"kind":"textbox","id":"sh/6ps7yhsj","slide":6,"text":"CONVEX TILT","textPreview":"CONVEX TILT","textChars":11,"textLines":1,"bbox":[486,218,296,22]}
+{"kind":"textbox","id":"sh/7q187m94","slide":6,"text":"Asymmetric","textPreview":"Asymmetric","textChars":10,"textLines":1,"bbox":[486,252,296,50]}
+{"kind":"shape","id":"sh/k3apw7ad","slide":6,"bbox":[486,316,70,3]}
+{"kind":"textbox","id":"sh/lojq5cry","slide":6,"text":"More budget for debit spreads and long gamma","textPreview":"More budget for debit spreads and long gamma","textChars":44,"textLines":1,"bbox":[486,346,292,92]}
+{"kind":"textbox","id":"sh/y187uhs7","slide":6,"text":"Benefits from large directional moves","textPreview":"Benefits from large directional moves","textChars":37,"textLines":1,"bbox":[486,456,292,60]}
+{"kind":"shape","id":"sh/j2h8329s","slide":6,"bbox":[850,190,352,354]}
+{"kind":"textbox","id":"sh/wzqps7ah","slide":6,"text":"INCOME ONLY","textPreview":"INCOME ONLY","textChars":11,"textLines":1,"bbox":[878,218,296,22]}
+{"kind":"textbox","id":"sh/x0zq1cr2","slide":6,"text":"Control","textPreview":"Control","textChars":7,"textLines":1,"bbox":[878,252,296,50]}
+{"kind":"shape","id":"sh/dk7ep4ze","slide":6,"bbox":[878,316,70,3]}
+{"kind":"textbox","id":"sh/cjyxgzyt","slide":6,"text":"Defined-risk premium selling without convexity","textPreview":"Defined-risk premium selling without convexity","textChars":46,"textLines":1,"bbox":[878,346,292,92]}
+{"kind":"textbox","id":"sh/ripwnuh8","slide":6,"text":"Tests whether volatility risk premium alone works","textPreview":"Tests whether volatility risk premium alone works","textChars":49,"textLines":1,"bbox":[878,456,292,60]}
+{"kind":"textbox","id":"sh/qhgfepg3","slide":6,"text":"Strategy set: credit spreads, debit spreads, iron condors, and financed risk reversals","textPreview":"Strategy set: credit spreads, debit spreads, iron condors, and financed risk reversals","textChars":86,"textLines":1,"bbox":[66,586,1120,38]}
+{"kind":"textbox","id":"sh/pg7elkzi","slide":6,"text":"Universe: SPY, QQQ, IWM, DIA, XLK, XLF, SMH, GLD, and TLT","textPreview":"Universe: SPY, QQQ, IWM, DIA, XLK, XLF, SMH, GLD, and TLT","textChars":57,"textLines":1,"bbox":[66,624,1120,28]}
+{"kind":"notes","id":"nt/ayva8e","slide":6,"text":"Profiles and strategy variants are documented in README.md. Universe and sleeve configuration source: engine/config.py."}
+{"kind":"slide","id":"sl/gh11cu","slide":7,"title":"PAPER RESULTS","textShapes":17}
+{"kind":"shape","id":"sh/lcne9g3a","slide":7,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/y9wfylkz","slide":7,"text":"PAPER RESULTS","textPreview":"PAPER RESULTS","textChars":13,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/za5w7qlk","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/c7exwb2t","slide":7,"text":"The balanced account leads the live three-account test","textPreview":"The balanced account leads the live three-account test","textChars":54,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/x8ne5g3e","slide":7,"text":"Broker equity return as shown on 4 September 2026. The sample covers fewer than five sessions.","textPreview":"Broker equity return as shown on 4 September 2026. The sample covers fewer than five sessions.","textChars":94,"textLines":1,"bbox":[66,135,1110,48]}
+{"kind":"textbox","id":"sh/b65w36l8","slide":7,"text":"-0.64%","textPreview":"-0.64%","textChars":6,"textLines":1,"bbox":[206,265,140,34]}
+{"kind":"textbox","id":"sh/w3yx8f2x","slide":7,"text":"0.79%","textPreview":"0.79%","textChars":5,"textLines":1,"bbox":[418,379,140,34]}
+{"kind":"textbox","id":"sh/h47yh0ji","slide":7,"text":"1.45%","textPreview":"1.45%","textChars":5,"textLines":1,"bbox":[580,494,140,34]}
+{"kind":"shape","id":"sh/5wral0j6","slide":7,"bbox":[768,210,420,385]}
+{"kind":"textbox","id":"sh/kvi9sfi1","slide":7,"text":"MAIN ACCOUNT EQUITY","textPreview":"MAIN ACCOUNT EQUITY","textChars":19,"textLines":1,"bbox":[802,236,350,22]}
+{"kind":"textbox","id":"sh/ju9sja1g","slide":7,"text":"$101,451.99","textPreview":"$101,451.99","textChars":11,"textLines":1,"bbox":[802,260,350,52]}
+{"kind":"textbox","id":"sh/it0rq50v","slide":7,"text":"+$1,451.99 from $100,000","textPreview":"+$1,451.99 from $100,000","textChars":24,"textLines":1,"bbox":[802,311,350,42]}
+{"kind":"textbox","id":"sh/xsrah0ja","slide":7,"text":"PEAK EQUITY","textPreview":"PEAK EQUITY","textChars":11,"textLines":1,"bbox":[802,354,350,22]}
+{"kind":"textbox","id":"sh/wri9ovip","slide":7,"text":"$101,965.56","textPreview":"$101,965.56","textChars":11,"textLines":1,"bbox":[802,378,350,52]}
+{"kind":"textbox","id":"sh/vqpsfq14","slide":7,"text":"+1.97% intraday peak","textPreview":"+1.97% intraday peak","textChars":20,"textLines":1,"bbox":[802,429,350,42]}
+{"kind":"textbox","id":"sh/apgrml0j","slide":7,"text":"MAXIMUM DRAWDOWN","textPreview":"MAXIMUM DRAWDOWN","textChars":16,"textLines":1,"bbox":[802,472,350,22]}
+{"kind":"textbox","id":"sh/1obatkje","slide":7,"text":"0.69%","textPreview":"0.69%","textChars":5,"textLines":1,"bbox":[802,496,350,52]}
+{"kind":"textbox","id":"sh/gn2t0zi9","slide":7,"text":"Observed on the main account","textPreview":"Observed on the main account","textChars":28,"textLines":1,"bbox":[802,547,350,42]}
+{"kind":"textbox","id":"sh/0radw3q5","slide":7,"text":"Paper results are experimental. They do not establish a durable edge.","textPreview":"Paper results are experimental. They do not establish a durable edge.","textChars":69,"textLines":1,"bbox":[68,606,1120,38]}
+{"kind":"chart","id":"ch/2hwrqpsr","slide":7,"name":"","chartType":"bar","bbox":[68,210,650,360]}
+{"kind":"notes","id":"nt/gh11cu","slide":7,"text":"Main values come from the live dashboard screenshot captured at 10:18 ET on 4 September 2026. Test2 and test3 returns come from dashboard/public/snapshot-test2.json and snapshot-test3.json. Percent figures are displayed as percentage points, not decimal fractions. Paper trading results are not live trading results."}
+{"kind":"slide","id":"sl/h7tsf7","slide":8,"title":"AUDITABILITY","textShapes":10}
+{"kind":"shape","id":"sh/vm9gf2hk","slide":8,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/w7ix87y5","slide":8,"text":"AUDITABILITY","textPreview":"AUDITABILITY","textChars":12,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/h8ryhczq","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/i90zahgb","slide":8,"text":"Every fill, refusal, and risk decision is visible","textPreview":"Every fill, refusal, and risk decision is visible","textChars":49,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/4b2hcryh","slide":8,"text":"PUBLIC DASHBOARD","textPreview":"PUBLIC DASHBOARD","textChars":16,"textLines":1,"bbox":[918,176,268,22]}
+{"kind":"textbox","id":"sh/5cbylwz2","slide":8,"text":"Live broker equity","textPreview":"Live broker equity","textChars":18,"textLines":1,"bbox":[918,216,270,34]}
+{"kind":"textbox","id":"sh/ydgfydg7","slide":8,"text":"Portfolio Greeks and payoff curves","textPreview":"Portfolio Greeks and payoff curves","textChars":34,"textLines":1,"bbox":[918,274,270,52]}
+{"kind":"textbox","id":"sh/zepg7ihs","slide":8,"text":"Open and closed structures","textPreview":"Open and closed structures","textChars":26,"textLines":1,"bbox":[918,346,270,34]}
+{"kind":"textbox","id":"sh/3m9krml8","slide":8,"text":"Named rejection reasons","textPreview":"Named rejection reasons","textChars":23,"textLines":1,"bbox":[918,404,270,34]}
+{"kind":"textbox","id":"sh/il03yh4n","slide":8,"text":"Stress tests and session plans","textPreview":"Stress tests and session plans","textChars":30,"textLines":1,"bbox":[918,462,270,52]}
+{"kind":"textbox","id":"sh/por2tc3e","slide":8,"text":"Public link on the closing slide","textPreview":"Public link on the closing slide","textChars":32,"textLines":1,"bbox":[918,568,270,34]}
+{"kind":"image","id":"im/mh8ni9cj","slide":8,"name":"","geometry":"roundRect","alt":"Alphaca live paper trading dashboard showing account value and performance","bbox":[66,160,806,454]}
+{"kind":"notes","id":"nt/h7tsf7","slide":8,"text":"Dashboard screenshot captured from the locally served current build on 4 September 2026. Public mirror: https://thesupermanish.github.io/superio-trading-agent/"}
+{"kind":"slide","id":"sl/brlgl4","slide":9,"title":"CONCLUSION","textShapes":18}
+{"kind":"shape","id":"sh/943y9of6","slide":9,"bbox":[0,0,1280,5]}
+{"kind":"textbox","id":"sh/m1cfy9gv","slide":9,"text":"CONCLUSION","textPreview":"CONCLUSION","textChars":10,"textLines":1,"bbox":[66,32,900,24]}
+{"kind":"textbox","id":"sh/n2lg7exg","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1190,670,40,22]}
+{"kind":"textbox","id":"sh/w7ex43yx","slide":9,"text":"Autonomy without unchecked financial authority","textPreview":"Autonomy without unchecked financial authority","textChars":46,"textLines":1,"bbox":[66,72,1148,62]}
+{"kind":"textbox","id":"sh/x8nydofi","slide":9,"text":"Alphaca shows how an AI trading agent can act independently while deterministic software keeps control of account risk.","textPreview":"Alphaca shows how an AI trading agent can act independently while deterministic software keeps control of account risk.","textChars":119,"textLines":1,"bbox":[66,150,1080,88]}
+{"kind":"shape","id":"sh/a5cf2tgr","slide":9,"bbox":[66,266,1100,2]}
+{"kind":"textbox","id":"sh/v6lgbyxc","slide":9,"text":"MARKET COVERAGE","textPreview":"MARKET COVERAGE","textChars":15,"textLines":1,"bbox":[66,310,300,22]}
+{"kind":"textbox","id":"sh/cbaxszyt","slide":9,"text":"9 ETFs","textPreview":"9 ETFs","textChars":6,"textLines":1,"bbox":[66,334,300,52]}
+{"kind":"textbox","id":"sh/dcje14fe","slide":9,"text":"Liquid equity, sector, commodity, and bond proxies","textPreview":"Liquid equity, sector, commodity, and bond proxies","textChars":50,"textLines":1,"bbox":[66,385,300,42]}
+{"kind":"textbox","id":"sh/50j65cjq","slide":9,"text":"PORTFOLIO EXPERIMENT","textPreview":"PORTFOLIO EXPERIMENT","textChars":20,"textLines":1,"bbox":[426,310,300,22]}
+{"kind":"textbox","id":"sh/kzapc725","slide":9,"text":"3 accounts","textPreview":"3 accounts","textChars":10,"textLines":1,"bbox":[426,334,300,52]}
+{"kind":"textbox","id":"sh/jyho321k","slide":9,"text":"Balanced, convex tilt, and income control","textPreview":"Balanced, convex tilt, and income control","textChars":41,"textLines":1,"bbox":[426,385,300,42]}
+{"kind":"textbox","id":"sh/ix87axkz","slide":9,"text":"OPEN RISK CEILING","textPreview":"OPEN RISK CEILING","textChars":17,"textLines":1,"bbox":[786,310,360,22]}
+{"kind":"textbox","id":"sh/toj69cjm","slide":9,"text":"8%","textPreview":"8%","textChars":2,"textLines":1,"bbox":[786,334,360,52]}
+{"kind":"textbox","id":"sh/snapg721","slide":9,"text":"Defined risk with a 10% drawdown stand-down","textPreview":"Defined risk with a 10% drawdown stand-down","textChars":43,"textLines":1,"bbox":[786,385,360,42]}
+{"kind":"shape","id":"sh/7m1o721w","slide":9,"bbox":[66,488,1100,102]}
+{"kind":"textbox","id":"sh/6ls7ehkb","slide":9,"text":"Repository","textPreview":"Repository","textChars":10,"textLines":1,"bbox":[92,507,140,24]}
+{"kind":"textbox","id":"sh/hs36dwjy","slide":9,"text":"github.com/TheSupermanish/superio-trading-agent","textPreview":"github.com/TheSupermanish/superio-trading-agent","textChars":47,"textLines":1,"bbox":[92,536,560,30]}
+{"kind":"textbox","id":"sh/grupkrid","slide":9,"text":"Live demo","textPreview":"Live demo","textChars":9,"textLines":1,"bbox":[712,507,120,24]}
+{"kind":"textbox","id":"sh/072hwzul","slide":9,"text":"thesupermanish.github.io/superio-trading-agent","textPreview":"thesupermanish.github.io/superio-trading-agent","textChars":46,"textLines":1,"bbox":[712,536,420,30]}
+{"kind":"textbox","id":"sh/l8vi54v6","slide":9,"text":"Built on Alpaca paper trading with Gemini, Vertex AI, Python, and Next.js","textPreview":"Built on Alpaca paper trading with Gemini, Vertex AI, Python, and Next.js","textChars":73,"textLines":1,"bbox":[66,624,1090,28]}
+{"kind":"notes","id":"nt/brlgl4","slide":9,"text":"Repository: https://github.com/TheSupermanish/superio-trading-agent. Public demo: https://thesupermanish.github.io/superio-trading-agent/. All performance shown in this deck comes from paper accounts over a short hackathon window."}
