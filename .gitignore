@@ -12,3 +12,5 @@ dashboard/out/
 logs/
 data/google/
 client_secret.json
+*.db-shm
+*.db-wal
