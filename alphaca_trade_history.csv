@@ -1,0 +1,21 @@
+structure_id,underlying,strategy_kind,sleeve,opened_at,closed_at,qty,entry_net_price,max_risk_dollars,max_gain_dollars,status,realized_pnl_dollars,exit_reason,legs_summary
+1,QQQ,call_debit_spread,convex,2026-08-28T14:00:16.056972+00:00,,6,-1.24,744.0,4056.0,rejected,0.0,holding,buy 722.0C / sell 730.0C
+2,SPY,call_debit_spread,convex,2026-08-28T14:05:05.485898+00:00,,9,-0.8200000000000001,738.0,3762.0,rejected,0.0,holding,buy 773.0C / sell 778.0C
+3,QQQ,call_debit_spread,convex,2026-08-28T14:05:09.149874+00:00,,8,-0.89,712.0,3288.0000000000005,rejected,0.0,holding,buy 722.0C / sell 727.0C
+4,SPY,call_debit_spread,convex,2026-08-28T14:06:12.903619+00:00,,8,-0.84,672.0,1728.0,rejected,0.0,holding,buy 774.0C / sell 777.0C
+5,QQQ,call_debit_spread,convex,2026-08-28T14:06:16.040931+00:00,,7,-0.9700000000000001,679.0000000000001,2821.0,rejected,0.0,holding,buy 721.0C / sell 726.0C
+6,SPY,call_debit_spread,convex,2026-08-28T14:09:29.168203+00:00,,7,-1.03,721.0,2779.0,rejected,0.0,holding,buy 774.0C / sell 779.0C
+7,QQQ,call_debit_spread,convex,2026-08-28T14:09:32.860799+00:00,,4,-1.7899999999999998,715.9999999999999,2484.0,rejected,0.0,holding,buy 722.0C / sell 730.0C
+8,SPY,call_debit_spread,convex,2026-08-28T14:10:55.075543+00:00,,5,-1.3199999999999998,659.9999999999999,3340.0,rejected,0.0,holding,buy 773.0C / sell 781.0C
+9,SPY,put_debit_spread,convex,2026-08-31T09:35:40.216235+00:00,,8,-0.85,680.0,5720.0,rejected,0.0,holding,buy 767.0P / sell 759.0P
+10,SPY,call_credit_spread,core,2026-08-31T09:37:12.064342+00:00,,9,0.23000000000000004,693.0,207.00000000000003,rejected,0.0,holding,sell 774.0C / buy 775.0C
+11,QQQ,call_credit_spread,core,2026-08-31T09:37:12.070817+00:00,,9,0.21999999999999997,702.0,197.99999999999997,rejected,0.0,holding,sell 724.0C / buy 725.0C
+12,IWM,iron_condor,core,2026-09-02T11:05:33.479879+00:00,2026-09-03T05:44:03.020306+00:00,11,0.35,715.0,385.0,closed,0.0,reconciled_flat,sell 296.0C / buy 297.0C / buy 290.0P / sell 291.0P
+13,SPY,call_credit_spread,core,2026-09-02T11:05:33.484540+00:00,2026-09-03T14:02:15.290444+00:00,15,0.29,1068.0,432.0,closed,-540.0000000000001,stop_loss,sell 768.0C / buy 769.0C
+14,SPY,put_credit_spread,core,2026-09-02T11:05:33.486922+00:00,2026-09-02T14:31:21.155636+00:00,12,0.1,1080.0,120.0,closed,71.99999999999997,take_profit,buy 755.0P / sell 756.0P
+15,SPY,put_credit_spread,core,2026-09-02T14:37:13.697412+00:00,2026-09-03T05:44:03.022169+00:00,12,0.1,1080.0,120.0,closed,0.0,reconciled_flat,buy 755.0P / sell 756.0P
+16,SPY,risk_reversal,carry,2026-09-03T13:57:10.321393+00:00,,1,-2.84,593.0,1707.0,open,0.0,holding,sell 756.0P / buy 753.0P / buy 782.0C / sell 802.0C
+17,IWM,risk_reversal,carry,2026-09-03T13:57:11.183858+00:00,,2,-1.55,923.9999999999999,2676.0,open,0.0,holding,sell 288.0P / buy 285.0P / buy 302.0C / sell 317.0C
+18,IWM,iron_condor,carry,2026-09-03T14:02:16.077602+00:00,,2,-1.55,3310.0,2690.0,rejected,0.0,duplicate_journal_row,buy 302.0C / sell 317.0C / buy 285.0P / sell 288.0P
+19,SPY,iron_condor,carry,2026-09-03T14:02:16.079176+00:00,,1,-2.84,2284.0,1716.0,rejected,0.0,duplicate_journal_row,buy 782.0C / sell 802.0C / buy 753.0P / sell 756.0P
+20,QQQ,risk_reversal,carry,2026-09-03T16:18:54.624685+00:00,,1,-3.76,705.0000000000001,1595.0,open,0.0,holding,sell 701.0P / buy 698.0P / buy 734.0C / sell 754.0C
